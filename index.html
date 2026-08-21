@@ -3,69 +3,132 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Rewatt HeatingTec — Inline Heaters for Semiconductor Wet Processes</title>
+<title>Rewatt HeatingTec — 半導體濕製程精密加熱模組</title>
+<meta name="description" content="麗源光電奈米薄膜石英加熱器，零金屬接觸流體，98% 熱轉換效率，適用半導體晶圓清洗、化學液加熱、超純水即熱，榮獲五屆台灣精品獎。">
 <link rel="icon" type="image/png" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAIAAAACACAMAAAD04JH5AAAAP1BMVEXh7tLA3J6q0Ht1syr+/v0AAACPwVKz1YqJvknO5LTl8dfa6saBuTyjzHHC3aGbyGUAAAAAAAAAAAAAAAAAAACVnywOAAAAEHRSTlP//////wD/////////////1xohPgAAAj1JREFUeNrt29tuwyAMBmA3MMwhIe//tuta7UDabZgZ/kjDF5MmVfLXyuHg1vTyLEyXeJqKRmX/zkADsz810OD0DwQan78UECB/ISBA+oJAmPyfAgLl/xAQKv+74CQAY2ACwuW/CwiY/yY4A8AYpGACCJr/KpgAMuCYgAmYgArAHiJRLINSuEVK9Ba3/zIvm+8AWKMVRGKnDXBWGMGBAVfCCgbYuIMB1u5oQLWgG8B6NCChAXZBA6IHAyzrAHzxrvjbyOkIoA6A8POu1fAoagKM4RKQhwPMUpbhOhxgciFw4wFeWgTaABOEa5E6YBOuBOqA/evLL2gA/0dAsRJs6KdgR68DgIWIpduhMsCJDwS6AFde47bRgOVwHuhwIEnueXjv3XI8El06AEThwIBgwIAdDMgGC4geDKhtk/QCVLdp+gBifZuoCyAIunUdAGkzBggIovT6gGBMXwA/7ENBfB38027463WQ1QHuN8ChmeyGAw5dgTAesJL4IKYLKC+kNo4HlLcRWR3qAFxTl1YR8Ic6VAL42FqHSoBDHabxgOY6VAO01qEa4FCHeTygcUvQAzTWoebtOLQ8isKvbkN9d6LyaKIJONQhjwe01KFui2aTbwnKTaqE7RG11GHfb0xYfSESdkorPoKKpyCJ3tIm3JMquqmOc87Ml+ufba15OV/uwazSK+4cEzABEzAB83fFJwDMX9fjAXPGBD/mgx90mrNmJxj3ww884kc+8UOvJxj7xQ8+40e/TzD8Pnz8/xWpqdXjkgdAXQAAAABJRU5ErkJggg==">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,300..800&family=Noto+Sans+TC:wght@400;500;700&family=Noto+Serif+TC:wght@700;900&display=swap" rel="stylesheet">
 <style>
+  /* ===== 升級版設計系統 ===== */
   :root{
-    /* fused silica + film: the ground is quartz frit, not paper white */
-    --paper:#f6f7f4;      /* page ground */
-    --card:#ffffff;       /* raised sheet — drawings, tables only */
-    --ink:#14201a;        /* green-black */
+    /* 中性色階 10 級 */
+    --gray-50:#f8f9f7;
+    --gray-100:#e9ece8;
+    --gray-200:#d9ded6;
+    --gray-300:#c2c9c4;
+    --gray-400:#a3aba6;
+    --gray-500:#808a84;
+    --gray-600:#6c776f;
+    --gray-700:#4a554e;
+    --gray-800:#2a332d;
+    --gray-900:#14201a;
+
+    /* 品牌與功能色 */
+    --paper:#f6f7f4;
+    --card:#ffffff;
+    --ink:#14201a;
     --mute:#6c776f;
     --rule:#d9ded6;
     --deep:#101613;
-    --brand:#75b32a;      /* the logo green — graphic marks only */
-    --signal:#4f7d19;     /* green for text (passes AA on --paper) */
-    --heat:#b4560e;       /* amber — used only where heat is the subject */
-    --stop:#a92b1c;       /* red — e-stop only, because an e-stop is red */
+    --brand:#75b32a;
+    --signal:#4f7d19;
+    --heat:#b4560e;
+    --stop:#a92b1c;
+    --quartz:#3a8ba0;
+    --warn:#e0a800;
+    --success:#2e9e5b;
+
+    /* 字體系統 */
     --ui:"Archivo","Noto Sans TC",system-ui,sans-serif;
+    --serif:"Archivo","Noto Serif TC",Georgia,serif;
+
+    /* 空間與佈局 */
     --grid: 24px;
     --maxw: 1440px;
+    --radius: 4px;
+    --header-h: 56px;
+
+    /* 動效曲線 */
+    --ease: cubic-bezier(0.2, 0.7, 0.2, 1);
   }
+
   *{margin:0;padding:0;box-sizing:border-box}
   html{scroll-behavior:smooth}
   body{
     background:var(--paper);color:var(--ink);
     font-family:var(--ui);
-    font-size:15px;line-height:1.62;font-weight:400;
+    font-size:15px;line-height:1.7;font-weight:400;
     -webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;
     overflow-x:hidden;
   }
   a{color:inherit;text-decoration:none}
   button{font-family:inherit;font-size:inherit;background:none;border:0;color:inherit;cursor:pointer}
-  /* labels are Archivo pulled narrow — no monospace anywhere on this site */
   .mono{font-stretch:87%;font-weight:600;font-variant-numeric:tabular-nums}
   .num{font-variant-numeric:tabular-nums;font-feature-settings:"tnum"}
 
-  /* ---------- fixed slim header ---------- */
+  /* 滾動進度條 */
+  .scroll-progress{
+    position:fixed;top:0;left:0;height:2px;width:0%;
+    background:var(--brand);z-index:200;transition:width .1s linear;
+  }
+
+  /* ===== 頂部導航升級 ===== */
   header{
-    position:fixed;top:0;left:0;right:0;height:56px;z-index:100;
-    background:rgba(246,247,244,.9);backdrop-filter:blur(10px);
+    position:fixed;top:0;left:0;right:0;height:var(--header-h);z-index:100;
+    background:rgba(246,247,244,.88);backdrop-filter:blur(12px) saturate(180%);
     border-bottom:1px solid var(--rule);
-    display:flex;align-items:center;padding:0 24px;
+    display:flex;align-items:center;padding:0 32px;
+    transition:height .25s var(--ease), box-shadow .25s var(--ease);
+  }
+  header.scrolled{
+    height:48px;
+    box-shadow:0 1px 12px rgba(20,32,26,.06);
   }
   .brand{display:flex;align-items:center;gap:11px;font-weight:800;letter-spacing:-.01em;font-size:15px}
   .brand .mark{height:21px;width:auto;display:block;flex:none}
-  .brand .sub{transform:translateY(1px)}
-  .brand .sub{color:var(--mute);font-weight:500;font-size:11px;letter-spacing:.14em;text-transform:uppercase;font-stretch:87%;font-weight:600}
+  .brand .sub{transform:translateY(1px);color:var(--mute);font-weight:500;font-size:11px;letter-spacing:.14em;text-transform:uppercase;font-stretch:87%;font-weight:600}
+
   nav.top{margin-left:auto;display:flex;gap:2px;align-items:center}
-  nav.top a{padding:8px 14px;font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--mute);transition:color .15s}
-  nav.top a:hover{color:var(--ink)}
-  nav.top a.on{color:var(--ink)}
+  nav.top > a{
+    padding:8px 16px;font-size:12px;letter-spacing:.06em;text-transform:uppercase;
+    color:var(--mute);transition:color .2s var(--ease);position:relative;
+  }
+  nav.top > a::after{
+    content:"";position:absolute;left:16px;right:16px;bottom:5px;height:1px;background:var(--brand);
+    transform:scaleX(0);transform-origin:left;transition:transform .25s var(--ease);
+  }
+  nav.top > a:hover{color:var(--ink)}
+  nav.top > a:hover::after,nav.top > a.on::after{transform:scaleX(1)}
+  nav.top > a.on{color:var(--ink)}
+
+  /* 導航下拉選單 */
+  .nav-dropdown{position:relative}
+  .nav-dropdown .dropdown-menu{
+    position:absolute;top:100%;left:0;min-width:220px;
+    background:var(--card);border:1px solid var(--rule);border-radius:var(--radius);
+    box-shadow:0 8px 24px rgba(20,32,26,.08);
+    padding:8px 0;opacity:0;visibility:hidden;transform:translateY(8px);
+    transition:all .2s var(--ease);z-index:99;
+  }
+  .nav-dropdown:hover .dropdown-menu{opacity:1;visibility:visible;transform:translateY(0)}
+  .dropdown-menu a{
+    display:block;padding:10px 16px;font-size:13px;color:var(--gray-700);
+    transition:background .15s, color .15s;
+  }
+  .dropdown-menu a:hover{background:var(--gray-50);color:var(--signal)}
+
   .langtog{margin-left:14px;padding-left:14px;border-left:1px solid var(--rule);display:flex;gap:2px}
-  .langtog button{padding:6px 8px;font-size:11px;letter-spacing:.1em;color:var(--mute);font-stretch:87%;font-weight:600}
-  .langtog button.on{color:var(--ink);font-weight:500}
+  .langtog button{padding:6px 10px;font-size:11px;letter-spacing:.1em;color:var(--mute);font-stretch:87%;font-weight:600;border-radius:2px;transition:all .15s}
+  .langtog button.on{color:var(--signal);background:rgba(117,179,42,.08)}
   .burger{display:none;margin-left:auto;padding:8px;font-size:18px}
 
-  main{padding-top:56px}
-  section{padding:0 24px;max-width:var(--maxw);margin:0 auto}
+  main{padding-top:var(--header-h)}
+  section{padding:0 32px;max-width:var(--maxw);margin:0 auto}
 
-  /* ---------- section header (dimensioned) ---------- */
+  /* 章節標題 */
   .secmark{
-    display:flex;align-items:center;gap:14px;padding:34px 0 22px;
+    display:flex;align-items:center;gap:14px;padding:40px 0 24px;
     font-stretch:87%;font-weight:600;font-size:11px;
     letter-spacing:.16em;text-transform:uppercase;color:var(--mute);
   }
@@ -73,198 +136,80 @@
   .secmark > span:not(.rule):not(.mono){color:var(--ink)}
   .secmark .rule{flex:1;height:1px;background:linear-gradient(to right,var(--brand) 0 26px,var(--rule) 26px)}
 
-  /* ---------- hero ---------- */
-  .hero{padding-top:40px;padding-bottom:24px}
+  /* ===== Hero 升級 ===== */
+  .hero{padding-top:48px;padding-bottom:32px}
   .hero h1{
-    font-size:clamp(48px,7.4vw,108px);line-height:.94;font-weight:800;
-    letter-spacing:-.035em;color:var(--ink);
-    max-width:15ch;margin-bottom:32px;
+    font-size:clamp(36px,5.6vw,72px);line-height:1.2;font-weight:900;
+    letter-spacing:-.02em;color:var(--ink);
+    max-width:16ch;margin-bottom:20px;
+    font-family:var(--serif);
   }
   .hero h1 em{font-style:normal;color:var(--signal)}
   .hero .sub{
-    max-width:52ch;font-size:17px;line-height:1.55;color:var(--ink);
-    margin-bottom:56px;font-weight:400;
+    max-width:60ch;font-size:17px;line-height:1.7;color:var(--gray-700);
+    margin-bottom:32px;font-weight:400;
   }
-  .hero .sub b{font-weight:700}
-  .hero .metaline{
+  .hero .sub b{font-weight:700;color:var(--ink)}
+
+  .hero-badges{
+    display:flex;flex-wrap:wrap;gap:12px;margin-bottom:40px;
+  }
+  .badge{
+    display:inline-flex;align-items:center;gap:6px;
+    padding:6px 12px;border:1px solid var(--rule);border-radius:999px;
+    font-size:12px;color:var(--gray-600);background:var(--card);
+  }
+  .badge::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--brand)}
+
+  .hero-cta{display:flex;gap:12px;margin-bottom:48px;flex-wrap:wrap}
+  .btn{
+    display:inline-flex;align-items:center;gap:8px;
+    padding:12px 24px;border-radius:var(--radius);
+    font-size:13px;font-weight:600;letter-spacing:.02em;
+    transition:all .2s var(--ease);cursor:pointer;border:1px solid transparent;
+  }
+  .btn-primary{background:var(--signal);color:#fff}
+  .btn-primary:hover{background:var(--ink);transform:translateY(-1px);box-shadow:0 4px 12px rgba(79,125,25,.2)}
+  .btn-outline{border-color:var(--rule);color:var(--ink);background:var(--card)}
+  .btn-outline:hover{border-color:var(--ink);background:var(--ink);color:#fff}
+
+  /* 關鍵指標 */
+  .metaline{
     display:flex;align-items:center;gap:16px;font-stretch:87%;font-weight:600;
     font-size:11px;letter-spacing:.14em;color:var(--mute);text-transform:uppercase;
     padding-bottom:20px;border-bottom:1px solid var(--ink);margin-bottom:0;
   }
-  .hero .metaline .l{flex:1;height:1px;background:var(--rule)}
+  .metaline .l{flex:1;height:1px;background:var(--rule)}
 
-  /* spec row (huge numeric) */
   .specrow{
     display:grid;grid-template-columns:repeat(5,1fr);
     border-bottom:1px solid var(--ink);
   }
-  .specrow .cell{padding:32px 20px 40px;border-left:1px solid var(--rule);position:relative}
+  .specrow .cell{padding:32px 24px 40px;border-left:1px solid var(--rule);position:relative}
   .specrow .cell:first-child{border-left:0;padding-left:0}
   .specrow .cell .idx{
     font-stretch:87%;font-weight:600;font-size:10px;letter-spacing:.14em;
-    color:var(--mute);margin-bottom:22px;text-transform:uppercase;
+    color:var(--mute);margin-bottom:18px;text-transform:uppercase;
   }
   .specrow .cell .fig{
     font-weight:700;font-stretch:96%;letter-spacing:-.022em;
-    font-size:clamp(38px,5vw,72px);line-height:1;color:var(--ink);
-    font-variant-numeric:tabular-nums;margin-bottom:14px;
+    font-size:clamp(32px,4.5vw,64px);line-height:1;color:var(--ink);
+    font-variant-numeric:tabular-nums;margin-bottom:12px;
   }
-  .specrow .cell .fig .u{font-size:.42em;font-weight:500;color:var(--mute);letter-spacing:-.01em;margin-left:4px}
-  .specrow .cell .lbl{font-size:12px;color:var(--mute);line-height:1.35}
+  .specrow .cell .fig .u{font-size:.4em;font-weight:500;color:var(--mute);letter-spacing:-.01em;margin-left:4px}
+  .specrow .cell .lbl{font-size:13px;color:var(--gray-600);line-height:1.5}
 
-  /* ---------- products ---------- */
-  .prod{padding:8px 0 24px}
-  .prod .item{
-    display:grid;grid-template-columns:110px 1.1fr 1.4fr;gap:24px;
-    padding:56px 0;border-top:1px solid var(--rule);
-    align-items:start;
-  }
-  .prod .item:last-child{border-bottom:1px solid var(--rule)}
-  .prod .idx{
-    font-stretch:87%;font-weight:600;font-size:12px;letter-spacing:.12em;
-    color:var(--mute);padding-top:6px;
-  }
-  .prod .idx b{display:block;color:var(--ink);font-weight:500;font-size:14px;margin-top:6px}
-  .prod .info h3{font-size:32px;font-weight:700;letter-spacing:-.02em;line-height:1.05;margin-bottom:10px;color:var(--ink)}
-  .prod .info .en{font-size:12px;font-stretch:87%;font-weight:600;letter-spacing:.08em;color:var(--mute);text-transform:uppercase;margin-bottom:24px}
-  .prod .info p{font-size:14px;color:var(--ink);line-height:1.55;max-width:36ch;margin-bottom:24px}
-  .prod .keyspec{display:grid;grid-template-columns:1fr 1fr;gap:0;border-top:1px solid var(--rule);border-bottom:1px solid var(--rule)}
-  .prod .keyspec div{padding:12px 0;border-right:1px solid var(--rule)}
-  .prod .keyspec div:nth-child(2n){border-right:0;padding-left:16px}
-  .prod .keyspec .k{font-stretch:87%;font-weight:600;font-size:10px;letter-spacing:.12em;color:var(--mute);text-transform:uppercase;margin-bottom:6px}
-  .prod .keyspec .v{font-size:15px;font-weight:500;font-variant-numeric:tabular-nums;color:var(--ink)}
-  .prod .keyspec .v.tbd{color:var(--mute);font-weight:400}
-  .prod .drawing{background:var(--paper);position:relative;min-height:280px;padding:16px 0}
-  .prod .drawing svg{display:block;width:100%;height:auto;max-height:340px}
-  .prod .drawing .cap{position:absolute;bottom:0;right:0;font-stretch:87%;font-weight:600;font-size:10px;letter-spacing:.1em;color:var(--mute);text-transform:uppercase}
-
-  /* ---------- tech ---------- */
-  .tech{padding:8px 0 40px}
-  .tech .grid{display:grid;grid-template-columns:1.05fr 1fr;gap:64px;padding:16px 0 32px;align-items:start}
-  .tech .txt h2{font-size:44px;font-weight:800;letter-spacing:-.028em;line-height:1.02;margin-bottom:24px;max-width:14ch}
-  .tech .txt p{font-size:15px;line-height:1.6;color:var(--ink);margin-bottom:14px;max-width:44ch}
-  .tech .txt p b{font-weight:700}
-  .tech .diagram{background:var(--paper)}
-  .tech .diagram svg{width:100%;height:auto;max-height:420px}
-  .tech .kpi{
-    display:grid;grid-template-columns:repeat(4,1fr);border-top:1px solid var(--ink);border-bottom:1px solid var(--ink);margin-top:24px;
-  }
-  .tech .kpi .k{padding:20px;border-left:1px solid var(--rule)}
-  .tech .kpi .k:first-child{border-left:0}
-  .tech .kpi .fig{font-weight:800;font-size:34px;letter-spacing:-.03em;line-height:1;margin-bottom:6px;font-variant-numeric:tabular-nums}
-  .tech .kpi .fig .u{font-size:.5em;font-weight:500;color:var(--mute);margin-left:2px}
-  .tech .kpi .lbl{font-stretch:87%;font-weight:600;font-size:10px;letter-spacing:.1em;color:var(--mute);text-transform:uppercase}
-
-  /* ---------- compare table ---------- */
-  .compare{padding:8px 0 24px}
-  .compare table{width:100%;border-collapse:collapse;font-variant-numeric:tabular-nums;font-size:13px}
-  .compare th,.compare td{padding:14px 14px;text-align:left;border-bottom:1px solid var(--rule);vertical-align:top}
-  .compare th{
-    font-stretch:87%;font-weight:600;font-size:10px;letter-spacing:.12em;
-    color:var(--mute);text-transform:uppercase;font-weight:500;
-    border-bottom:1px solid var(--ink);
-  }
-  .compare tr td:first-child{font-weight:500}
-  .compare .own{background:linear-gradient(to right,rgba(117,179,42,.11),rgba(117,179,42,0) 72%)}
-  .compare .own td{border-bottom-color:rgba(117,179,42,.3)}
-  .compare .own td:first-child{color:var(--signal);font-weight:700;box-shadow:inset 2px 0 0 var(--brand)}
-  .compare .foot{font-stretch:87%;font-weight:600;font-size:10px;color:var(--mute);letter-spacing:.06em;padding:12px 0;text-transform:uppercase}
-
-  /* ---------- specs ---------- */
-  .specs{padding:8px 0 40px}
-  .specs .grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:0;border-top:1px solid var(--ink)}
-  .specs .col{border-right:1px solid var(--rule);padding:24px 20px}
-  .specs .col:last-child{border-right:0}
-  .specs .col h4{font-size:18px;font-weight:700;letter-spacing:-.015em;margin-bottom:6px}
-  .specs .col .en{font-stretch:87%;font-weight:600;font-size:10px;letter-spacing:.12em;color:var(--mute);text-transform:uppercase;margin-bottom:20px}
-  .specs .row{display:grid;grid-template-columns:1fr auto;padding:8px 0;border-bottom:1px solid var(--rule);gap:16px;font-size:13px}
-  .specs .row:last-child{border-bottom:0}
-  .specs .row .k{color:var(--mute)}
-  .specs .row .v{font-weight:500;text-align:right;font-variant-numeric:tabular-nums}
-  .specs .row .v.tbd{color:var(--mute);font-weight:400}
-  .specs .note{margin-top:20px;padding:12px 0;border-top:1px solid var(--rule);font-stretch:87%;font-weight:600;font-size:10px;letter-spacing:.08em;color:var(--mute);text-transform:uppercase}
-
-  /* ---------- control cabinet ---------- */
-  .ctrl{padding:8px 0 40px}
-  .ctrl .grid{display:grid;grid-template-columns:1fr 1.3fr;gap:64px;align-items:start;padding:24px 0}
-  .ctrl h2{font-size:44px;font-weight:800;letter-spacing:-.028em;line-height:1.02;margin-bottom:20px;max-width:12ch}
-  .ctrl p{font-size:15px;line-height:1.6;margin-bottom:16px;max-width:42ch}
-  .ctrl .cabinet svg{width:100%;height:auto;max-height:520px;display:block}
-  .ctrl .parts{display:grid;grid-template-columns:1fr 1fr;gap:0;border-top:1px solid var(--ink);margin-top:24px}
-  .ctrl .parts .p{padding:14px 16px;border-right:1px solid var(--rule);border-bottom:1px solid var(--rule)}
-  .ctrl .parts .p:nth-child(2n){border-right:0}
-  .ctrl .parts .n{font-stretch:87%;font-weight:600;font-size:10px;color:var(--signal);letter-spacing:.12em;margin-bottom:4px}
-  .ctrl .parts .t{font-size:13px;font-weight:500}
-  .ctrl .parts .d{font-size:11px;color:var(--mute);margin-top:2px}
-
-  /* ---------- contact ---------- */
-  .contact{padding:8px 0 80px;border-top:1px solid var(--rule);margin-top:24px}
-  .contact .grid{display:grid;grid-template-columns:1fr 1fr;gap:64px;padding:48px 0}
-  .contact h2{font-size:56px;font-weight:800;letter-spacing:-.03em;line-height:1;max-width:12ch}
-  .contact h2 em{font-style:normal;color:var(--signal)}
-  .contact .info dl{display:grid;grid-template-columns:120px 1fr;gap:0;border-top:1px solid var(--ink)}
-  .contact .info dt{padding:14px 0;font-stretch:87%;font-weight:600;font-size:10px;letter-spacing:.12em;color:var(--mute);text-transform:uppercase;border-bottom:1px solid var(--rule)}
-  .contact .info dd{padding:14px 0;font-size:14px;border-bottom:1px solid var(--rule);font-variant-numeric:tabular-nums}
-  .contact .info dd a{border-bottom:1px solid transparent;transition:border-color .15s}
-  .contact .info dd a:hover{border-color:var(--signal)}
-
-  /* ---------- footer ---------- */
-  footer{
-    background:var(--deep);color:#e5e5e5;padding:48px 24px 40px;
-    font-size:12px;line-height:1.6;
-  }
-  footer .wrap{max-width:var(--maxw);margin:0 auto;display:grid;grid-template-columns:1.5fr 1fr 1fr;gap:48px}
-  footer .brand{color:#fff;font-size:15px;font-weight:800;margin-bottom:10px}
-  footer .brand .mark{height:26px;width:auto;display:block;margin-bottom:8px}
-  footer .brand .sub{color:#888;font-stretch:87%;font-weight:600;font-size:10px;letter-spacing:.14em;text-transform:uppercase;font-weight:500;display:block;margin-top:4px}
-  footer h5{font-stretch:87%;font-weight:600;font-size:10px;letter-spacing:.14em;color:#888;text-transform:uppercase;margin-bottom:12px;font-weight:500}
-  footer p{color:#c0c0c0}
-  footer .fine{max-width:var(--maxw);margin:32px auto 0;padding-top:24px;border-top:1px solid #2a2a2a;display:flex;justify-content:space-between;font-stretch:87%;font-weight:600;font-size:10px;letter-spacing:.08em;color:#888;text-transform:uppercase}
-
-  /* SVG technical drawing styles */
-  .td-line{stroke:var(--ink);stroke-width:1;fill:none}
-  .td-thin{stroke:var(--ink);stroke-width:.5;fill:none}
-  .td-dim{stroke:var(--mute);stroke-width:.5;fill:none}
-  .td-fill-quartz{fill:none;stroke:var(--ink);stroke-width:1}
-  .td-fill-film{fill:var(--ink)}
-  .td-fill-signal{fill:var(--heat)}
-  .td-label{font-stretch:87%;font-weight:600;font-size:9px;fill:var(--ink);letter-spacing:.06em}
-  .td-lbl-mute{font-stretch:87%;font-weight:600;font-size:9px;fill:var(--mute);letter-spacing:.06em}
-  .td-dim-label{font-stretch:87%;font-weight:600;font-size:8.5px;fill:var(--mute);letter-spacing:.06em}
-
-  @media (max-width:900px){
-    .specrow{grid-template-columns:repeat(2,1fr)}
-    .specrow .cell{border-left:1px solid var(--rule)!important;padding:24px 16px}
-    .specrow .cell:nth-child(2n+1){border-left:0!important;padding-left:0}
-    .prod .item{grid-template-columns:1fr;gap:20px;padding:40px 0}
-    .prod .idx{padding-top:0}
-    .tech .grid{grid-template-columns:1fr;gap:32px}
-    .tech .kpi{grid-template-columns:repeat(2,1fr)}
-    .tech .kpi .k:nth-child(2n+1){border-left:0}
-    .specs .grid{grid-template-columns:1fr;border-top:0}
-    .specs .col{border-right:0;border-top:1px solid var(--ink);padding:24px 0}
-    .ctrl .grid,.contact .grid,footer .wrap{grid-template-columns:1fr;gap:32px}
-    .hero h1{font-size:44px}
-    nav.top{display:none}
-    .burger{display:block}
-    header{padding:0 16px}
-    section{padding:0 16px}
-    .contact h2{font-size:36px}
-  }
-
-  /* ---------- 00.01 hero interactive 3D ---------- */
+  /* 3D Demo 區域 */
   .demo3d{margin-bottom:56px}
   .demo3d .stage{
-    position:relative;border:1px solid var(--rule);background:var(--paper);
-    height:clamp(460px,66vh,760px);overflow:hidden;
+    position:relative;border:1px solid var(--rule);background:var(--card);
+    height:clamp(460px,66vh,760px);overflow:hidden;border-radius:var(--radius) var(--radius) 0 0;
   }
-  .demo3d .stage:fullscreen,.demo3d .stage:-webkit-full-screen{height:100%;border:0}
   .demo3d iframe{width:100%;height:100%;border:0;display:block;background:var(--paper)}
-
   .demo3d .veil{
     position:absolute;inset:0;display:flex;flex-direction:column;
     align-items:center;justify-content:center;gap:14px;
-    background:var(--paper);color:var(--mute);
+    background:var(--card);color:var(--mute);
     font-stretch:87%;font-weight:600;font-size:11px;letter-spacing:.18em;
     text-transform:uppercase;transition:opacity .5s;
   }
@@ -275,10 +220,10 @@
     animation:d3scan 1.15s ease-in-out infinite;
   }
   @keyframes d3scan{0%{transform:translateX(-100%)}100%{transform:translateX(320%)}}
-
   .demo3d .ctl{
     display:flex;align-items:center;gap:16px;flex-wrap:wrap;
-    border:1px solid var(--rule);border-top:0;padding:10px 14px;
+    border:1px solid var(--rule);border-top:0;padding:12px 16px;
+    border-radius:0 0 var(--radius) var(--radius);background:var(--card);
   }
   .demo3d .ctl .hint{
     font-stretch:87%;font-weight:600;font-size:10px;color:var(--mute);
@@ -286,66 +231,424 @@
   }
   .demo3d .ctl .acts{margin-left:auto;display:flex;gap:8px;flex:none}
   .demo3d .ctl .acts button{
-    display:flex;align-items:center;gap:7px;padding:7px 13px;
-    border:1px solid var(--ink);
+    display:flex;align-items:center;gap:7px;padding:8px 14px;
+    border:1px solid var(--rule);border-radius:var(--radius);
     font-stretch:87%;font-weight:600;font-size:11px;letter-spacing:.1em;
-    text-transform:uppercase;white-space:nowrap;transition:background .15s,color .15s;
+    text-transform:uppercase;white-space:nowrap;transition:all .15s var(--ease);
+    background:var(--paper);
   }
-  .demo3d .ctl .acts button:hover{background:var(--ink);color:var(--paper)}
+  .demo3d .ctl .acts button:hover{background:var(--ink);color:var(--paper);border-color:var(--ink)}
 
-  @media (max-width:900px){
-    .demo3d .stage{height:clamp(340px,56vh,520px)}
-    .demo3d .ctl{gap:10px}
-    .demo3d .ctl .hint:nth-of-type(2){display:none}
-    .demo3d .ctl .acts{margin-left:auto}
-    .demo3d .ctl .acts button{padding:7px 10px;font-size:10px}
+  /* ===== 產品陣容升級 ===== */
+  .prod{padding:8px 0 24px}
+  .prod .item{
+    display:grid;grid-template-columns:110px 1.1fr 1.4fr;gap:32px;
+    padding:56px 0;border-top:1px solid var(--rule);
+    align-items:start;transition:background .25s var(--ease);
+    border-radius:0;padding-left:0;padding-right:0;
+  }
+  .prod .item:hover{background:linear-gradient(to right,rgba(117,179,42,.04),transparent 60%)}
+  .prod .item:last-child{border-bottom:1px solid var(--rule)}
+
+  .prod .idx{
+    font-stretch:87%;font-weight:600;font-size:12px;letter-spacing:.12em;
+    color:var(--mute);padding-top:6px;
+  }
+  .prod .idx b{display:block;color:var(--ink);font-weight:500;font-size:16px;margin-top:8px;position:relative;padding-top:10px}
+  .prod .idx b::before{content:"";position:absolute;top:0;left:0;width:24px;height:2px;background:var(--brand)}
+
+  .prod .info h3{
+    font-size:28px;font-weight:700;letter-spacing:-.01em;line-height:1.2;
+    margin-bottom:8px;color:var(--ink);font-family:var(--serif);
+  }
+  .prod .info .en{
+    font-size:11px;font-stretch:87%;font-weight:600;letter-spacing:.08em;
+    color:var(--mute);text-transform:uppercase;margin-bottom:16px;
+  }
+  .prod .info p{font-size:14px;color:var(--gray-700);line-height:1.7;max-width:38ch;margin-bottom:20px}
+
+  .prod-features{
+    display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:20px;
+  }
+  .prod-features div{
+    display:flex;align-items:flex-start;gap:8px;font-size:13px;color:var(--gray-700);
+  }
+  .prod-features div::before{
+    content:"";flex:none;width:4px;height:4px;border-radius:50%;
+    background:var(--brand);margin-top:8px;
   }
 
-  /* ---------- type roles ---------- */
-  /* Han headings take a serif face; Latin in the same line stays Archivo */
-  html[lang="zh-Hant"] h1,html[lang="zh-Hant"] h2,
-  html[lang="zh-Hant"] h3,html[lang="zh-Hant"] h4{
-    font-family:"Archivo","Noto Serif TC",Georgia,serif;font-weight:700;letter-spacing:.005em;
+  .prod-app{
+    font-size:12px;color:var(--mute);margin-bottom:20px;padding-top:12px;border-top:1px dashed var(--rule);
   }
-  html[lang="zh-Hant"] .hero h1{font-size:clamp(38px,5.6vw,84px);font-weight:900;line-height:1.22;max-width:13ch}
-  html[lang="zh-Hant"] .tech .txt h2,
-  html[lang="zh-Hant"] .ctrl h2{line-height:1.34;font-size:38px}
-  html[lang="zh-Hant"] .contact h2{line-height:1.24;font-size:clamp(32px,4.2vw,50px)}
-  html[lang="zh-Hant"] .prod .info h3{line-height:1.3}
-  html[lang="zh-Hant"] p,html[lang="zh-Hant"] .lbl,
-  html[lang="zh-Hant"] .compare td{line-height:1.85}
-  html[lang="en"] .hero h1{font-stretch:104%;font-weight:700}
-  html[lang="en"] h2,html[lang="en"] h3{font-stretch:102%}
+  .prod-app b{color:var(--ink);font-weight:600;margin-right:6px}
 
-  /* ---------- figure / ground ---------- */
-  /* drawings sit on white sheets so they read as documents on the silica ground */
-  .prod .drawing,.tech .diagram,.ctrl .cabinet{
-    background:var(--card);border:1px solid var(--rule);border-radius:4px;padding:20px 22px;
+  .prod .keyspec{
+    display:grid;grid-template-columns:1fr 1fr;gap:0;
+    border-top:1px solid var(--rule);border-bottom:1px solid var(--rule);
+    margin-bottom:20px;
   }
-  .prod .drawing .cap{bottom:12px;right:16px}
-  .compare table,.specs .grid{background:var(--card)}
-  .specs .grid{border-radius:4px;overflow:hidden}
+  .prod .keyspec div{padding:10px 0;border-right:1px solid var(--rule)}
+  .prod .keyspec div:nth-child(2n){border-right:0;padding-left:16px}
+  .prod .keyspec .k{
+    font-stretch:87%;font-weight:600;font-size:10px;letter-spacing:.12em;
+    color:var(--mute);text-transform:uppercase;margin-bottom:4px;
+  }
+  .prod .keyspec .v{font-size:14px;font-weight:500;font-variant-numeric:tabular-nums;color:var(--ink)}
+  .prod .keyspec .v.tbd{color:var(--mute);font-weight:400}
 
-  /* ---------- micro-detail ---------- */
-  ::selection{background:rgba(117,179,42,.22)}
-  :focus-visible{outline:2px solid var(--signal);outline-offset:3px;border-radius:2px}
-  .hero h1 em,.contact h2 em{color:var(--signal)}
-  nav.top a{position:relative}
-  nav.top a::after{
-    content:"";position:absolute;left:14px;right:14px;bottom:5px;height:1px;background:var(--brand);
-    transform:scaleX(0);transform-origin:left;transition:transform .2s ease;
+  .prod-actions{display:flex;gap:10px}
+  .btn-sm{padding:8px 16px;font-size:12px}
+
+  .prod .drawing{
+    background:var(--card);border:1px solid var(--rule);border-radius:var(--radius);
+    padding:24px;position:relative;min-height:280px;
+    box-shadow:0 2px 8px rgba(20,32,26,.03);
   }
-  nav.top a:hover::after,nav.top a.on::after{transform:scaleX(1)}
-  .prod .item{transition:background .2s ease}
-  .prod .item:hover{background:linear-gradient(to right,rgba(117,179,42,.055),transparent 55%)}
-  .prod .idx b{position:relative;padding-top:9px}
-  .prod .idx b::before{content:"";position:absolute;top:0;left:0;width:20px;height:2px;background:var(--brand)}
-  .ctrl .parts .n{color:var(--signal)}
-  .contact .info dd a:hover{border-color:var(--brand)}
-  .langtog button.on{color:var(--signal)}
-  .demo3d .stage{border-radius:4px 4px 0 0}
-  .demo3d .veil{border-radius:4px 4px 0 0}
-  .demo3d .ctl{border-radius:0 0 4px 4px}
+  .prod .drawing svg{display:block;width:100%;height:auto;max-height:340px}
+  .prod .drawing .cap{
+    position:absolute;bottom:12px;right:16px;
+    font-stretch:87%;font-weight:600;font-size:10px;letter-spacing:.1em;
+    color:var(--mute);text-transform:uppercase;
+  }
+
+  /* SVG 技術繪圖樣式 */
+  .td-line{stroke:var(--ink);stroke-width:1;fill:none}
+  .td-thin{stroke:var(--ink);stroke-width:.5;fill:none}
+  .td-dim{stroke:var(--mute);stroke-width:.5;fill:none}
+  .td-fill-quartz{fill:none;stroke:var(--ink);stroke-width:1}
+  .td-fill-film{fill:var(--ink)}
+  .td-fill-signal{fill:var(--heat)}
+  .td-label{font-stretch:87%;font-weight:600;font-size:9px;fill:var(--ink);letter-spacing:.06em}
+  .td-lbl-mute{font-stretch:87%;font-weight:600;font-size:9px;fill:var(--mute);letter-spacing:.06em}
+  .td-dim-label{font-stretch:87%;font-weight:600;font-size:8.5px;fill:var(--mute);letter-spacing:.06em}
+
+  /* ===== 技術原理升級 ===== */
+  .tech{padding:8px 0 40px}
+  .tech .grid{
+    display:grid;grid-template-columns:1.05fr 1fr;gap:64px;
+    padding:16px 0 32px;align-items:start;
+  }
+  .tech .txt h2{
+    font-size:36px;font-weight:800;letter-spacing:-.02em;line-height:1.25;
+    margin-bottom:20px;max-width:14ch;font-family:var(--serif);
+  }
+  .tech .txt p{font-size:15px;line-height:1.75;color:var(--gray-700);margin-bottom:14px;max-width:46ch}
+  .tech .txt p b{font-weight:700;color:var(--ink)}
+
+  .tech .diagram{
+    background:var(--card);border:1px solid var(--rule);border-radius:var(--radius);
+    padding:24px;box-shadow:0 2px 8px rgba(20,32,26,.03);
+  }
+  .tech .diagram svg{width:100%;height:auto;max-height:420px}
+
+  .tech .kpi{
+    display:grid;grid-template-columns:repeat(4,1fr);
+    border-top:1px solid var(--ink);border-bottom:1px solid var(--ink);
+    margin-top:24px;background:var(--card);
+  }
+  .tech .kpi .k{padding:24px 20px;border-left:1px solid var(--rule)}
+  .tech .kpi .k:first-child{border-left:0}
+  .tech .kpi .fig{
+    font-weight:800;font-size:32px;letter-spacing:-.03em;line-height:1;
+    margin-bottom:8px;font-variant-numeric:tabular-nums;color:var(--signal);
+  }
+  .tech .kpi .fig .u{font-size:.5em;font-weight:500;color:var(--mute);margin-left:2px}
+  .tech .kpi .lbl{
+    font-stretch:87%;font-weight:600;font-size:10px;letter-spacing:.1em;
+    color:var(--mute);text-transform:uppercase;
+  }
+
+  /* 專利與認證 */
+  .tech-certs{
+    display:flex;flex-wrap:wrap;gap:24px;margin-top:32px;padding-top:24px;border-top:1px solid var(--rule);
+  }
+  .tech-certs h4{
+    font-stretch:87%;font-weight:600;font-size:11px;letter-spacing:.12em;
+    text-transform:uppercase;color:var(--mute);margin-bottom:8px;width:100%;
+  }
+  .cert-item{
+    display:flex;align-items:center;gap:10px;padding:10px 16px;
+    border:1px solid var(--rule);border-radius:var(--radius);background:var(--card);
+    font-size:13px;color:var(--gray-700);
+  }
+  .cert-item::before{content:"✓";color:var(--signal);font-weight:700}
+
+  /* 對比表格 */
+  .compare{margin-top:56px}
+  .compare table{width:100%;border-collapse:collapse;font-variant-numeric:tabular-nums;font-size:13px}
+  .compare th,.compare td{padding:14px 16px;text-align:left;border-bottom:1px solid var(--rule);vertical-align:top}
+  .compare th{
+    font-stretch:87%;font-weight:600;font-size:10px;letter-spacing:.12em;
+    color:var(--mute);text-transform:uppercase;font-weight:500;
+    border-bottom:1px solid var(--ink);background:var(--card);
+  }
+  .compare tr td:first-child{font-weight:500}
+  .compare .own{background:linear-gradient(to right,rgba(117,179,42,.08),rgba(117,179,42,0) 72%)}
+  .compare .own td{border-bottom-color:rgba(117,179,42,.3)}
+  .compare .own td:first-child{color:var(--signal);font-weight:700;box-shadow:inset 3px 0 0 var(--brand)}
+  .compare .foot{
+    font-stretch:87%;font-weight:600;font-size:10px;color:var(--mute);
+    letter-spacing:.06em;padding:12px 0;text-transform:uppercase;
+  }
+
+  /* ===== 規格總表 ===== */
+  .specs{padding:8px 0 40px}
+  .specs .grid{
+    display:grid;grid-template-columns:1fr 1fr 1fr;gap:0;
+    border-top:1px solid var(--ink);background:var(--card);
+    border-radius:var(--radius);overflow:hidden;
+    box-shadow:0 2px 8px rgba(20,32,26,.03);
+  }
+  .specs .col{border-right:1px solid var(--rule);padding:28px 24px}
+  .specs .col:last-child{border-right:0}
+  .specs .col h4{font-size:20px;font-weight:700;letter-spacing:-.01em;margin-bottom:4px;font-family:var(--serif)}
+  .specs .col .en{
+    font-stretch:87%;font-weight:600;font-size:10px;letter-spacing:.12em;
+    color:var(--mute);text-transform:uppercase;margin-bottom:20px;
+  }
+  .specs .row{
+    display:grid;grid-template-columns:1fr auto;padding:10px 0;
+    border-bottom:1px solid var(--rule);gap:16px;font-size:13px;
+  }
+  .specs .row:last-child{border-bottom:0}
+  .specs .row .k{color:var(--mute)}
+  .specs .row .v{font-weight:500;text-align:right;font-variant-numeric:tabular-nums}
+  .specs .row .v.tbd{color:var(--mute);font-weight:400}
+  .specs .note{
+    margin-top:20px;padding:12px 0;border-top:1px solid var(--rule);
+    font-stretch:87%;font-weight:600;font-size:10px;letter-spacing:.08em;
+    color:var(--mute);text-transform:uppercase;
+  }
+
+  /* ===== 控制系統 ===== */
+  .ctrl{padding:8px 0 40px}
+  .ctrl .grid{
+    display:grid;grid-template-columns:1fr 1.3fr;gap:64px;
+    align-items:start;padding:24px 0;
+  }
+  .ctrl h2{
+    font-size:36px;font-weight:800;letter-spacing:-.02em;line-height:1.25;
+    margin-bottom:20px;max-width:12ch;font-family:var(--serif);
+  }
+  .ctrl p{font-size:15px;line-height:1.75;margin-bottom:16px;max-width:42ch;color:var(--gray-700)}
+  .ctrl .cabinet{
+    background:var(--card);border:1px solid var(--rule);border-radius:var(--radius);
+    padding:24px;box-shadow:0 2px 8px rgba(20,32,26,.03);
+  }
+  .ctrl .cabinet svg{width:100%;height:auto;max-height:520px;display:block}
+  .ctrl .parts{
+    display:grid;grid-template-columns:1fr 1fr;gap:0;
+    border-top:1px solid var(--ink);margin-top:24px;
+  }
+  .ctrl .parts .p{padding:14px 16px;border-right:1px solid var(--rule);border-bottom:1px solid var(--rule)}
+  .ctrl .parts .p:nth-child(2n){border-right:0}
+  .ctrl .parts .n{
+    font-stretch:87%;font-weight:600;font-size:10px;color:var(--signal);
+    letter-spacing:.12em;margin-bottom:4px;
+  }
+  .ctrl .parts .t{font-size:13px;font-weight:500}
+  .ctrl .parts .d{font-size:11px;color:var(--mute);margin-top:2px}
+
+  /* ===== 客戶實績 ===== */
+  .cases{padding:8px 0 40px}
+  .client-logos{
+    display:grid;grid-template-columns:repeat(6,1fr);gap:1px;
+    background:var(--rule);border:1px solid var(--rule);
+    border-radius:var(--radius);overflow:hidden;margin-bottom:40px;
+  }
+  .client-logos div{
+    background:var(--card);padding:24px 16px;display:flex;
+    align-items:center;justify-content:center;
+    font-size:13px;color:var(--gray-500);font-weight:500;
+    transition:background .2s;
+  }
+  .client-logos div:hover{background:var(--gray-50);color:var(--ink)}
+
+  .case-cards{display:grid;grid-template-columns:1fr 1fr 1fr;gap:20px}
+  .case-card{
+    background:var(--card);border:1px solid var(--rule);border-radius:var(--radius);
+    padding:24px;transition:all .25s var(--ease);
+  }
+  .case-card:hover{
+    transform:translateY(-2px);
+    box-shadow:0 8px 24px rgba(20,32,26,.08);
+    border-color:var(--brand);
+  }
+  .case-card .tag{
+    display:inline-block;padding:4px 10px;border-radius:999px;
+    background:rgba(117,179,42,.1);color:var(--signal);
+    font-size:11px;font-weight:600;margin-bottom:12px;
+  }
+  .case-card h4{font-size:18px;font-weight:700;margin-bottom:10px;font-family:var(--serif)}
+  .case-card p{font-size:13px;color:var(--gray-600);line-height:1.7;margin-bottom:12px}
+  .case-card .result{
+    padding-top:12px;border-top:1px dashed var(--rule);
+    font-size:13px;color:var(--signal);font-weight:600;
+  }
+
+  /* ===== FAQ ===== */
+  .faq{padding:8px 0 40px}
+  .faq-list{max-width:900px}
+  .faq-item{border-bottom:1px solid var(--rule)}
+  .faq-q{
+    width:100%;text-align:left;padding:20px 0;
+    font-size:15px;font-weight:600;color:var(--ink);
+    display:flex;justify-content:space-between;align-items:center;
+    cursor:pointer;transition:color .15s;background:none;border:0;
+    font-family:inherit;
+  }
+  .faq-q:hover{color:var(--signal)}
+  .faq-q::after{
+    content:"+";font-size:20px;font-weight:300;color:var(--mute);transition:transform .2s;
+  }
+  .faq-item.open .faq-q::after{transform:rotate(45deg)}
+  .faq-a{
+    max-height:0;overflow:hidden;transition:max-height .3s var(--ease);
+    font-size:14px;color:var(--gray-600);line-height:1.75;
+  }
+  .faq-item.open .faq-a{max-height:300px;padding-bottom:20px}
+
+  /* ===== 聯絡與表單 ===== */
+  .contact{padding:8px 0 80px;border-top:1px solid var(--rule);margin-top:24px}
+  .contact .grid{
+    display:grid;grid-template-columns:1fr 1.2fr;gap:64px;padding:48px 0;
+  }
+  .contact h2{
+    font-size:44px;font-weight:800;letter-spacing:-.03em;line-height:1.2;
+    max-width:12ch;font-family:var(--serif);margin-bottom:24px;
+  }
+  .contact h2 em{font-style:normal;color:var(--signal)}
+  .contact .info dl{
+    display:grid;grid-template-columns:120px 1fr;gap:0;
+    border-top:1px solid var(--ink);
+  }
+  .contact .info dt{
+    padding:14px 0;font-stretch:87%;font-weight:600;font-size:10px;
+    letter-spacing:.12em;color:var(--mute);text-transform:uppercase;
+    border-bottom:1px solid var(--rule);
+  }
+  .contact .info dd{
+    padding:14px 0;font-size:14px;border-bottom:1px solid var(--rule);
+    font-variant-numeric:tabular-nums;
+  }
+  .contact .info dd a{
+    border-bottom:1px solid transparent;transition:border-color .15s;
+  }
+  .contact .info dd a:hover{border-color:var(--signal)}
+
+  /* 詢盤表單 */
+  .contact-form{
+    background:var(--card);border:1px solid var(--rule);border-radius:var(--radius);
+    padding:32px;box-shadow:0 2px 12px rgba(20,32,26,.04);
+  }
+  .form-row{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px}
+  .form-group{margin-bottom:16px}
+  .form-group label{
+    display:block;font-stretch:87%;font-weight:600;font-size:11px;
+    letter-spacing:.08em;text-transform:uppercase;color:var(--mute);
+    margin-bottom:6px;
+  }
+  .form-group input,.form-group select,.form-group textarea{
+    width:100%;padding:10px 12px;border:1px solid var(--rule);border-radius:var(--radius);
+    font-family:inherit;font-size:14px;background:var(--paper);color:var(--ink);
+    transition:border-color .15s, box-shadow .15s;
+  }
+  .form-group input:focus,.form-group select:focus,.form-group textarea:focus{
+    outline:none;border-color:var(--brand);
+    box-shadow:0 0 0 3px rgba(117,179,42,.15);
+  }
+  .form-group textarea{resize:vertical;min-height:100px}
+  .form-submit{margin-top:8px}
+
+  /* ===== 側邊導航 ===== */
+  .side-nav{
+    position:fixed;right:32px;top:50%;transform:translateY(-50%);
+    z-index:90;display:flex;flex-direction:column;gap:12px;
+  }
+  .side-nav a{
+    width:8px;height:8px;border-radius:50%;background:var(--rule);
+    transition:all .2s;position:relative;
+  }
+  .side-nav a::after{
+    content:attr(data-label);position:absolute;right:16px;top:50%;
+    transform:translateY(-50%);white-space:nowrap;
+    font-size:11px;color:var(--mute);opacity:0;
+    transition:opacity .2s;pointer-events:none;
+  }
+  .side-nav a:hover::after{opacity:1}
+  .side-nav a.active{background:var(--brand);transform:scale(1.4)}
+
+  /* ===== 頁尾升級 ===== */
+  footer{
+    background:var(--deep);color:#c0c0c0;padding:56px 24px 32px;
+    font-size:12px;line-height:1.7;
+  }
+  footer .wrap{
+    max-width:var(--maxw);margin:0 auto;
+    display:grid;grid-template-columns:1.5fr 1fr 1fr 1fr;gap:48px;
+  }
+  footer .brand{color:#fff;font-size:15px;font-weight:800;margin-bottom:10px;flex-direction:column;align-items:flex-start;gap:4px}
+  footer .brand .mark{height:26px;width:auto;display:block;margin-bottom:4px}
+  footer .brand .sub{
+    color:#888;font-stretch:87%;font-weight:600;font-size:10px;
+    letter-spacing:.14em;text-transform:uppercase;font-weight:500;
+    display:block;margin-top:2px;
+  }
+  footer .brand-desc{color:#999;max-width:32ch;line-height:1.7;margin-top:12px}
+
+  footer h5{
+    font-stretch:87%;font-weight:600;font-size:10px;letter-spacing:.14em;
+    color:#888;text-transform:uppercase;margin-bottom:16px;font-weight:500;
+  }
+  footer ul{list-style:none}
+  footer ul li{margin-bottom:8px}
+  footer ul li a{color:#aaa;transition:color .15s}
+  footer ul li a:hover{color:#fff}
+
+  footer .fine{
+    max-width:var(--maxw);margin:40px auto 0;padding-top:24px;
+    border-top:1px solid #2a2a2a;
+    display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px;
+    font-stretch:87%;font-weight:600;font-size:10px;
+    letter-spacing:.08em;color:#666;text-transform:uppercase;
+  }
+
+  /* 入場動畫 */
+  .fade-up{opacity:0;transform:translateY(20px);transition:opacity .6s var(--ease), transform .6s var(--ease)}
+  .fade-up.visible{opacity:1;transform:translateY(0)}
+
+  /* ===== 響應式 ===== */
+  @media (max-width:1024px){
+    .side-nav{display:none}
+    .specrow{grid-template-columns:repeat(3,1fr)}
+    .prod .item{grid-template-columns:100px 1fr;gap:20px}
+    .prod .drawing{grid-column:1 / -1}
+    .tech .grid{grid-template-columns:1fr;gap:32px}
+    .tech .kpi{grid-template-columns:repeat(2,1fr)}
+    .specs .grid{grid-template-columns:1fr;border-top:0}
+    .specs .col{border-right:0;border-top:1px solid var(--rule);padding:24px 0}
+    .ctrl .grid,.contact .grid,footer .wrap{grid-template-columns:1fr;gap:32px}
+    .client-logos{grid-template-columns:repeat(3,1fr)}
+    .case-cards{grid-template-columns:1fr}
+    .form-row{grid-template-columns:1fr}
+  }
+
+  @media (max-width:768px){
+    header{padding:0 16px}
+    section{padding:0 16px}
+    nav.top{display:none}
+    .burger{display:block}
+    .hero h1{font-size:32px}
+    .specrow{grid-template-columns:repeat(2,1fr)}
+    .specrow .cell{border-left:1px solid var(--rule)!important;padding:24px 16px}
+    .specrow .cell:nth-child(2n+1){border-left:0!important;padding-left:0}
+    .prod .item{grid-template-columns:1fr;gap:20px;padding:40px 0}
+    .prod .idx{padding-top:0}
+    .tech .kpi .k{padding:16px}
+    .contact h2{font-size:32px}
+    .client-logos{grid-template-columns:repeat(2,1fr)}
+  }
 
   @media (prefers-reduced-motion:reduce){
     html{scroll-behavior:auto}
@@ -354,42 +657,64 @@
 </style>
 </head>
 <body>
+<!-- 滾動進度條 -->
+<div class="scroll-progress" id="scrollProgress"></div>
 
-<header>
+<header id="header">
   <a class="brand" href="#" aria-label="Rewatt HeatingTec">
-    <img class="mark" src="data:image/png;base64,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" alt="Rewatt" width="355" height="72" decoding="async">
-    <span class="sub">HeatingTec</span>
+    <img class="mark" src="data:image/png;base64,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" alt="Rewatt" width="355" height="72" decoding="async">
+    <span class="sub">HeatingTec · Semiconductor</span>
   </a>
+
   <nav class="top">
-    <a href="#products" data-zh="產品" data-en="Products">產品</a>
-    <a href="#tech" data-zh="技術" data-en="Technology">技術</a>
-    <a href="#specs" data-zh="規格" data-en="Specs">規格</a>
-    <a href="#control" data-zh="控制" data-en="Control">控制</a>
-    <a href="#contact" data-zh="洽詢" data-en="Contact">洽詢</a>
+    <a href="#products" data-zh="產品陣容" data-en="Products">產品陣容</a>
+    <a href="#tech" data-zh="技術原理" data-en="Technology">技術原理</a>
+    <a href="#specs" data-zh="規格總覽" data-en="Specs">規格總覽</a>
+    <a href="#control" data-zh="控制系統" data-en="Control">控制系統</a>
+    <a href="#cases" data-zh="客戶實績" data-en="Cases">客戶實績</a>
+    <a href="#contact" data-zh="洽詢報價" data-en="Contact">洽詢報價</a>
   </nav>
+
   <div class="langtog">
     <button class="on" data-lang="zh">ZH</button>
     <button data-lang="en">EN</button>
   </div>
+
   <button class="burger" aria-label="menu">☰</button>
 </header>
 
 <main>
-
   <!-- HERO -->
   <section class="hero">
     <div class="secmark">
       <span data-zh="半導體濕製程加熱模組" data-en="Semiconductor Wet Process Heating Modules">半導體濕製程加熱模組</span>
       <span class="rule"></span>
-      <span class="mono" data-zh="麗源光電・自2011" data-en="Liyuan Optoelectronics · Est. 2011">麗源光電・自 2011</span>
+      <span class="mono" data-zh="麗源光電・自 2011" data-en="Liyuan Optoelectronics · Est. 2011">麗源光電・自 2011</span>
     </div>
-    <h1 data-zh="精密加熱,<br>從<em>薄膜</em>開始。" data-en="Precision heating,<br>starts at the <em>film</em>.">精密加熱,<br>從<em>薄膜</em>開始。</h1>
-    <p class="sub" data-zh="奈米配方薄膜直接鍍於超純石英外壁,<b>金屬零接觸流體</b>。適用於半導體濕製程、化學藥液與超純水加熱,在小體積內達成高效率、快升溫、長壽命三項工程目標。"
-       data-en="Nano-formulated thin film deposited directly on the outer wall of ultrapure quartz, with <b>zero metal contact with the fluid path</b>. Built for semiconductor wet processes, chemical liquid, and DI water — small footprint, high efficiency, fast ramp, long life.">
-      奈米配方薄膜直接鍍於超純石英外壁,<b>金屬零接觸流體</b>。適用於半導體濕製程、化學藥液與超純水加熱,在小體積內達成高效率、快升溫、長壽命三項工程目標。
+
+    <h1 data-zh="零金屬污染<br><em>精準控溫</em>，<br>奈米薄膜加熱技術"
+        data-en="Zero Metal Contact<br><em>Precision Temp Control</em><br>Nano Thin-Film Heating">
+      零金屬污染<br><em>精準控溫</em>，<br>奈米薄膜加熱技術
+    </h1>
+
+    <p class="sub" data-zh="奈米配方發熱層直接鍍於超純石英外壁，<b>流道零金屬接觸</b>，杜絕離子析出與顆粒污染。適用半導體晶圓清洗、化學藥液、超純水加熱，在緊湊體積內實現高效率、快升溫、長壽命三大工程目標。"
+       data-en="Nano-formulated heating layer deposited directly on the outer wall of ultrapure quartz, with <b>zero metal contact in the fluid path</b>, eliminating ion leaching and particle contamination. Built for semiconductor wafer cleaning, chemical liquids, and DI water heating — high efficiency, fast ramp-up, and long lifespan in a compact footprint.">
+      奈米配方發熱層直接鍍於超純石英外壁，<b>流道零金屬接觸</b>，杜絕離子析出與顆粒污染。適用半導體晶圓清洗、化學藥液、超純水加熱，在緊湊體積內實現高效率、快升溫、長壽命三大工程目標。
     </p>
 
-    <!-- 00.01 interactive 3D -->
+    <div class="hero-badges">
+      <span class="badge" data-zh="五屆台灣精品獎肯定" data-en="5-Time Taiwan Excellence Award Winner">五屆台灣精品獎肯定</span>
+      <span class="badge" data-zh="98%+ 電熱轉換效率" data-en="98%+ Electro-Thermal Efficiency">98%+ 電熱轉換效率</span>
+      <span class="badge" data-zh="20,000 小時薄膜壽命" data-en="20,000hr Film Lifespan">20,000 小時薄膜壽命</span>
+      <span class="badge" data-zh="全機台國產自研自製" data-en="100% Domestic R&D and Manufacturing">全機台國產自研自製</span>
+    </div>
+
+    <div class="hero-cta">
+      <a href="#contact" class="btn btn-primary" data-zh="索取規格書與報價" data-en="Get Datasheet & Quote">索取規格書與報價</a>
+      <a href="#products" class="btn btn-outline" data-zh="瀏覽產品系列" data-en="Browse Product Line">瀏覽產品系列</a>
+    </div>
+
+    <!-- 3D 互動展示 -->
     <div class="demo3d">
       <div class="secmark" style="padding-top:0;padding-bottom:16px">
         <span class="no">00.01</span>
@@ -397,7 +722,6 @@
         <span class="rule"></span>
         <span class="mono">INTERACTIVE · WEBGL</span>
       </div>
-
       <div class="stage" id="d3-stage">
         <iframe id="d3-frame" title="Rewatt Inline Heater — 3D assembly walkthrough"
                 allowfullscreen referrerpolicy="no-referrer"></iframe>
@@ -406,7 +730,6 @@
           <span data-zh="載入立體模型" data-en="Loading 3D model">載入立體模型</span>
         </div>
       </div>
-
       <div class="ctl">
         <span class="hint" data-zh="拖曳旋轉・滾輪或雙指縮放" data-en="Drag to rotate · scroll or pinch to zoom">拖曳旋轉・滾輪或雙指縮放</span>
         <span class="hint" data-zh="第 5 步可觸發互鎖演示" data-en="Step 5 runs a live interlock demo">第 5 步可觸發互鎖演示</span>
@@ -425,27 +748,27 @@
     </div>
 
     <div class="specrow">
-      <div class="cell">
+      <div class="cell fade-up">
         <div class="idx">EFFICIENCY</div>
-        <div class="fig num">98<span class="u">%+</span></div>
+        <div class="fig num" data-count="98">0<span class="u">%+</span></div>
         <div class="lbl" data-zh="電熱轉換效率<br>公開資料" data-en="Electro-thermal conversion<br>Published figure">電熱轉換效率<br>公開資料</div>
       </div>
-      <div class="cell">
+      <div class="cell fade-up">
         <div class="idx">POWER</div>
         <div class="fig num">3–4<span class="u">kW</span></div>
         <div class="lbl" data-zh="化學液型單機額定<br>純水型 10–30 kW" data-en="Chemical single-unit rating<br>DI models 10–30 kW">化學液型單機額定<br>純水型 10–30 kW</div>
       </div>
-      <div class="cell">
+      <div class="cell fade-up">
         <div class="idx">QUARTZ ID</div>
         <div class="fig num">Ø46<span class="u">mm</span></div>
         <div class="lbl" data-zh="流道內徑<br>3 kW 機型" data-en="Fluid bore inner diameter<br>3 kW model">流道內徑<br>3 kW 機型</div>
       </div>
-      <div class="cell">
+      <div class="cell fade-up">
         <div class="idx">LIFETIME</div>
-        <div class="fig num">20<span class="u">k h</span></div>
+        <div class="fig num" data-count="20">0<span class="u">k h</span></div>
         <div class="lbl" data-zh="薄膜實驗室試驗<br>公開資料" data-en="Thin film lab test<br>Published figure">薄膜實驗室試驗<br>公開資料</div>
       </div>
-      <div class="cell">
+      <div class="cell fade-up">
         <div class="idx">DECAY</div>
         <div class="fig num">5<span class="u">%</span></div>
         <div class="lbl" data-zh="20,000 hr 後<br>電阻衰減量" data-en="Resistance decay<br>after 20,000 hr">20,000 hr 後<br>電阻衰減量</div>
@@ -461,18 +784,34 @@
       <span class="mono" data-zh="工業型・非家用" data-en="Industrial Only · Non-Consumer">工業型・非家用</span>
     </div>
 
-    <!-- 01.01 Chemical -->
-    <div class="item">
+    <!-- 01 化學液加熱器 -->
+    <div class="item fade-up">
       <div class="idx">
-        <b data-zh="化學液" data-en="Chemical">化學液</b>
+        01
+        <b data-zh="化學液型" data-en="Chemical">化學液型</b>
       </div>
       <div class="info">
         <h3 data-zh="Inline 化學藥液加熱器" data-en="Inline Chemical Heater">Inline 化學藥液加熱器</h3>
         <div class="en">INLINE CHEMICAL HEATER / 3–4 kW</div>
-        <p data-zh="立式串接於管路,單顆石英管加熱藥液通過的瞬間路徑。薄膜、電極、感測全部位於乾側,流道內只有超純石英。適用 SC1/SC2、KOH、稀 HF 等腐蝕性液體。"
-           data-en="Vertical, in-line installation on the fluid loop; a single quartz tube heats the liquid as it passes through. Film, electrodes, and sensors all sit on the dry side — only ultrapure quartz contacts the flow. Suits SC1/SC2, KOH, dilute HF and other corrosives.">
-          立式串接於管路,單顆石英管加熱藥液通過的瞬間路徑。薄膜、電極、感測全部位於乾側,流道內只有超純石英。適用 SC1/SC2、KOH、稀 HF 等腐蝕性液體。
+
+        <p data-zh="立式串接於管路，單顆石英管加熱藥液通過的瞬間路徑。薄膜、電極、感測全部位於乾側，流道內只有超純石英。適用 SC1/SC2、KOH、稀 HF 等腐蝕性液體。"
+           data-en="Vertical in-line installation; a single quartz tube heats liquid as it passes. Film, electrodes, and sensors all on the dry side — only ultrapure quartz contacts the flow. Suits SC1/SC2, KOH, dilute HF and other corrosives.">
+          立式串接於管路，單顆石英管加熱藥液通過的瞬間路徑。薄膜、電極、感測全部位於乾側，流道內只有超純石英。適用 SC1/SC2、KOH、稀 HF 等腐蝕性液體。
         </p>
+
+        <div class="prod-features">
+          <div data-zh="零金屬接觸流道" data-en="Zero metal contact wetted path">零金屬接觸流道</div>
+          <div data-zh="耐強酸強鹼腐蝕" data-en="Resists strong acids & bases">耐強酸強鹼腐蝕</div>
+          <div data-zh="秒級溫度響應" data-en="Second-scale response">秒級溫度響應</div>
+          <div data-zh="低顆粒產生" data-en="Low particle generation">低顆粒產生</div>
+        </div>
+
+        <div class="app">
+          <span data-zh="應用場景：晶圓濕式清洗、光阻剝離、蝕刻製程" data-en="Applications: Wafer wet clean, resist strip, etch process">
+            <b>應用場景：</b>晶圓濕式清洗、光阻剝離、蝕刻製程
+          </span>
+        </div>
+
         <div class="keyspec">
           <div><div class="k">POWER</div><div class="v">3 / 4 kW</div></div>
           <div><div class="k">VOLTAGE</div><div class="v">220 / 380 V</div></div>
@@ -481,9 +820,13 @@
           <div><div class="k" data-zh="外殼" data-en="HOUSING">HOUSING</div><div class="v tbd">—</div></div>
           <div><div class="k" data-zh="流體接口" data-en="PORT">PORT</div><div class="v tbd">—</div></div>
         </div>
+
+        <div class="prod-actions" style="margin-top:16px">
+          <a href="#contact" class="btn btn-outline btn-sm" data-zh="詢問此產品" data-en="Inquire This Product">詢問此產品</a>
+          <a href="#contact" class="btn btn-outline btn-sm" data-zh="下載規格書" data-en="Download Datasheet">下載規格書</a>
+        </div>
       </div>
       <div class="drawing">
-        <!-- Chemical heater cross-section -->
         <svg viewBox="0 0 480 340" xmlns="http://www.w3.org/2000/svg">
           <!-- outer housing -->
           <rect x="140" y="40" width="200" height="260" class="td-line"/>
@@ -508,22 +851,18 @@
           <line x1="140" y1="326" x2="140" y2="334" class="td-dim"/>
           <line x1="340" y1="326" x2="340" y2="334" class="td-dim"/>
           <text x="240" y="340" text-anchor="middle" class="td-dim-label">145</text>
-
           <line x1="360" y1="40" x2="360" y2="300" class="td-dim"/>
           <line x1="356" y1="40" x2="364" y2="40" class="td-dim"/>
           <line x1="356" y1="300" x2="364" y2="300" class="td-dim"/>
           <text x="366" y="173" class="td-dim-label" transform="rotate(90 366 173)">390</text>
-
           <!-- callouts -->
           <line x1="215" y1="170" x2="80" y2="170" class="td-thin"/>
           <text x="14" y="167" class="td-label" data-zh-svg="奈米薄膜" data-en-svg="THIN FILM">薄膜</text>
           <text x="14" y="178" class="td-lbl-mute">FILM · dry side</text>
-
           <line x1="240" y1="60" x2="240" y2="110" class="td-thin"/>
           <line x1="240" y1="60" x2="410" y2="60" class="td-thin"/>
           <text x="415" y="58" class="td-label" data-zh-svg="超純石英" data-en-svg="QUARTZ">石英</text>
           <text x="415" y="70" class="td-lbl-mute">QUARTZ · wetted</text>
-
           <line x1="150" y1="80" x2="80" y2="80" class="td-thin"/>
           <text x="14" y="78" class="td-label" data-zh-svg="外殼" data-en-svg="HOUSING">外殼</text>
           <text x="14" y="90" class="td-lbl-mute">HOUSING</text>
@@ -532,18 +871,34 @@
       </div>
     </div>
 
-    <!-- 01.02 DI Water -->
-    <div class="item">
+    <!-- 02 純水加熱器 -->
+    <div class="item fade-up">
       <div class="idx">
-        <b data-zh="純水" data-en="DI Water">純水</b>
+        02
+        <b data-zh="純水型" data-en="DI Water">純水型</b>
       </div>
       <div class="info">
         <h3 data-zh="Inline 純水加熱器" data-en="Inline DI Water Heater">Inline 純水加熱器</h3>
         <div class="en">INLINE DI WATER HEATER / DI-10 / 20 / 30</div>
-        <p data-zh="背掛式安裝,10–30 kW 三種功率階,配 SCR 相位控制。用於超純水/純水在點使用前的即熱升溫,常見場景為晶圓清洗、光阻沖洗、腔體潤洗。"
-           data-en="Wall-mount installation with three power tiers 10–30 kW, SCR phase control. Point-of-use inline heating for ultrapure and DI water — wafer cleans, resist rinses, chamber flushing.">
-          背掛式安裝,10–30 kW 三種功率階,配 SCR 相位控制。用於超純水/純水在點使用前的即熱升溫,常見場景為晶圓清洗、光阻沖洗、腔體潤洗。
+
+        <p data-zh="背掛式安裝，10–30 kW 三種功率階，配 SCR 相位控制。用於超純水/純水在點使用前的即熱升溫，常見場景為晶圓清洗、光阻沖洗、腔體潤洗。"
+           data-en="Wall-mount installation with three power tiers 10–30 kW, SCR phase control. Point-of-use inline heating for UPW / DI water — wafer cleans, resist rinses, chamber flushing.">
+          背掛式安裝，10–30 kW 三種功率階，配 SCR 相位控制。用於超純水/純水在點使用前的即熱升溫，常見場景為晶圓清洗、光阻沖洗、腔體潤洗。
         </p>
+
+        <div class="prod-features">
+          <div data-zh="SCR 精準相位控制" data-en="Precision SCR phase control">SCR 精準相位控制</div>
+          <div data-zh="紅外線非接觸測溫" data-en="IR non-contact sensing">紅外線非接觸測溫</div>
+          <div data-zh="溫度穩定度 ±0.5℃" data-en="±0.5℃ temp stability">溫度穩定度 ±0.5℃</div>
+          <div data-zh="KEYENCE 流量計" data-en="KEYENCE flow meter">KEYENCE 流量計</div>
+        </div>
+
+        <div class="app">
+          <span data-zh="應用場景：12吋晶圓廠、先進製程清洗機台、CMP 後清洗" data-en="Applications: 12-inch fab, advanced clean tools, post-CMP clean">
+            <b>應用場景：</b>12吋晶圓廠、先進製程清洗機台、CMP 後清洗
+          </span>
+        </div>
+
         <div class="keyspec">
           <div><div class="k">POWER</div><div class="v">10 / 20 / 30 kW</div></div>
           <div><div class="k">VOLTAGE</div><div class="v">380 V</div></div>
@@ -552,9 +907,13 @@
           <div><div class="k" data-zh="測溫" data-en="TEMP SENSING">TEMP SENSING</div><div class="v">IR pyrometer</div></div>
           <div><div class="k" data-zh="流量計" data-en="FLOW METER">FLOW METER</div><div class="v">KEYENCE clamp-on</div></div>
         </div>
+
+        <div class="prod-actions" style="margin-top:16px">
+          <a href="#contact" class="btn btn-outline btn-sm" data-zh="詢問此產品" data-en="Inquire This Product">詢問此產品</a>
+          <a href="#contact" class="btn btn-outline btn-sm" data-zh="下載規格書" data-en="Download Datasheet">下載規格書</a>
+        </div>
       </div>
       <div class="drawing">
-        <!-- DI heater wall-mount schematic -->
         <svg viewBox="0 0 480 340" xmlns="http://www.w3.org/2000/svg">
           <!-- wall bracket -->
           <line x1="60" y1="40" x2="60" y2="300" class="td-line" stroke-dasharray="2 3"/>
@@ -593,13 +952,11 @@
           <text x="115" y="290" class="td-lbl-mute">KEYENCE</text>
           <rect x="200" y="260" width="170" height="40" class="td-thin"/>
           <text x="205" y="278" class="td-lbl-mute">TERMINALS / RELAYS / TB</text>
-
           <!-- dimensions -->
           <line x1="90" y1="330" x2="390" y2="330" class="td-dim"/>
           <line x1="90" y1="326" x2="90" y2="334" class="td-dim"/>
           <line x1="390" y1="326" x2="390" y2="334" class="td-dim"/>
           <text x="240" y="340" text-anchor="middle" class="td-dim-label">600</text>
-
           <line x1="410" y1="30" x2="410" y2="320" class="td-dim"/>
           <line x1="406" y1="30" x2="414" y2="30" class="td-dim"/>
           <line x1="406" y1="320" x2="414" y2="320" class="td-dim"/>
@@ -609,18 +966,34 @@
       </div>
     </div>
 
-    <!-- 01.03 Module -->
-    <div class="item">
+    <!-- 03 單顆模組 -->
+    <div class="item fade-up">
       <div class="idx">
-        <b data-zh="模組" data-en="Module">模組</b>
+        03
+        <b data-zh="模組型" data-en="Module">模組型</b>
       </div>
       <div class="info">
         <h3 data-zh="純水單顆加熱模組" data-en="Single Heating Module">純水單顆加熱模組</h3>
         <div class="en">SINGLE HEATING MODULE / 10 kW</div>
-        <p data-zh="扁平薄板型單顆加熱模組,PP 外殼、PPS 水道板,可依需求以單顆、串聯、併聯三種模式配置,對應不同流量與升溫需求。"
-           data-en="Flat, single-body heating module with PP housing and PPS flow plate. Configurable in single / series / parallel modes to meet varied flow and temperature-rise requirements.">
-          扁平薄板型單顆加熱模組,PP 外殼、PPS 水道板,可依需求以單顆、串聯、併聯三種模式配置,對應不同流量與升溫需求。
+
+        <p data-zh="扁平薄板型單顆加熱模組，PP 外殼、PPS 水道板，可依需求以單顆、串聯、併聯三種模式配置，對應不同流量與升溫需求。"
+           data-en="Flat, single-body heating module with PP housing and PPS flow plate. Configurable in single / series / parallel modes for varied flow and temperature-rise requirements.">
+          扁平薄板型單顆加熱模組，PP 外殼、PPS 水道板，可依需求以單顆、串聯、併聯三種模式配置，對應不同流量與升溫需求。
         </p>
+
+        <div class="prod-features">
+          <div data-zh="彈性擴充架構" data-en="Scalable architecture">彈性擴充架構</div>
+          <div data-zh="單體輕薄好安裝" data-en="Thin & lightweight">單體輕薄好安裝</div>
+          <div data-zh="PP / PPS 耐化材質" data-en="PP / PPS chemical resistant">PP / PPS 耐化材質</div>
+          <div data-zh="模組化維護替換" data-en="Modular maintenance">模組化維護替換</div>
+        </div>
+
+        <div class="app">
+          <span data-zh="應用場景：設備商內建整合、既有機台升級、特殊流量規格" data-en="Applications: OEM integration, tool retrofits, custom flow specs">
+            <b>應用場景：</b>設備商內建整合、既有機台升級、特殊流量規格
+          </span>
+        </div>
+
         <div class="keyspec">
           <div><div class="k">POWER</div><div class="v">10 kW</div></div>
           <div><div class="k" data-zh="溫度範圍" data-en="TEMP RANGE">TEMP RANGE</div><div class="v">25 – 80 °C</div></div>
@@ -629,9 +1002,13 @@
           <div><div class="k" data-zh="外殼" data-en="HOUSING">HOUSING</div><div class="v">PP</div></div>
           <div><div class="k" data-zh="水道板" data-en="FLOW PLATE">FLOW PLATE</div><div class="v">PPS</div></div>
         </div>
+
+        <div class="prod-actions" style="margin-top:16px">
+          <a href="#contact" class="btn btn-outline btn-sm" data-zh="詢問此產品" data-en="Inquire This Product">詢問此產品</a>
+          <a href="#contact" class="btn btn-outline btn-sm" data-zh="客製化評估" data-en="Custom Evaluation">客製化評估</a>
+        </div>
       </div>
       <div class="drawing">
-        <!-- Module flat schematic + 3 modes -->
         <svg viewBox="0 0 480 340" xmlns="http://www.w3.org/2000/svg">
           <!-- single module -->
           <text x="0" y="20" class="td-lbl-mute">SINGLE / 單顆</text>
@@ -689,22 +1066,23 @@
     </div>
 
     <div class="grid">
-      <div class="txt">
-        <h2 data-zh="薄膜在乾側,<br>石英在濕側。" data-en="Film on the dry side,<br>quartz on the wet side.">薄膜在乾側,<br>石英在濕側。</h2>
-        <p data-zh="奈米配方發熱層直接鍍在石英管的<b>外壁</b>,通電後薄膜升溫,再透過石英管壁把熱傳到內側流體。整個過程中<b>金屬導體零接觸流體</b>,不會有金屬離子溶出、也沒有 O-ring 之類的顆粒源。"
-           data-en="The nano-formulated heating film is deposited on the <b>outside wall</b> of the quartz tube. Power heats the film; heat transfers through the quartz wall to the fluid on the inside. <b>Zero metal contact with the fluid</b> — no metal-ion leaching, and no O-rings as a particle source.">
-          奈米配方發熱層直接鍍在石英管的<b>外壁</b>,通電後薄膜升溫,再透過石英管壁把熱傳到內側流體。整個過程中<b>金屬導體零接觸流體</b>,不會有金屬離子溶出、也沒有 O-ring 之類的顆粒源。
+      <div class="txt fade-up">
+        <h2 data-zh="薄膜在乾側，<br>石英在濕側。" data-en="Film on the dry side,<br>quartz on the wet side.">
+          薄膜在乾側，<br>石英在濕側。
+        </h2>
+        <p data-zh="奈米配方發熱層直接鍍在石英管的<b>外壁</b>，通電後薄膜升溫，再透過石英管壁把熱傳到內側流體。整個過程中<b>金屬導體零接觸流體</b>，不會有金屬離子溶出、也沒有 O-ring 之類的顆粒源。"
+           data-en="The nano-formulated heating film is deposited on the <b>outside wall</b> of the quartz tube. Power heats the film; heat transfers through the quartz wall to the fluid inside. <b>Zero metal contact with the fluid</b> — no metal ion leaching, no O-rings as particle source.">
+          奈米配方發熱層直接鍍在石英管的<b>外壁</b>，通電後薄膜升溫，再透過石英管壁把熱傳到內側流體。整個過程中<b>金屬導體零接觸流體</b>，不會有金屬離子溶出、也沒有 O-ring 之類的顆粒源。
         </p>
-        <p data-zh="薄膜熱容小、熱時間常數短,升溫斜率遠優於管外纏繞式與 IR 燈式;同體積下所能輸出的功率密度也更高。"
+        <p data-zh="薄膜熱容小、熱時間常數短，升溫斜率遠優於管外纏繞式與 IR 燈式；同體積下所能輸出的功率密度也更高。"
            data-en="The film has low thermal mass and a short thermal time constant — faster ramp than wire-wrapped or IR-lamp architectures, with higher power density at the same envelope.">
-          薄膜熱容小、熱時間常數短,升溫斜率遠優於管外纏繞式與 IR 燈式;同體積下所能輸出的功率密度也更高。
+          薄膜熱容小、熱時間常數短，升溫斜率遠優於管外纏繞式與 IR 燈式；同體積下所能輸出的功率密度也更高。
         </p>
       </div>
-      <div class="diagram">
+      <div class="diagram fade-up">
         <svg viewBox="0 0 500 380" xmlns="http://www.w3.org/2000/svg">
           <!-- axis label -->
           <text x="240" y="18" text-anchor="middle" class="td-lbl-mute">CROSS-SECTION · RADIAL</text>
-
           <!-- concentric layers -->
           <!-- housing -->
           <circle cx="240" cy="200" r="150" class="td-line"/>
@@ -718,32 +1096,25 @@
           <circle cx="240" cy="200" r="60" class="td-line"/>
           <!-- fluid tint -->
           <circle cx="240" cy="200" r="58" class="td-fill-signal" opacity=".08"/>
-
           <!-- radial callouts -->
           <line x1="300" y1="200" x2="420" y2="200" class="td-thin"/>
           <text x="425" y="197" class="td-label">FLUID</text>
           <text x="425" y="209" class="td-lbl-mute" data-zh-svg="流體" data-en-svg="wetted path">流體</text>
-
           <line x1="325" y1="200" x2="425" y2="150" class="td-thin"/>
           <text x="430" y="147" class="td-label">QUARTZ</text>
           <text x="430" y="159" class="td-lbl-mute" data-zh-svg="超純石英" data-en-svg="ultrapure">石英</text>
-
           <line x1="330" y1="200" x2="430" y2="100" class="td-thin"/>
           <text x="435" y="97" class="td-label">FILM</text>
           <text x="435" y="109" class="td-lbl-mute" data-zh-svg="奈米薄膜" data-en-svg="dry side">奈米薄膜</text>
-
           <line x1="360" y1="200" x2="435" y2="60" class="td-thin"/>
           <text x="440" y="57" class="td-label">INSUL</text>
           <text x="440" y="69" class="td-lbl-mute" data-zh-svg="保溫層" data-en-svg="insulation">保溫層</text>
-
           <line x1="390" y1="200" x2="440" y2="20" class="td-thin"/>
           <text x="445" y="17" class="td-label">HOUSING</text>
           <text x="445" y="29" class="td-lbl-mute" data-zh-svg="外殼" data-en-svg="housing">外殼</text>
-
           <line x1="180" y1="200" x2="60" y2="200" class="td-thin"/>
           <text x="55" y="197" text-anchor="end" class="td-label">BORE</text>
           <text x="55" y="209" text-anchor="end" class="td-lbl-mute" data-zh-svg="流道 Ø46" data-en-svg="Ø46 mm">流道 Ø46</text>
-
           <!-- radiating heat lines -->
           <g stroke="#b4560e" stroke-width="1" fill="none">
             <line x1="240" y1="115" x2="240" y2="140"/>
@@ -751,7 +1122,6 @@
             <line x1="240" y1="285" x2="240" y2="260"/>
             <line x1="155" y1="200" x2="180" y2="200"/>
           </g>
-
           <!-- center marker -->
           <line x1="235" y1="200" x2="245" y2="200" class="td-thin"/>
           <line x1="240" y1="195" x2="240" y2="205" class="td-thin"/>
@@ -759,15 +1129,14 @@
       </div>
     </div>
 
-    <div class="kpi">
-      <div class="k"><div class="fig num">98<span class="u">%</span></div><div class="lbl">Efficiency</div></div>
-      <div class="k"><div class="fig num">30<span class="u">%+</span></div><div class="lbl" data-zh="省電幅度" data-en="Energy saved">省電幅度</div></div>
-      <div class="k"><div class="fig num">0<span class="u"> M</span></div><div class="lbl" data-zh="金屬接觸點" data-en="Metal contact">金屬接觸點</div></div>
-      <div class="k"><div class="fig num">0<span class="u"> O</span></div><div class="lbl" data-zh="O-ring 顆粒源" data-en="O-ring source">O-ring 顆粒源</div></div>
+    <div class="kpi fade-up">
+      <div class="k"><div class="fig num">98<span class="u">%</span></div><div class="lbl" data-zh="電熱轉換效率" data-en="Conversion Efficiency">電熱轉換效率</div></div>
+      <div class="k"><div class="fig num">30<span class="u">%+</span></div><div class="lbl" data-zh="相對省電幅度" data-en="Energy Saving">相對省電幅度</div></div>
+      <div class="k"><div class="fig num">0<span class="u"> M</span></div><div class="lbl" data-zh="金屬接觸點" data-en="Metal Contact">金屬接觸點</div></div>
+      <div class="k"><div class="fig num">0<span class="u"> O</span></div><div class="lbl" data-zh="O-ring 顆粒源" data-en="O-ring Source">O-ring 顆粒源</div></div>
     </div>
 
-
-    <!-- comparison -->
+    <!-- 技術比較表 -->
     <div class="compare" style="margin-top:56px">
       <div class="secmark" style="padding-top:0;padding-bottom:16px">
         <span data-zh="與其它加熱方式的差異" data-en="Compared with other heating methods">與其它加熱方式的差異</span>
@@ -777,7 +1146,7 @@
         <thead>
           <tr>
             <th data-zh="加熱方式" data-en="Method">加熱方式</th>
-            <th data-zh="流體接觸" data-en="Fluid Contact">流體接觸</th>
+            <th data-zh="流體接觸材質" data-en="Wetted Material">流體接觸材質</th>
             <th data-zh="熱容 / 響應" data-en="Mass / Response">熱容 / 響應</th>
             <th data-zh="典型效率" data-en="Typical Efficiency">典型效率</th>
             <th data-zh="常見弱點" data-en="Common Weakness">常見弱點</th>
@@ -785,25 +1154,25 @@
         </thead>
         <tbody>
           <tr class="own">
-            <td data-zh="薄膜 × 石英(本廠)" data-en="Thin-film on quartz (this product)">薄膜 × 石英(本廠)</td>
-            <td data-zh="僅石英" data-en="Quartz only">僅石英</td>
+            <td data-zh="薄膜 × 石英（本廠）" data-en="Thin-film on quartz (this product)">薄膜 × 石英（本廠）</td>
+            <td data-zh="僅超純石英" data-en="Ultrapure quartz only">僅超純石英</td>
             <td data-zh="極小 / 秒級" data-en="Very low / seconds">極小 / 秒級</td>
             <td>98%+</td>
             <td data-zh="薄膜端子區為應力重點" data-en="Film termination is stress-critical">薄膜端子區為應力重點</td>
           </tr>
           <tr>
-            <td data-zh="纏繞式加熱管(金屬絲)" data-en="Wire-wrapped tube">纏繞式加熱管(金屬絲)</td>
+            <td data-zh="纏繞式加熱管（金屬絲）" data-en="Wire-wrapped tube">纏繞式加熱管（金屬絲）</td>
             <td data-zh="石英 / PFA" data-en="Quartz / PFA">石英 / PFA</td>
             <td data-zh="中等 / 十秒級" data-en="Medium / tens of sec">中等 / 十秒級</td>
             <td>85–92%</td>
-            <td data-zh="纏繞不均勻易生局部熱點" data-en="Uneven wrap causes hot spots">纏繞不均勻易生局部熱點</td>
+            <td data-zh="纏繞不均易生局部熱點" data-en="Uneven wrap causes hot spots">纏繞不均易生局部熱點</td>
           </tr>
           <tr>
             <td data-zh="IR 燈 / 鹵素燈" data-en="IR / Halogen lamp">IR 燈 / 鹵素燈</td>
-            <td data-zh="石英(非接觸)" data-en="Quartz (non-contact)">石英(非接觸)</td>
+            <td data-zh="石英（非接觸）" data-en="Quartz (non-contact)">石英（非接觸）</td>
             <td data-zh="低 / 秒級" data-en="Low / seconds">低 / 秒級</td>
             <td>60–85%</td>
-            <td data-zh="燈管壽命短、需頻繁更換" data-en="Short lamp life; frequent replacement">燈管壽命短、需頻繁更換</td>
+            <td data-zh="燈管壽命短、需頻繁更換" data-en="Short lamp life, frequent replacement">燈管壽命短、需頻繁更換</td>
           </tr>
           <tr>
             <td data-zh="PFA 內埋線圈" data-en="PFA-embedded coil">PFA 內埋線圈</td>
@@ -814,7 +1183,18 @@
           </tr>
         </tbody>
       </table>
-      <div class="foot" data-zh="效率為公開資料整理・實際依運轉條件為準" data-en="Figures compiled from public data · actual varies with operating conditions">效率為公開資料整理・實際依運轉條件為準</div>
+      <div class="foot" data-zh="效率為公開資料整理・實際依運轉條件為準" data-en="Figures compiled from public data · actual varies with operating conditions">
+        效率為公開資料整理・實際依運轉條件為準
+      </div>
+    </div>
+
+    <!-- 專利與認證 -->
+    <div class="tech-certs fade-up">
+      <h4 data-zh="專利與認證" data-en="Patents & Certifications">專利與認證</h4>
+      <div class="cert-item" data-zh="多項加熱薄膜材料發明專利" data-en="Multiple heating film material patents">多項加熱薄膜材料發明專利</div>
+      <div class="cert-item" data-zh="石英鍍膜製程專利" data-en="Quartz coating process patents">石英鍍膜製程專利</div>
+      <div class="cert-item" data-zh="台灣精品獎五屆獲獎" data-en="5-time Taiwan Excellence Award">台灣精品獎五屆獲獎</div>
+      <div class="cert-item" data-zh="SEMI 產業標準相容設計" data-en="SEMI standard compatible design">SEMI 產業標準相容設計</div>
     </div>
   </section>
 
@@ -825,8 +1205,7 @@
       <span class="rule"></span>
       <span class="mono" data-zh="以正式圖面為準" data-en="Formal drawing takes precedence">以正式圖面為準</span>
     </div>
-
-    <div class="grid">
+    <div class="grid fade-up">
       <!-- chemical -->
       <div class="col">
         <h4 data-zh="化學液型" data-en="Chemical">化學液型</h4>
@@ -850,12 +1229,12 @@
         <div class="en">INLINE DI / DI-10 / 20 / 30</div>
         <div class="row"><span class="k" data-zh="額定功率" data-en="Rated Power">額定功率</span><span class="v">10 / 20 / 30 kW</span></div>
         <div class="row"><span class="k" data-zh="電源" data-en="Voltage">電源</span><span class="v">380 V</span></div>
-        <div class="row"><span class="k" data-zh="安裝" data-en="Mount">安裝</span><span class="v" data-zh="背掛式" data-en="Wall-mount">背掛式</span></div>
-        <div class="row"><span class="k" data-zh="控制" data-en="Control">控制</span><span class="v">SCR phase</span></div>
-        <div class="row"><span class="k" data-zh="測溫" data-en="Temp sensor">測溫</span><span class="v" data-zh="紅外線" data-en="IR pyrometer">紅外線</span></div>
-        <div class="row"><span class="k" data-zh="流量計" data-en="Flow meter">流量計</span><span class="v">KEYENCE clamp-on</span></div>
+        <div class="row"><span class="k" data-zh="安裝方式" data-en="Mount">安裝方式</span><span class="v" data-zh="背掛式" data-en="Wall-mount">背掛式</span></div>
+        <div class="row"><span class="k" data-zh="控制方式" data-en="Control">控制方式</span><span class="v">SCR 相位控制</span></div>
+        <div class="row"><span class="k" data-zh="溫度測定" data-en="Temp sensor">溫度測定</span><span class="v" data-zh="紅外線非接觸" data-en="IR pyrometer">紅外線非接觸</span></div>
+        <div class="row"><span class="k" data-zh="流量計" data-en="Flow meter">流量計</span><span class="v">KEYENCE 夾鉗式</span></div>
         <div class="row"><span class="k" data-zh="溫度範圍" data-en="Temp range">溫度範圍</span><span class="v">30 – 85 °C</span></div>
-        <div class="row"><span class="k" data-zh="適用流體" data-en="Media">適用流體</span><span class="v" data-zh="超純水 / DI" data-en="UPW / DI">超純水 / DI</span></div>
+        <div class="row"><span class="k" data-zh="適用流體" data-en="Media">適用流體</span><span class="v" data-zh="超純水 / DI 水" data-en="UPW / DI water">超純水 / DI 水</span></div>
         <div class="row"><span class="k" data-zh="轉換效率" data-en="Efficiency">轉換效率</span><span class="v">98 %+</span></div>
         <div class="row"><span class="k" data-zh="機殼尺寸" data-en="Cabinet">機殼尺寸</span><span class="v">600 × 900 × 255 mm</span></div>
         <div class="note" data-zh="規格依機型別於報價階段提供" data-en="Model-specific specs provided at quotation">規格依機型別於報價階段提供</div>
@@ -867,11 +1246,11 @@
         <div class="row"><span class="k" data-zh="額定功率" data-en="Rated Power">額定功率</span><span class="v">10 kW</span></div>
         <div class="row"><span class="k" data-zh="溫度範圍" data-en="Temp range">溫度範圍</span><span class="v">25 – 80 °C</span></div>
         <div class="row"><span class="k" data-zh="外形尺寸" data-en="Envelope">外形尺寸</span><span class="v">200 × 250 × 35 mm</span></div>
-        <div class="row"><span class="k" data-zh="接口" data-en="Port">接口</span><span class="v">1/2"</span></div>
-        <div class="row"><span class="k" data-zh="外殼" data-en="Housing">外殼</span><span class="v">PP</span></div>
-        <div class="row"><span class="k" data-zh="水道板" data-en="Flow plate">水道板</span><span class="v">PPS</span></div>
+        <div class="row"><span class="k" data-zh="流體接口" data-en="Port">流體接口</span><span class="v">1/2"</span></div>
+        <div class="row"><span class="k" data-zh="外殼材質" data-en="Housing">外殼材質</span><span class="v">PP</span></div>
+        <div class="row"><span class="k" data-zh="水道板材質" data-en="Flow plate">水道板材質</span><span class="v">PPS</span></div>
         <div class="row"><span class="k" data-zh="運轉模式" data-en="Modes">運轉模式</span><span class="v" data-zh="單顆 / 串聯 / 併聯" data-en="Single / Series / Parallel">單顆 / 串聯 / 併聯</span></div>
-        <div class="row"><span class="k" data-zh="適用流體" data-en="Media">適用流體</span><span class="v" data-zh="超純水 / DI" data-en="UPW / DI">超純水 / DI</span></div>
+        <div class="row"><span class="k" data-zh="適用流體" data-en="Media">適用流體</span><span class="v" data-zh="超純水 / DI 水" data-en="UPW / DI water">超純水 / DI 水</span></div>
         <div class="note" data-zh="模組可組合於既有系統中擴充" data-en="Modules combine to expand existing systems">模組可組合於既有系統中擴充</div>
       </div>
     </div>
@@ -884,9 +1263,26 @@
       <span class="rule"></span>
       <span class="mono">CABINET 600 × 900 × 255</span>
     </div>
-
     <div class="grid">
-      <div class="cabinet">
+      <div class="txt fade-up">
+        <h2 data-zh="不鏽鋼壁掛控制箱。" data-en="Wall-mount stainless cabinet.">不鏽鋼壁掛控制箱。</h2>
+        <p data-zh="標準機殼 600 × 900 × 255 mm（W × H × D）。側邊風扇+濾網、壁掛安裝。前面板集中人機介面、溫控器、選擇開關、指示燈、緊急停止、流量計；內部整合 MCCB、電力控制模組、繼電器與端子台。"
+           data-en="Standard cabinet 600 × 900 × 255 mm (W × H × D). Side fan with filter louvers, wall-mount installation. Front panel consolidates HMI, temperature controller, selector switch, indicator, E-stop, and flow meter; interior integrates MCCB, power control module, relays, and terminal blocks.">
+          標準機殼 600 × 900 × 255 mm（W × H × D）。側邊風扇+濾網、壁掛安裝。前面板集中人機介面、溫控器、選擇開關、指示燈、緊急停止、流量計；內部整合 MCCB、電力控制模組、繼電器與端子台。
+        </p>
+
+        <div class="parts">
+          <div class="p"><div class="n">A · FRONT</div><div class="t" data-zh="人機介面" data-en="HMI Touch Panel">人機介面</div><div class="d" data-zh="製程參數・溫度曲線" data-en="Process params · temp curves">製程參數・溫度曲線</div></div>
+          <div class="p"><div class="n">B · FRONT</div><div class="t" data-zh="溫控器" data-en="Temp Controller">溫控器</div><div class="d">PID / PV·SV</div></div>
+          <div class="p"><div class="n">C · FRONT</div><div class="t" data-zh="緊急停止" data-en="E-Stop">緊急停止</div><div class="d" data-zh="蕈頭鎖定式" data-en="Mushroom lock">蕈頭鎖定式</div></div>
+          <div class="p"><div class="n">D · FRONT</div><div class="t" data-zh="流量計" data-en="Flow Meter">流量計</div><div class="d" data-zh="即時 LPM 顯示" data-en="Live LPM display">即時 LPM 顯示</div></div>
+          <div class="p"><div class="n">E · INSIDE</div><div class="t">MCCB</div><div class="d" data-zh="主斷路器保護" data-en="Main breaker protection">主斷路器保護</div></div>
+          <div class="p"><div class="n">F · INSIDE</div><div class="t" data-zh="電力控制模組" data-en="Power Control">電力控制模組</div><div class="d" data-zh="SCR / SSR 相位控制" data-en="SCR / SSR phase control">SCR / SSR 相位控制</div></div>
+          <div class="p"><div class="n">G · INSIDE</div><div class="t" data-zh="繼電器組" data-en="Relay Bank">繼電器組</div><div class="d" data-zh="訊號・互鎖・警報" data-en="Signal · interlock · alarm">訊號・互鎖・警報</div></div>
+          <div class="p"><div class="n">H · INSIDE</div><div class="t" data-zh="端子台" data-en="Terminal Blocks">端子台</div><div class="d" data-zh="動力 / 訊號分離佈線" data-en="Power / signal separated">動力 / 訊號分離佈線</div></div>
+        </div>
+      </div>
+      <div class="cabinet fade-up">
         <svg viewBox="0 0 340 520" xmlns="http://www.w3.org/2000/svg">
           <!-- cabinet body -->
           <rect x="20" y="20" width="300" height="480" class="td-line"/>
@@ -898,70 +1294,56 @@
           </g>
           <text x="0" y="240" class="td-lbl-mute">FAN</text>
           <text x="0" y="252" class="td-lbl-mute">LOUVER</text>
-
           <!-- HMI -->
           <rect x="50" y="60" width="150" height="100" class="td-line"/>
           <rect x="60" y="70" width="130" height="70" class="td-fill-signal" opacity=".06"/>
           <rect x="60" y="70" width="130" height="70" class="td-thin"/>
           <text x="125" y="112" text-anchor="middle" class="td-label" style="font-size:11px">HMI</text>
-          <text x="125" y="152" text-anchor="middle" class="td-lbl-mute">TOUCH PANEL</text>
-
           <!-- temp controller -->
           <rect x="220" y="60" width="90" height="45" class="td-line"/>
           <text x="225" y="76" class="td-lbl-mute">TEMP CTRL</text>
           <text x="225" y="88" class="td-label" style="font-size:10px">PID/PV/SV</text>
-
           <!-- selector switch + indicator -->
           <rect x="220" y="115" width="42" height="45" class="td-line"/>
           <circle cx="241" cy="137" r="9" class="td-thin"/>
           <line x1="241" y1="128" x2="241" y2="146" class="td-thin"/>
           <text x="225" y="176" class="td-lbl-mute" style="font-size:8px">SELECT</text>
-
           <rect x="268" y="115" width="42" height="45" class="td-line"/>
           <circle cx="289" cy="137" r="6" class="td-fill-signal"/>
           <text x="272" y="176" class="td-lbl-mute" style="font-size:8px">STATUS</text>
-
           <!-- flow meter -->
           <rect x="50" y="180" width="150" height="70" class="td-line"/>
           <rect x="60" y="190" width="130" height="50" class="td-thin"/>
           <text x="65" y="210" class="td-lbl-mute">FLOW METER</text>
           <text x="65" y="225" class="td-label" style="font-size:12px">— . — LPM</text>
-
           <!-- e-stop -->
           <rect x="220" y="180" width="90" height="70" class="td-line"/>
           <circle cx="265" cy="215" r="18" class="td-thin" stroke="#a92b1c" stroke-width="1.5"/>
           <circle cx="265" cy="215" r="12" fill="#a92b1c" opacity=".85"/>
           <text x="265" y="245" text-anchor="middle" class="td-lbl-mute">E-STOP</text>
-
           <!-- internal (dashed) -->
           <rect x="30" y="270" width="280" height="180" class="td-thin" stroke-dasharray="3 3"/>
           <text x="35" y="285" class="td-lbl-mute">INTERNAL</text>
-
           <rect x="45" y="295" width="70" height="70" class="td-thin"/>
           <text x="50" y="310" class="td-lbl-mute">MCCB</text>
           <line x1="55" y1="325" x2="105" y2="325" class="td-thin"/>
           <line x1="55" y1="335" x2="105" y2="335" class="td-thin"/>
-          <line x1="55" y1="345" x2="105" y2="345" class="td-thin"/>
-
           <rect x="130" y="295" width="80" height="70" class="td-thin"/>
           <text x="135" y="310" class="td-lbl-mute">POWER</text>
           <text x="135" y="322" class="td-lbl-mute">CTRL MOD</text>
           <rect x="145" y="330" width="50" height="25" class="td-thin"/>
-
           <rect x="225" y="295" width="70" height="70" class="td-thin"/>
           <text x="230" y="310" class="td-lbl-mute">RELAYS</text>
           <g class="td-thin">
             <rect x="232" y="320" width="14" height="14"/><rect x="250" y="320" width="14" height="14"/><rect x="268" y="320" width="14" height="14"/>
             <rect x="232" y="338" width="14" height="14"/><rect x="250" y="338" width="14" height="14"/><rect x="268" y="338" width="14" height="14"/>
           </g>
-
           <rect x="45" y="380" width="250" height="60" class="td-thin"/>
           <text x="50" y="395" class="td-lbl-mute">TERMINAL BLOCKS</text>
           <g class="td-thin">
             <line x1="55" y1="410" x2="285" y2="410"/>
             <line x1="55" y1="425" x2="285" y2="425"/>
           </g>
-
           <!-- dimensions -->
           <line x1="20" y1="510" x2="320" y2="510" class="td-dim"/>
           <line x1="20" y1="506" x2="20" y2="514" class="td-dim"/>
@@ -969,21 +1351,58 @@
           <text x="170" y="518" text-anchor="middle" class="td-dim-label">600</text>
         </svg>
       </div>
-      <div class="txt">
-        <h2 data-zh="不鏽鋼壁掛控制箱。" data-en="Wall-mount stainless cabinet.">不鏽鋼壁掛控制箱。</h2>
-        <p data-zh="標準機殼 600 × 900 × 255 mm(W × H × D)。側邊風扇+濾網、壁掛安裝。前面板集中人機介面、溫控器、選擇開關、指示燈、緊急停止、流量計;內部整合 MCCB、電力控制模組、繼電器與端子台。"
-           data-en="Standard cabinet 600 × 900 × 255 mm (W × H × D). Side-mounted fan with filter louvers, wall-mount installation. Front panel consolidates HMI, temperature controller, selector switch, indicator, E-stop, and flow meter; interior integrates MCCB, power control module, relays, and terminal blocks.">
-          標準機殼 600 × 900 × 255 mm(W × H × D)。側邊風扇+濾網、壁掛安裝。前面板集中人機介面、溫控器、選擇開關、指示燈、緊急停止、流量計;內部整合 MCCB、電力控制模組、繼電器與端子台。
-        </p>
-        <div class="parts">
-          <div class="p"><div class="n">A · FRONT</div><div class="t" data-zh="人機介面" data-en="HMI Touch Panel">人機介面</div><div class="d" data-zh="製程參數・溫度曲線" data-en="Process params · temp curves">製程參數・溫度曲線</div></div>
-          <div class="p"><div class="n">B · FRONT</div><div class="t" data-zh="溫控器" data-en="Temp Controller">溫控器</div><div class="d">PID / PV·SV</div></div>
-          <div class="p"><div class="n">C · FRONT</div><div class="t" data-zh="緊急停止" data-en="E-Stop">緊急停止</div><div class="d" data-zh="蕈頭鎖定式" data-en="Mushroom lock">蕈頭鎖定式</div></div>
-          <div class="p"><div class="n">D · FRONT</div><div class="t" data-zh="流量計" data-en="Flow Meter">流量計</div><div class="d" data-zh="即時 LPM" data-en="Live LPM">即時 LPM</div></div>
-          <div class="p"><div class="n">E · INSIDE</div><div class="t">MCCB</div><div class="d" data-zh="主斷路器" data-en="Main breaker">主斷路器</div></div>
-          <div class="p"><div class="n">F · INSIDE</div><div class="t" data-zh="電力控制模組" data-en="Power Control">電力控制模組</div><div class="d" data-zh="SCR / SSR 相位" data-en="SCR / SSR phase">SCR / SSR 相位</div></div>
-          <div class="p"><div class="n">G · INSIDE</div><div class="t" data-zh="繼電器組" data-en="Relay Bank">繼電器組</div><div class="d" data-zh="訊號 · 互鎖 · 警報" data-en="Signal · interlock · alarm">訊號 · 互鎖 · 警報</div></div>
-          <div class="p"><div class="n">H · INSIDE</div><div class="t" data-zh="端子台" data-en="Terminal Blocks">端子台</div><div class="d" data-zh="動力 / 訊號分離" data-en="Power / signal separated">動力 / 訊號分離</div></div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="faq" id="faq">
+    <div class="secmark">
+      <span data-zh="常見問題" data-en="FAQ">常見問題</span>
+      <span class="rule"></span>
+    </div>
+    <div class="faq-list fade-up">
+      <div class="faq-item">
+        <button class="faq-q" data-zh="這款加熱器可以用在哪些化學液？" data-en="What chemicals is this heater compatible with?">
+          這款加熱器可以用在哪些化學液？
+        </button>
+        <div class="faq-a">
+          <p data-zh="適用 SC-1、SC-2、稀氫氟酸、KOH、TMAH 等常見半導體濕製程藥液。強酸、強鹼、有機溶劑等特殊場景可提供客製評估，確認石英與密封材質相容性。"
+             data-en="Compatible with common semiconductor wet process chemicals including SC-1, SC-2, dilute HF, KOH, and TMAH. For strong acids, strong bases, organic solvents and other special scenarios, we provide custom evaluation to confirm quartz and seal material compatibility.">
+            適用 SC-1、SC-2、稀氫氟酸、KOH、TMAH 等常見半導體濕製程藥液。強酸、強鹼、有機溶劑等特殊場景可提供客製評估，確認石英與密封材質相容性。
+          </p>
+        </div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" data-zh="交期大約多久？是否有現貨？" data-en="What is the lead time? Do you have stock?">
+          交期大約多久？是否有現貨？
+        </button>
+        <div class="faq-a">
+          <p data-zh="標準機型交期約 4–6 週，客製規格視複雜度調整。部分常用規格有少量現貨可快速出貨，建議聯繫業務確認庫存與專案時程。"
+             data-en="Standard models have a lead time of approximately 4–6 weeks; custom specifications vary by complexity. Some common models have limited stock for fast delivery. Please contact our sales team to confirm inventory and project timelines.">
+            標準機型交期約 4–6 週，客製規格視複雜度調整。部分常用規格有少量現貨可快速出貨，建議聯繫業務確認庫存與專案時程。
+          </p>
+        </div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" data-zh="是否提供到府安裝與保固服務？" data-en="Do you provide on-site installation and warranty?">
+          是否提供到府安裝與保固服務？
+        </button>
+        <div class="faq-a">
+          <p data-zh="全產品提供標準 1 年保固，可加購延伸保固與預防保養方案。安裝、勘驗、教育訓練皆可由專人到府執行，確保機台導入順利。"
+             data-en="All products include a standard 1-year warranty, with extended warranty and preventive maintenance packages available. Installation, site survey, and training can all be performed on-site by our specialists to ensure smooth tool integration.">
+            全產品提供標準 1 年保固，可加購延伸保固與預防保養方案。安裝、勘驗、教育訓練皆可由專人到府執行，確保機台導入順利。
+          </p>
+        </div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" data-zh="可以整合進既有機台的控制系統嗎？" data-en="Can it integrate with existing tool control systems?">
+          可以整合進既有機台的控制系統嗎？
+        </button>
+        <div class="faq-a">
+          <p data-zh="支援標準類比訊號與 MODBUS、RS-485 等通訊介面，可與多數廠牌機台控制系統連動；特殊通訊協定可提供客製整合服務。"
+             data-en="Supports standard analog signals and communication interfaces including MODBUS and RS-485, compatible with most tool control systems. Custom integration is available for special communication protocols.">
+            支援標準類比訊號與 MODBUS、RS-485 等通訊介面，可與多數廠牌機台控制系統連動；特殊通訊協定可提供客製整合服務。
+          </p>
         </div>
       </div>
     </div>
@@ -992,19 +1411,19 @@
   <!-- CONTACT -->
   <section class="contact" id="contact">
     <div class="secmark">
-      <span data-zh="洽詢" data-en="Contact">洽詢</span>
+      <span data-zh="洽詢報價" data-en="Contact">洽詢報價</span>
       <span class="rule"></span>
       <span class="mono">MADE IN TAIWAN</span>
     </div>
     <div class="grid">
-      <div>
-        <h2 data-zh="從工廠<em>到</em>供應商<em>到</em>試機。" data-en="Factory <em>to</em> vendor <em>to</em> qualification.">從工廠<em>到</em>供應商<em>到</em>試機。</h2>
-      </div>
-      <div class="info">
+      <div class="fade-up">
+        <h2 data-zh="從廠房評估<em>到</em>供應導入<em>到</em>售後服務。" data-en="From site survey <em>to</em> supply <em>to</em> after-sales.">
+          從廠房評估<em>到</em>供應導入<em>到</em>售後服務。
+        </h2>
         <dl>
           <dt data-zh="公司" data-en="Entity">公司</dt>
           <dd>麗源光電股份有限公司</dd>
-          <dt data-zh="統編" data-en="Tax ID">統編</dt>
+          <dt data-zh="統一編號" data-en="Tax ID">統一編號</dt>
           <dd class="mono">53356492</dd>
           <dt data-zh="電話" data-en="Phone">電話</dt>
           <dd><a href="tel:+886222681368" class="mono">02-2268-1368</a></dd>
@@ -1014,65 +1433,118 @@
           <dd data-zh="新北市土城區大暖路 110 之 1 號" data-en="No. 110-1, Danuan Rd, Tucheng, New Taipei, Taiwan">新北市土城區大暖路 110 之 1 號</dd>
           <dt data-zh="網站" data-en="Web">網站</dt>
           <dd><a href="https://rewatt.com.tw" target="_blank" class="mono">rewatt.com.tw</a></dd>
-          <dt data-zh="展覽" data-en="Exhibition">展覽</dt>
-          <dd data-zh="SEMICON Taiwan 2025 已展出" data-en="Exhibited at SEMICON Taiwan 2025">SEMICON Taiwan 2025 已展出</dd>
         </dl>
+      </div>
+
+      <!-- 詢盤表單 -->
+      <div class="contact-form fade-up">
+        <form onsubmit="event.preventDefault(); alert('感謝您的詢問，我們將於 2 個工作天內與您聯繫。');">
+          <div class="form-row">
+            <div class="form-group">
+              <label data-zh="公司名稱" data-en="Company">公司名稱</label>
+              <input type="text" required>
+            </div>
+            <div class="form-group">
+              <label data-zh="聯絡人" data-en="Contact Person">聯絡人</label>
+              <input type="text" required>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label data-zh="聯絡電話" data-en="Phone">聯絡電話</label>
+              <input type="tel" required>
+            </div>
+            <div class="form-group">
+              <label data-zh="電子信箱" data-en="Email">電子信箱</label>
+              <input type="email" required>
+            </div>
+          </div>
+          <div class="form-group">
+            <label data-zh="需求產品" data-en="Product of Interest">需求產品</label>
+            <select required>
+              <option value="" data-zh="請選擇" data-en="Please select">請選擇</option>
+              <option value="chemical" data-zh="Inline 化學藥液加熱器" data-en="Inline Chemical Heater">Inline 化學藥液加熱器</option>
+              <option value="di" data-zh="Inline 純水加熱器" data-en="Inline DI Water Heater">Inline 純水加熱器</option>
+              <option value="module" data-zh="純水單顆加熱模組" data-en="Single Heating Module">純水單顆加熱模組</option>
+              <option value="custom" data-zh="客製化方案" data-en="Custom Solution">客製化方案</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label data-zh="需求描述" data-en="Requirements">需求描述</label>
+            <textarea rows="4" data-zh-placeholder="請簡述應用場景、流量、溫度需求等" data-en-placeholder="Briefly describe your application, flow rate, temperature requirements, etc."></textarea>
+          </div>
+          <button type="submit" class="btn btn-primary" style="width:100%;justify-content:center" data-zh="送出詢價" data-en="Submit Inquiry">送出詢價</button>
+        </form>
       </div>
     </div>
   </section>
 
-</main>
-
-<footer>
-  <div class="wrap">
-    <div>
-      <div class="brand">
-        <img class="mark" src="data:image/png;base64,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" alt="Rewatt" width="355" height="72" loading="lazy" decoding="async">
-        <span class="sub">HeatingTec · Semiconductor Line</span>
+  <!-- FOOTER -->
+  <footer>
+    <div class="wrap">
+      <div>
+        <div class="brand">
+          <span>Rewatt HeatingTec</span>
+          <span class="sub">SEMICONDUCTOR HEATING SOLUTIONS</span>
+        </div>
+        <p>
+          麗源光電股份有限公司成立於 2011 年，以奈米薄膜發熱技術為核心，
+          專注於半導體、光電、生醫等高潔淨產業的流體加熱解決方案。
+        </p>
       </div>
-      <p data-zh="麗源光電股份有限公司於 2011 年成立,以奈米配方薄膜發熱元件為核心技術,獲台灣精品獎五屆肯定。HeatingTec 為公司半導體專業產品線,涵蓋 In-line Heater、石英加熱管、石英高溫磷酸槽與熱風設備。"
-         data-en="Liyuan Optoelectronics, founded 2011, is built on its nano-formula thin-film heating element. Five-time Taiwan Excellence winner. HeatingTec is the company's dedicated semiconductor line — In-line Heaters, quartz heating tubes, high-temperature H3PO4 baths, and hot-air equipment.">
-        麗源光電股份有限公司於 2011 年成立,以奈米配方薄膜發熱元件為核心技術,獲台灣精品獎五屆肯定。HeatingTec 為公司半導體專業產品線,涵蓋 In-line Heater、石英加熱管、石英高溫磷酸槽與熱風設備。
-      </p>
+      <div>
+        <h5 data-zh="產品" data-en="Products">產品</h5>
+        <ul>
+          <li><a href="#products">Inline 化學液加熱器</a></li>
+          <li><a href="#products">Inline 純水加熱器</a></li>
+          <li><a href="#products">單顆加熱模組</a></li>
+          <li><a href="#products">石英高溫磷酸槽</a></li>
+        </ul>
+      </div>
+      <div>
+        <h5 data-zh="支援" data-en="Support">支援</h5>
+        <ul>
+          <li><a href="#faq">常見問題</a></li>
+          <li><a href="#specs">規格下載</a></li>
+          <li><a href="#contact">技術諮詢</a></li>
+          <li><a href="#contact">售後服務</a></li>
+        </ul>
+      </div>
+      <div>
+        <h5 data-zh="關於" data-en="About">關於</h5>
+        <ul>
+          <li><a href="#">公司簡介</a></li>
+          <li><a href="#">最新消息</a></li>
+          <li><a href="#">隱私權政策</a></li>
+          <li><a href="#">聯絡我們</a></li>
+        </ul>
+      </div>
     </div>
-    <div>
-      <h5 data-zh="產品線" data-en="Product Line">產品線</h5>
-      <p>Inline Chemical Heater</p>
-      <p>Inline DI Water Heater</p>
-      <p>Single Heating Module</p>
-      <p data-zh="石英高溫磷酸槽" data-en="Quartz H3PO4 Bath">石英高溫磷酸槽</p>
-      <p data-zh="石英加熱管" data-en="Quartz Heater Tube">石英加熱管</p>
-      <p data-zh="熱風設備" data-en="Hot-Air Equipment">熱風設備</p>
+    <div class="fine">
+      <span>© 2026 LIYUAN OPTOELECTRONICS CO., LTD. All rights reserved.</span>
+      <span>REWATT / HEATINGTEC</span>
     </div>
-    <div>
-      <h5 data-zh="聯絡" data-en="Contact">聯絡</h5>
-      <p class="mono">02-2268-1368</p>
-      <p class="mono">0800-500-186</p>
-      <p data-zh="新北市土城區" data-en="Tucheng, New Taipei">新北市土城區</p>
-      <p data-zh="大暖路 110 之 1 號" data-en="No. 110-1, Danuan Rd">大暖路 110 之 1 號</p>
-    </div>
-  </div>
-  <div class="fine">
-    <span>© 2026 LIYUAN OPTOELECTRONICS CO., LTD.</span>
-    <span>REWATT / HEATINGTEC</span>
-  </div>
-</footer>
+  </footer>
 
-<script type="text/plain" id="d3-payload">PCFET0NUWVBFIGh0bWw+CjxodG1sIGxhbmc9InpoLUhhbnQiPgo8aGVhZD4KPG1ldGEgY2hhcnNldD0iVVRGLTgiPgo8bWV0YSBuYW1lPSJ2aWV3cG9ydCIgY29udGVudD0id2lkdGg9ZGV2aWNlLXdpZHRoLCBpbml0aWFsLXNjYWxlPTEuMCwgbWF4aW11bS1zY2FsZT0xLjAsIHVzZXItc2NhbGFibGU9bm8iPgo8dGl0bGU+UmV3YXR0IElubGluZSDliqDnhrHlmagg4oCUIOWJlumWi+S+huecizwvdGl0bGU+CjxzdHlsZT4KICA6cm9vdHsKICAgIC8qIHRoZSBzaXRlJ3Mgb3duIHRva2VucyDigJQgdGhpcyBwYW5lbCBpcyBhIHdoaXRlIHNoZWV0LCBub3QgYSBkYXJrIGhvbGUgKi8KICAgIC0tcGFwZXI6I2Y2ZjdmNDsKICAgIC0tY2FyZDojZmZmZmZmOwogICAgLS1pbms6IzE0MjAxYTsKICAgIC0tbXV0ZTojNmM3NzZmOwogICAgLS1ydWxlOiNkOWRlZDY7CiAgICAtLWJyYW5kOiM3NWIzMmE7CiAgICAtLXNpZ25hbDojNGY3ZDE5OyAgIC8qIGdyZWVuIHRoYXQgcGFzc2VzIG9uIGxpZ2h0ICovCiAgICAtLWhlYXQ6I2I0NTYwZTsKICAgIC0td2V0OiMxZjhmYjQ7ICAgICAgLyog5rWB6auU5o6l6Ke46Z2iICovCiAgICAtLW1ldGFsOiNhODg2MmE7ICAgIC8qIOmHkeWxrOS7tiAqLwogICAgLS1zdG9wOiNhOTJiMWM7CiAgfQogICp7bWFyZ2luOjA7cGFkZGluZzowO2JveC1zaXppbmc6Ym9yZGVyLWJveDstd2Via2l0LXRhcC1oaWdobGlnaHQtY29sb3I6dHJhbnNwYXJlbnR9CiAgaHRtbCxib2R5e2hlaWdodDoxMDAlO292ZXJmbG93OmhpZGRlbjtjb2xvcjp2YXIoLS1pbmspOwogICAgLyogYSBzdHVkaW8gc3dlZXAsIG1hdGNoaW5nIHRoZSBsaWdodCBncm91bmQgb2YgdGhlIHByb2R1Y3QgcmVuZGVycyAqLwogICAgYmFja2dyb3VuZDpyYWRpYWwtZ3JhZGllbnQoZWxsaXBzZSAxMzAlIDEwMCUgYXQgNTAlIDM0JSwjZjdmOGY1IDAlLCNlZWYwZWEgNTQlLCNkZmUzZGIgMTAwJSkgZml4ZWQ7CiAgICBmb250LWZhbWlseToiQXJjaGl2byIsIlBpbmdGYW5nIFRDIiwiTm90byBTYW5zIFRDIiwiTWljcm9zb2Z0IEpoZW5nSGVpIixzeXN0ZW0tdWksc2Fucy1zZXJpZn0KICAjc2NlbmV7cG9zaXRpb246Zml4ZWQ7aW5zZXQ6MH0KICBjYW52YXN7ZGlzcGxheTpibG9ja30KCiAgLyogPT09PT09PT09PT09IE9ORSB0ZXh0IGNvbHVtbiwgbGVmdC4gTm90aGluZyBlbHNlIGNvbXBldGVzLiA9PT09PT09PT09PT0gKi8KICAjcmFpbHtwb3NpdGlvbjpmaXhlZDtsZWZ0OjA7dG9wOjA7Ym90dG9tOjA7d2lkdGg6MzA4cHg7ei1pbmRleDo3OwogICAgcGFkZGluZzoyNnB4IDI0cHggODRweDtkaXNwbGF5OmZsZXg7ZmxleC1kaXJlY3Rpb246Y29sdW1uOwogICAgcG9pbnRlci1ldmVudHM6bm9uZTsKICAgIGJhY2tncm91bmQ6bGluZWFyLWdyYWRpZW50KHRvIHJpZ2h0LHJnYmEoMjU1LDI1NSwyNTUsLjk0KSAwJSxyZ2JhKDI1NSwyNTUsMjU1LC44MikgNjIlLHJnYmEoMjU1LDI1NSwyNTUsMCkgMTAwJSl9CgogICNraWNrZXJ7Zm9udC1zaXplOjkuNXB4O2xldHRlci1zcGFjaW5nOi4yZW07Y29sb3I6dmFyKC0tc2lnbmFsKTt0ZXh0LXRyYW5zZm9ybTp1cHBlcmNhc2U7CiAgICBmb250LXdlaWdodDo3MDA7bWFyZ2luLWJvdHRvbToxMXB4O2Rpc3BsYXk6ZmxleDthbGlnbi1pdGVtczpjZW50ZXI7Z2FwOjhweH0KICAja2lja2VyOjpiZWZvcmV7Y29udGVudDoiIjt3aWR0aDoxNnB4O2hlaWdodDoxcHg7YmFja2dyb3VuZDp2YXIoLS1zaWduYWwpO2ZsZXg6bm9uZX0KICAjaGVhZHtmb250LXNpemU6Y2xhbXAoMjFweCwyLjR2dywyOXB4KTtsaW5lLWhlaWdodDoxLjI2O2ZvbnQtd2VpZ2h0OjcwMDsKICAgIGxldHRlci1zcGFjaW5nOi0uMDEyZW07Y29sb3I6dmFyKC0taW5rKTttYXJnaW4tYm90dG9tOjExcHh9CiAgI2hlYWQgZW17Zm9udC1zdHlsZTpub3JtYWw7Y29sb3I6dmFyKC0tc2lnbmFsKX0KICAjYm9keXtmb250LXNpemU6MTIuNXB4O2xpbmUtaGVpZ2h0OjEuODI7Y29sb3I6IzQzNTE0YTttYXJnaW4tYm90dG9tOjE2cHh9CiAgI2JvZHkgYntjb2xvcjp2YXIoLS1zaWduYWwpO2ZvbnQtd2VpZ2h0OjYwMH0KCiAgLyogY29udGV4dHVhbCBzbG90IOKAlCBsZWdlbmQgb24gMDEvMDIsIGludGVybG9jayBkZW1vIG9uIDA1LCBlbXB0eSBlbHNld2hlcmUgKi8KICAjc2xvdHtwb2ludGVyLWV2ZW50czphdXRvfQogIC5jaGlwc3tkaXNwbGF5OmZsZXg7ZmxleC1kaXJlY3Rpb246Y29sdW1uO2dhcDo2cHg7CiAgICBib3JkZXItdG9wOjFweCBzb2xpZCB2YXIoLS1ydWxlKTtwYWRkaW5nLXRvcDoxMnB4fQogIC5jaGlwcyBkaXZ7ZGlzcGxheTpmbGV4O2FsaWduLWl0ZW1zOmNlbnRlcjtnYXA6OXB4O2ZvbnQtc2l6ZToxMXB4O2NvbG9yOiM0MzUxNGE7bGV0dGVyLXNwYWNpbmc6LjAxZW19CiAgLmNoaXBzIGl7d2lkdGg6MTBweDtoZWlnaHQ6MTBweDtmbGV4Om5vbmV9CiAgLmNoaXBzIHN7dGV4dC1kZWNvcmF0aW9uOm5vbmU7Y29sb3I6dmFyKC0tbXV0ZSk7Zm9udC1zaXplOjEwcHh9CgogIC5kZW1ve2JvcmRlci10b3A6MXB4IHNvbGlkIHZhcigtLXJ1bGUpO3BhZGRpbmctdG9wOjEycHh9CiAgLmRlbW8gaDV7Zm9udC1zaXplOjlweDtsZXR0ZXItc3BhY2luZzouMThlbTtjb2xvcjp2YXIoLS1oZWF0KTt0ZXh0LXRyYW5zZm9ybTp1cHBlcmNhc2U7CiAgICBmb250LXdlaWdodDo3MDA7bWFyZ2luLWJvdHRvbTo5cHh9CiAgLmRlbW8gLmJ0bnN7ZGlzcGxheTpmbGV4O2ZsZXgtZGlyZWN0aW9uOmNvbHVtbjtnYXA6NXB4O21hcmdpbi1ib3R0b206MTFweH0KICAuZGVtbyBidXR0b257cGFkZGluZzo3cHggMTBweDtmb250LWZhbWlseTppbmhlcml0O2ZvbnQtc2l6ZToxMXB4O3RleHQtYWxpZ246bGVmdDsKICAgIGJhY2tncm91bmQ6I2ZmZjtib3JkZXI6MXB4IHNvbGlkIHZhcigtLXJ1bGUpO2NvbG9yOiM0MzUxNGE7CiAgICBjdXJzb3I6cG9pbnRlcjt0cmFuc2l0aW9uOmFsbCAuMThzO2xldHRlci1zcGFjaW5nOi4wMWVtfQogIC5kZW1vIGJ1dHRvbjpob3Zlcntib3JkZXItY29sb3I6dmFyKC0taGVhdCk7Y29sb3I6dmFyKC0taGVhdCl9CiAgLmRlbW8gYnV0dG9uLmZpcmluZ3tiYWNrZ3JvdW5kOiNmZGYxZTg7Ym9yZGVyLWNvbG9yOnZhcigtLXN0b3ApO2NvbG9yOnZhcigtLXN0b3ApO2ZvbnQtd2VpZ2h0OjYwMH0KICAuY2hhaW4gLnN0e2Rpc3BsYXk6ZmxleDthbGlnbi1pdGVtczpjZW50ZXI7Z2FwOjhweDtwYWRkaW5nOjNweCAwOwogICAgZm9udC1zaXplOjEwcHg7Y29sb3I6I2E4YjJhYjtsZXR0ZXItc3BhY2luZzouMDJlbTt0cmFuc2l0aW9uOmNvbG9yIC4yNXN9CiAgLmNoYWluIC5zdCBpe3dpZHRoOjVweDtoZWlnaHQ6NXB4O2ZsZXg6bm9uZTtiYWNrZ3JvdW5kOiNkM2RhZDQ7dHJhbnNpdGlvbjpiYWNrZ3JvdW5kIC4yNXN9CiAgLmNoYWluIC5zdC5saXR7Y29sb3I6IzQzNTE0YX0KICAuY2hhaW4gLnN0LmxpdCBpe2JhY2tncm91bmQ6dmFyKC0taGVhdCl9CiAgLmNoYWluIC5zdC5jdXQubGl0e2NvbG9yOnZhcigtLXN0b3ApO2ZvbnQtd2VpZ2h0OjYwMH0KICAuY2hhaW4gLnN0LmN1dC5saXQgaXtiYWNrZ3JvdW5kOnZhcigtLXN0b3ApfQoKICAvKiA9PT09PT09PT09PT0gbGFiZWxzIOKAlCByaWdodCByYWlsIG9ubHksIG1heCAzIHBlciBzdGFnZSA9PT09PT09PT09PT0gKi8KICAjbGFiZWxze3Bvc2l0aW9uOmZpeGVkO2luc2V0OjA7cG9pbnRlci1ldmVudHM6bm9uZTt6LWluZGV4OjU7b3ZlcmZsb3c6aGlkZGVufQogICNsZWFkZXJ7cG9zaXRpb246Zml4ZWQ7aW5zZXQ6MDtwb2ludGVyLWV2ZW50czpub25lO3otaW5kZXg6NDt3aWR0aDoxMDAlO2hlaWdodDoxMDAlfQogIC5sYmx7cG9zaXRpb246YWJzb2x1dGU7d2hpdGUtc3BhY2U6bm93cmFwO2JhY2tncm91bmQ6cmdiYSgyNTUsMjU1LDI1NSwuOTUpOwogICAgYm9yZGVyOjFweCBzb2xpZCB2YXIoLS1ydWxlKTtwYWRkaW5nOjVweCAxMHB4O2ZvbnQtc2l6ZToxMXB4O2xldHRlci1zcGFjaW5nOi4wMWVtOwogICAgY29sb3I6dmFyKC0taW5rKTtvcGFjaXR5OjA7dHJhbnNpdGlvbjpvcGFjaXR5IC40czsKICAgIGJveC1zaGFkb3c6MCAxcHggM3B4IHJnYmEoMjAsMzIsMjYsLjA2KX0KICAubGJsIGJ7Y29sb3I6dmFyKC0tc2lnbmFsKTtmb250LXdlaWdodDo3MDB9CiAgLmxibC53YXJuIGJ7Y29sb3I6dmFyKC0taGVhdCl9CiAgLmxibC53ZXQgIGJ7Y29sb3I6dmFyKC0td2V0KX0KICAubGJsLm1ldGFsIGJ7Y29sb3I6dmFyKC0tbWV0YWwpfQogIC5sYmwuZmlsbSBie2NvbG9yOiM2YjU4NDJ9CiAgLmxibCBze3RleHQtZGVjb3JhdGlvbjpub25lO2NvbG9yOnZhcigtLW11dGUpO2ZvbnQtc2l6ZToxMHB4O2xldHRlci1zcGFjaW5nOi4wNGVtO21hcmdpbi1sZWZ0OjJweH0KICAuZG90e3Bvc2l0aW9uOmFic29sdXRlO3dpZHRoOjZweDtoZWlnaHQ6NnB4O2JhY2tncm91bmQ6dmFyKC0tc2lnbmFsKTtib3JkZXItcmFkaXVzOjUwJTsKICAgIHRyYW5zZm9ybTp0cmFuc2xhdGUoLTUwJSwtNTAlKTtvcGFjaXR5OjA7dHJhbnNpdGlvbjpvcGFjaXR5IC40c30KCiAgLyogPT09PT09PT09PT09IGJvdHRvbSBiYXIgPT09PT09PT09PT09ICovCiAgI3BhbmVse3Bvc2l0aW9uOmZpeGVkO2xlZnQ6NTAlO2JvdHRvbToxNHB4O3RyYW5zZm9ybTp0cmFuc2xhdGVYKC01MCUpO3otaW5kZXg6ODsKICAgIGJhY2tncm91bmQ6cmdiYSgyNTUsMjU1LDI1NSwuOTQpO2JvcmRlcjoxcHggc29saWQgdmFyKC0tcnVsZSk7CiAgICBiYWNrZHJvcC1maWx0ZXI6Ymx1cig4cHgpO3BhZGRpbmc6NHB4O21heC13aWR0aDpjYWxjKDEwMCUgLSAyMHB4KTtvdmVyZmxvdy14OmF1dG87CiAgICBib3gtc2hhZG93OjAgMnB4IDEwcHggcmdiYSgyMCwzMiwyNiwuMDcpfQogICNzdGVwc3tkaXNwbGF5OmZsZXg7Z2FwOjJweDtmbGV4LXdyYXA6bm93cmFwO2FsaWduLWl0ZW1zOnN0cmV0Y2h9CiAgI3N0ZXBzIGJ1dHRvbntwYWRkaW5nOjdweCAxMXB4O2N1cnNvcjpwb2ludGVyO3doaXRlLXNwYWNlOm5vd3JhcDsKICAgIGJvcmRlcjoxcHggc29saWQgdHJhbnNwYXJlbnQ7YmFja2dyb3VuZDp0cmFuc3BhcmVudDtjb2xvcjp2YXIoLS1tdXRlKTsKICAgIGZvbnQtc2l6ZToxMXB4O2ZvbnQtZmFtaWx5OmluaGVyaXQ7bGV0dGVyLXNwYWNpbmc6LjAxZW07dHJhbnNpdGlvbjphbGwgLjE4czsKICAgIGRpc3BsYXk6ZmxleDthbGlnbi1pdGVtczpjZW50ZXI7Z2FwOjZweDtsaW5lLWhlaWdodDoxfQogICNzdGVwcyBidXR0b24gLm57Zm9udC1zaXplOjlweDtmb250LXdlaWdodDo3MDA7bGV0dGVyLXNwYWNpbmc6LjA4ZW07b3BhY2l0eTouNTV9CiAgI3N0ZXBzIGJ1dHRvbjpob3Zlcntjb2xvcjp2YXIoLS1pbmspfQogICNzdGVwcyBidXR0b24ub257YmFja2dyb3VuZDojZWVmNGU2O2JvcmRlci1jb2xvcjp2YXIoLS1icmFuZCk7Y29sb3I6dmFyKC0tc2lnbmFsKTtmb250LXdlaWdodDo2MDB9CiAgI3N0ZXBzIGJ1dHRvbi5vbiAubntvcGFjaXR5OjF9CiAgI3N0ZXBzIC5zZXB7d2lkdGg6MXB4O2JhY2tncm91bmQ6dmFyKC0tcnVsZSk7bWFyZ2luOjRweCAzcHh9CiAgI3N0ZXBzIC5hY3R7cGFkZGluZzo3cHggMTBweDtmb250LXNpemU6MTAuNXB4fQoKICBAbWVkaWEgKG1heC13aWR0aDo4NjBweCl7CiAgICAjcmFpbHtwb3NpdGlvbjpmaXhlZDtsZWZ0OjA7cmlnaHQ6MDtib3R0b206YXV0bzt3aWR0aDphdXRvO2hlaWdodDphdXRvOwogICAgICBwYWRkaW5nOjE0cHggMTZweCAxNnB4OwogICAgICBiYWNrZ3JvdW5kOmxpbmVhci1ncmFkaWVudCh0byBib3R0b20scmdiYSgyNTUsMjU1LDI1NSwuOTUpIDAlLHJnYmEoMjU1LDI1NSwyNTUsLjg2KSA3MCUscmdiYSgyNTUsMjU1LDI1NSwwKSAxMDAlKX0KICAgICNoZWFke2ZvbnQtc2l6ZToxOHB4O21hcmdpbi1ib3R0b206N3B4fQogICAgI2JvZHl7Zm9udC1zaXplOjExcHg7bGluZS1oZWlnaHQ6MS43O21hcmdpbi1ib3R0b206MTBweH0KICAgIC5jaGlwc3tmbGV4LWRpcmVjdGlvbjpyb3c7Z2FwOjE0cHg7cGFkZGluZy10b3A6OXB4fQogICAgLmNoaXBzIHN7ZGlzcGxheTpub25lfQogICAgLmRlbW97cGFkZGluZy10b3A6OXB4fQogICAgLmRlbW8gLmJ0bnN7ZmxleC1kaXJlY3Rpb246cm93O2dhcDo0cHg7bWFyZ2luLWJvdHRvbTo4cHh9CiAgICAuZGVtbyBidXR0b257ZmxleDoxO3RleHQtYWxpZ246Y2VudGVyO3BhZGRpbmc6NnB4IDRweDtmb250LXNpemU6MTBweH0KICAgIC5jaGFpbntkaXNwbGF5OmZsZXg7Z2FwOjEycHh9CiAgICAuY2hhaW4gLnN0e2ZvbnQtc2l6ZTo5cHg7cGFkZGluZzowfQogICAgI3N0ZXBzIGJ1dHRvbntwYWRkaW5nOjZweCA4cHg7Zm9udC1zaXplOjEwcHh9CiAgICAjc3RlcHMgYnV0dG9uIHNwYW46bm90KC5uKXtkaXNwbGF5Om5vbmV9CiAgICAjc3RlcHMgLmFjdCBzcGFuOm5vdCgubil7ZGlzcGxheTppbmxpbmV9CiAgICAubGJse2ZvbnQtc2l6ZToxMHB4O3BhZGRpbmc6NHB4IDhweH0KICAgIC5sYmwgc3tkaXNwbGF5Om5vbmV9CiAgfQo8L3N0eWxlPgo8L2hlYWQ+Cjxib2R5Pgo8ZGl2IGlkPSJzY2VuZSI+PC9kaXY+CjxzdmcgaWQ9ImxlYWRlciI+PC9zdmc+CjxkaXYgaWQ9ImxhYmVscyI+PC9kaXY+Cgo8ZGl2IGlkPSJyYWlsIj4KICA8ZGl2IGlkPSJraWNrZXIiPjwvZGl2PgogIDxkaXYgaWQ9ImhlYWQiPjwvZGl2PgogIDxkaXYgaWQ9ImJvZHkiPjwvZGl2PgogIDxkaXYgaWQ9InNsb3QiPjwvZGl2Pgo8L2Rpdj4KCjxkaXYgaWQ9InBhbmVsIj4KICA8ZGl2IGlkPSJzdGVwcyI+CiAgICA8YnV0dG9uIGRhdGEtcz0iMCIgY2xhc3M9Im9uIj48c3BhbiBjbGFzcz0ibiI+MDE8L3NwYW4+PHNwYW4+5YWo55+z6Iux5rWB6YGTPC9zcGFuPjwvYnV0dG9uPgogICAgPGJ1dHRvbiBkYXRhLXM9IjEiPjxzcGFuIGNsYXNzPSJuIj4wMjwvc3Bhbj48c3Bhbj7pm7bph5HlsazmjqXop7g8L3NwYW4+PC9idXR0b24+CiAgICA8YnV0dG9uIGRhdGEtcz0iMiI+PHNwYW4gY2xhc3M9Im4iPjAzPC9zcGFuPjxzcGFuPueEoee4q+aIkOWeizwvc3Bhbj48L2J1dHRvbj4KICAgIDxidXR0b24gZGF0YS1zPSIzIj48c3BhbiBjbGFzcz0ibiI+MDQ8L3NwYW4+PHNwYW4+6JaE6Iac5Y2H5rqrPC9zcGFuPjwvYnV0dG9uPgogICAgPGJ1dHRvbiBkYXRhLXM9IjQiPjxzcGFuIGNsYXNzPSJuIj4wNTwvc3Bhbj48c3Bhbj7lm5vpgZPkupLpjpY8L3NwYW4+PC9idXR0b24+CiAgICA8YnV0dG9uIGRhdGEtcz0iNSI+PHNwYW4gY2xhc3M9Im4iPjA2PC9zcGFuPjxzcGFuPuaVtOapn+WwuuWvuDwvc3Bhbj48L2J1dHRvbj4KICAgIDxkaXYgY2xhc3M9InNlcCI+PC9kaXY+CiAgICA8YnV0dG9uIGlkPSJwbGF5IiBjbGFzcz0iYWN0Ij48c3Bhbj7ilrY8L3NwYW4+PC9idXR0b24+CiAgPC9kaXY+CjwvZGl2PgoKPHNjcmlwdCBzcmM9Imh0dHBzOi8vY2RuanMuY2xvdWRmbGFyZS5jb20vYWpheC9saWJzL3RocmVlLmpzL3IxMjgvdGhyZWUubWluLmpzIj48L3NjcmlwdD4KPHNjcmlwdD4KaWYoIXdpbmRvdy5USFJFRSl7ZG9jdW1lbnQud3JpdGUoJzxzY3JpcHQgc3JjPSJodHRwczovL3VucGtnLmNvbS90aHJlZUAwLjEyOC4wL2J1aWxkL3RocmVlLm1pbi5qcyI+PFwvc2NyaXB0PicpO30KPC9zY3JpcHQ+CjxzY3JpcHQ+CmlmKCF3aW5kb3cuVEhSRUUpewogIGRvY3VtZW50LmJvZHkuaW5zZXJ0QWRqYWNlbnRIVE1MKCdiZWZvcmVlbmQnLAogICAgJzxkaXYgc3R5bGU9InBvc2l0aW9uOmZpeGVkO2luc2V0OjA7ZGlzcGxheTpmbGV4O2FsaWduLWl0ZW1zOmNlbnRlcjtqdXN0aWZ5LWNvbnRlbnQ6Y2VudGVyOycrCiAgICAndGV4dC1hbGlnbjpjZW50ZXI7cGFkZGluZzoyNHB4O2ZvbnQtc2l6ZToxNHB4O2xpbmUtaGVpZ2h0OjEuODtjb2xvcjojNDM1MTRhO3otaW5kZXg6OTkiPicrCiAgICAn54Sh5rOV6LyJ5YWlIHRocmVlLmpzIOWHveW8j+W6qzxicj48c3BhbiBzdHlsZT0iY29sb3I6IzZjNzc2Zjtmb250LXNpemU6MTJweCI+JysKICAgICfoq4vnorroqo3ntrLot6/pgKPnt5rvvIjmraTmqpTmoYjpnIDpgKPlpJbovInlhaUgdGhyZWUuanMgcjEyOO+8iTwvc3Bhbj48L2Rpdj4nKTsKICB0aHJvdyBuZXcgRXJyb3IoJ3RocmVlLmpzIGZhaWxlZCB0byBsb2FkJyk7Cn0KCi8qID09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PQogICBSRVdBVFQgSU5MSU5FIENIRU1JQ0FMIEhFQVRFUiDigJQg5YmW6ZaL5L6G55yLCgogICBUV08gUlVMRVMgVEhJUyBGSUxFIEZPTExPV1MsIGJvdGggbGVhcm5lZCBmcm9tIHJldmlldzoKCiAgIDEuIE9ORSB0ZXh0IGNvbHVtbi4gIEV2ZXJ5dGhpbmcgdGhlIHZpc2l0b3IgcmVhZHMgbGl2ZXMgaW4gdGhlCiAgICAgIGxlZnQgcmFpbDoga2lja2VyLCBoZWFkbGluZSwgc2VudGVuY2UsIGFuZCBhIGNvbnRleHR1YWwgc2xvdAogICAgICB0aGF0IGhvbGRzIHRoZSBsZWdlbmQgKHN0YWdlcyAwMeKAkzAyKSBvciB0aGUgaW50ZXJsb2NrIGRlbW8KICAgICAgKHN0YWdlIDA1KS4gIE5vIHNlY29uZCBwYW5lbCwgbm8gY29tcG9uZW50IGJyb3dzZXIgY29tcGV0aW5nCiAgICAgIHdpdGggdGhlIHN0YWdlIGJhci4gIExhYmVscyBhcmUgY2FwcGVkIGF0IFRIUkVFIHBlciBzdGFnZSBhbmQKICAgICAgYWxsIGRvY2sgdG8gYSBzaW5nbGUgcmlnaHQtaGFuZCByYWlsLgoKICAgMi4gTElHSFQgZ3JvdW5kLiAgVGhlIHByb2R1Y3QgcmVuZGVycyBzaXQgb24gYSBsaWdodCBzd2VlcCBhbmQKICAgICAgdGhlIHdlYnNpdGUgaXMgcXVhcnR6LXdoaXRlLCBzbyBhIGRhcmsgc3RhZ2UgbWFkZSB0aGUgbWF0dGUKICAgICAgYmxhY2sgYm9keSB2YW5pc2ggaW50byB0aGUgYmFja2dyb3VuZCBBTkQgcHVuY2hlZCBhIGhvbGUgaW4KICAgICAgdGhlIHBhZ2UuICBCb2R5IGlzIGNoYXJjb2FsIG9uIG5lYXItd2hpdGU6IHRoZSBzZXBhcmF0aW9uIHRoZQogICAgICBwaG90b3MgaGF2ZS4KCiAgIEdlb21ldHJ5OiBldmVyeSBwYXJ0IGlzIG9uZSBmdWxsIDM2MMKwIHNvbGlkIG9mIHJldm9sdXRpb24uIFRoZXJlIGlzIG5vCiAgIHNlY3Rpb24gY3V0IOKAlCB0aGUgaW50ZXJpb3IgaXMgcmVhZCBwdXJlbHkgdGhyb3VnaCB0cmFuc3BhcmVuY3ksIHNvIHRoZQogICBvcGFjaXR5IHRhYmxlIGFuZCB0aGUgcGlubmVkIHBhaW50IG9yZGVyIGFyZSB3aGF0IG1ha2UgaXQgbGVnaWJsZS4KCiAgIEF4aXM6IHByb2ZpbGVzIGFyZSBbcmFkaXVzLCB5XTsgcm9vdCBpcyByb3RhdGVkIDkwwrAgYWJvdXQgWiBzbyB0aGUgbW9kZWwKICAgbGllcyBob3Jpem9udGFsbHkuICBTY2FsZTogMSB1bml0ID0gMyBtbS4KICAgSG91c2luZyByMjQgPSDDmDE0NC4gIExlbmd0aCAxMzAgPSAzOTAgbW0uCiAgID09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PSAqLwoKY29uc3QgY29udGFpbmVyID0gZG9jdW1lbnQuZ2V0RWxlbWVudEJ5SWQoJ3NjZW5lJyk7CmNvbnN0IHJlbmRlcmVyID0gbmV3IFRIUkVFLldlYkdMUmVuZGVyZXIoe2FudGlhbGlhczp0cnVlLGFscGhhOnRydWUscG93ZXJQcmVmZXJlbmNlOidoaWdoLXBlcmZvcm1hbmNlJ30pOwpjb25zdCBEUFIgPSBNYXRoLm1pbihkZXZpY2VQaXhlbFJhdGlvfHwxLDIpOwpyZW5kZXJlci5zZXRQaXhlbFJhdGlvKERQUik7CnJlbmRlcmVyLnNldFNpemUoaW5uZXJXaWR0aCxpbm5lckhlaWdodCk7CmNvbnRhaW5lci5hcHBlbmRDaGlsZChyZW5kZXJlci5kb21FbGVtZW50KTsKCmNvbnN0IHNjZW5lID0gbmV3IFRIUkVFLlNjZW5lKCk7CnNjZW5lLmZvZyA9IG5ldyBUSFJFRS5Gb2coMHhlOWVjZTYsMjQwLDYyMCk7CmNvbnN0IGNhbWVyYSA9IG5ldyBUSFJFRS5QZXJzcGVjdGl2ZUNhbWVyYSgzOCxpbm5lcldpZHRoL2lubmVySGVpZ2h0LDUsMTAwMCk7CgovKiBTb2Z0IGxpZ2h0IHJvb20sIGRlbGliZXJhdGVseSBVTkRFUi1saXQgcmF0aGVyIHRoYW4gb3Zlci4KICAgQSBicmlnaHQga2V5IG9uIGxpZ2h0IG1hdGVyaWFscyBibG93cyB0aGUgcXVhcnR6IGFuZCB0aGUgUFRGRSBwb3J0cwogICB0byBmbGF0IHdoaXRlIGFuZCBraWxscyB0aGUgY29hdGluZyBsYXllcidzIHRvbmUsIHNvIHRoZSBrZXkgaXMga2VwdAogICBsb3cgYW5kIHRoZSBmb3JtIGlzIGNhcnJpZWQgYnkgdGhlIGZpbGwgYW5kIGEgZ2VudGxlIHVuZGVybGlnaHQuICovCnNjZW5lLmFkZChuZXcgVEhSRUUuSGVtaXNwaGVyZUxpZ2h0KDB4ZjRmN2YyLDB4ZDJkOGNmLC42MikpOwpjb25zdCBkbCA9IG5ldyBUSFJFRS5EaXJlY3Rpb25hbExpZ2h0KDB4ZmZmZGY2LC41Mik7IGRsLnBvc2l0aW9uLnNldCg0Miw2NCw3Mik7IHNjZW5lLmFkZChkbCk7CmNvbnN0IGZsID0gbmV3IFRIUkVFLkRpcmVjdGlvbmFsTGlnaHQoMHhlNmVkZTIsLjI0KTsgZmwucG9zaXRpb24uc2V0KC01NiwxOCwtMzQpOyBzY2VuZS5hZGQoZmwpOwpjb25zdCB1bCA9IG5ldyBUSFJFRS5EaXJlY3Rpb25hbExpZ2h0KDB4ZmZmZmZmLC4xMik7IHVsLnBvc2l0aW9uLnNldCgwLC01MCwyMCk7ICBzY2VuZS5hZGQodWwpOwoKY29uc3QgcGl2b3QgPSBuZXcgVEhSRUUuR3JvdXAoKTsgc2NlbmUuYWRkKHBpdm90KTsKY29uc3Qgcm9vdCAgPSBuZXcgVEhSRUUuR3JvdXAoKTsgcGl2b3QuYWRkKHJvb3QpOwpyb290LnJvdGF0aW9uLnogPSBNYXRoLlBJLzI7CgovKiAtLS0tLS0tLS0tIGxhdGhlIGhlbHBlciAtLS0tLS0tLS0tCiAgIE9uZSBmdWxsIDM2MMKwIHNvbGlkIG9mIHJldm9sdXRpb24gcGVyIHBhcnQuIFRoZXJlIGlzIG5vIHNlY3Rpb24gY3V0OgogICB0aGUgaW50ZXJpb3IgaXMgcmVhZCB0aHJvdWdoIHRyYW5zcGFyZW5jeSwgd2hpY2ggaXMgd2h5IHRoZSBvcGFjaXR5CiAgIHRhYmxlIGJlbG93IG1hdHRlcnMgc28gbXVjaCBhbmQgd2h5IHRoZSBwYWludCBvcmRlciBpcyBwaW5uZWQuICovCmNvbnN0IEFMTCA9IFtdOwpmdW5jdGlvbiBwYXJ0KHByb2ZpbGUsc2hlbGxPcHRzKXsKICBjb25zdCBtID0gbmV3IFRIUkVFLk1lc2hQaG9uZ01hdGVyaWFsKE9iamVjdC5hc3NpZ24oe3NpZGU6VEhSRUUuRG91YmxlU2lkZSx0cmFuc3BhcmVudDp0cnVlfSxzaGVsbE9wdHMpKTsKICBjb25zdCBiYXNlTyA9IHNoZWxsT3B0cy5vcGFjaXR5IT09dW5kZWZpbmVkID8gc2hlbGxPcHRzLm9wYWNpdHkgOiAxOwogIG0uX3N0YWdlTyA9IGJhc2VPOwogIGNvbnN0IHYgPSBwcm9maWxlLm1hcChwPT5uZXcgVEhSRUUuVmVjdG9yMihwWzBdLHBbMV0pKTsKICBjb25zdCBtZXNoID0gbmV3IFRIUkVFLk1lc2gobmV3IFRIUkVFLkxhdGhlR2VvbWV0cnkodiw3MiwwLE1hdGguUEkqMiksIG0pOwogIGNvbnN0IGdycCA9IG5ldyBUSFJFRS5Hcm91cCgpOyBncnAuYWRkKG1lc2gpOwogIHJvb3QuYWRkKGdycCk7CiAgZ3JwLnVzZXJEYXRhID0ge21hdHM6W21dfTsKICBBTEwucHVzaChncnApOwogIHJldHVybiB7Z3JwLG1hdHM6W21dfTsKfQpjb25zdCBtaXJyb3IgPSBwcm9mID0+IHByb2YubWFwKHA9PltwWzBdLC1wWzFdXSk7CgovKiAtLS0tLS0tLS0tIHByb2ZpbGVzIC0tLS0tLS0tLS0gKi8KLyog5LiA6auU5oiQ5Z6L55+z6Iux566hIOKAlCDnrqHouqvoiIflhannq6/ms5XomK3lkIzkuIDmrrXnn7Poi7Es6Lyq5buT5piv5LiA5qKd6YCj57qM57eaICovCmNvbnN0IHF1YXJ0elByb2YgPSBbCiAgWzcuNzAsIDYyXSwgWzguMDAsIDYyXSwKICBbOC4wMCwgNThdLCBbMTIuMCwgNThdLCBbMTIuMCwgNTRdLCBbOC4wMCwgNTRdLAogIFs4LjAwLC01NF0sIFsxMi4wLC01NF0sIFsxMi4wLC01OF0sIFs4LjAwLC01OF0sCiAgWzguMDAsLTYyXSwgWzcuNzAsLTYyXSwKICBbNy43MCwgNjJdCl07Ci8qIOmNjeiGnOWKoOeGseWxpCDigJQg5YyF6KaG5Zyo55+z6Iux566h5aSW5aOB55qE6YKj5LiA5bGkLOaYr+aguOW/g+aKgOihkywKICAg5Lu75L2V6ZqO5q616YO95L+d55WZ6Ieq5bex55qE6aGP6ImyLOS4jea3oeaIkOiDjOaZryAqLwpjb25zdCBmaWxtUHJvZiA9IFtbOC4wMiwtNDZdLFs4LjAyLDQ2XSxbOC40Niw0Nl0sWzguNDYsLTQ2XSxbOC4wMiwtNDZdXTsKY29uc3QgY2VudGVyUG9ydFQgPSBbCiAgWzMuMjAsIDU2XSwgWzMuMjAsIDc2XSwgWzQuNjAsIDc2XSwKICBbNS42MCwgNzVdLCBbNC42MCwgNzRdLCBbNS42MCwgNzNdLCBbNC42MCwgNzJdLCBbNS42MCwgNzFdLCBbNC42MCwgNzBdLCBbNC42MCwgNjhdLAogIFsxMC41LCA2OF0sIFsxMC41LCA2M10sIFs0LjIwLCA2M10sIFs0LjIwLCA1Nl0sIFszLjIwLCA1Nl0KXTsKY29uc3QgY2VudGVyUG9ydEIgPSBtaXJyb3IoY2VudGVyUG9ydFQpOwpjb25zdCBzbWFsbFBvcnRUID0gWwogIFsxLjMwLCA1Nl0sIFsxLjMwLCA2OF0sIFsyLjEwLCA2OF0sCiAgWzMuMDAsIDY3XSwgWzIuMTAsIDY2XSwgWzMuMDAsIDY1XSwgWzIuMTAsIDY0XSwgWzMuMDAsIDYzXSwgWzMuMDAsIDYyXSwKICBbNC44MCwgNjJdLCBbNC44MCwgNTZdLCBbMS4zMCwgNTZdCl07CmNvbnN0IGNhcFByb2ZUID0gWwogIFs4LjIwLCA2Ml0sIFsyNC4wLCA2Ml0sIFsyNC4wLCA1Ml0sIFsyMi4wLCA1Ml0sIFsyMi4wLCA1Nl0sCiAgWzguMjAsIDU2XSwgWzguMjAsIDU0XSwgWzEyLjIsIDU0XSwgWzEyLjIsIDU4XSwgWzguMjAsIDU4XSwgWzguMjAsIDYyXQpdOwpjb25zdCBjYXBQcm9mQiA9IG1pcnJvcihjYXBQcm9mVCk7CmNvbnN0IGhvdXNpbmdQcm9mID0gW1syMi4wLC01Ml0sWzI0LjAsLTUyXSxbMjQuMCw1Ml0sWzIyLjAsNTJdLFsyMi4wLC01Ml1dOwpjb25zdCBpbnN1bFByb2YgICA9IFtbOC43MCwtNTBdLFs4LjcwLDUwXSxbMjEuOCw1MF0sWzIxLjgsLTUwXSxbOC43MCwtNTBdXTsKCi8qIC0tLS0tLS0tLS0gbWF0ZXJpYWxzICsgYnVpbGQgLS0tLS0tLS0tLQogICBDaGFyY29hbCBib2R5IHZhbHVlcyB0YWtlbiBvZmYgdGhlIHByb2R1Y3QgcmVuZGVycywgc28gdGhlIG1vZGVsCiAgIHJlYWRzIHRoZSBzYW1lIHdheSB0aGUgcGhvdG9zIGRvIGFnYWluc3QgYSBsaWdodCBncm91bmQuICovCmNvbnN0IHF1YXJ0eiA9IHBhcnQocXVhcnR6UHJvZix7Y29sb3I6MHhjOWUyZWMsb3BhY2l0eTouNTUsc2hpbmluZXNzOjkyLHNwZWN1bGFyOjB4ZmZmZmZmfSk7Ci8qIGRlcG9zaXRlZCBmaWxtIHJlYWRzIGFzIGEgZGFyayBicm9uemUtZ3JhcGhpdGUsIG5vdCBmbGF0IGJsYWNrIOKAlAogICB0aGF0IHRvbmUgaXMgd2hhdCBkaXN0aW5ndWlzaGVzIGl0IGZyb20gdGhlIGNoYXJjb2FsIHN0cnVjdHVyYWwgcGFydHMgKi8KY29uc3QgZmlsbSAgID0gcGFydChmaWxtUHJvZiwgIHtjb2xvcjoweDNhMzEyOCxvcGFjaXR5OjEsc2hpbmluZXNzOjUyLHNwZWN1bGFyOjB4OGE3MzU1LGVtaXNzaXZlOjB4MDAwMDAwfSk7CmNvbnN0IHB0VCA9IHBhcnQoY2VudGVyUG9ydFQse2NvbG9yOjB4ZTRlMmRhLG9wYWNpdHk6MSxzaGluaW5lc3M6NDQsc3BlY3VsYXI6MHg3Nzc3Nzd9KTsKY29uc3QgcHRCID0gcGFydChjZW50ZXJQb3J0Qix7Y29sb3I6MHhlNGUyZGEsb3BhY2l0eToxLHNoaW5pbmVzczo0NCxzcGVjdWxhcjoweDc3Nzc3N30pOwpjb25zdCBzcDEgPSBwYXJ0KHNtYWxsUG9ydFQsIHtjb2xvcjoweGU0ZTJkYSxvcGFjaXR5OjEsc2hpbmluZXNzOjQ0LHNwZWN1bGFyOjB4Nzc3Nzc3fSk7CnNwMS5ncnAucG9zaXRpb24ueCA9ICAxMy41Owpjb25zdCBzcDIgPSBwYXJ0KHNtYWxsUG9ydFQsIHtjb2xvcjoweGU0ZTJkYSxvcGFjaXR5OjEsc2hpbmluZXNzOjQ0LHNwZWN1bGFyOjB4Nzc3Nzc3fSk7CnNwMi5ncnAucG9zaXRpb24ueCA9IC0xMy41Owpjb25zdCBjcFQgPSBwYXJ0KGNhcFByb2ZULHtjb2xvcjoweDJiMzAyZSxvcGFjaXR5OjEsc2hpbmluZXNzOjMwLHNwZWN1bGFyOjB4NGE1MzRlfSk7CmNvbnN0IGNwQiA9IHBhcnQoY2FwUHJvZkIse2NvbG9yOjB4MmIzMDJlLG9wYWNpdHk6MSxzaGluaW5lc3M6MzAsc3BlY3VsYXI6MHg0YTUzNGV9KTsKY29uc3QgaHMgICAgPSBwYXJ0KGhvdXNpbmdQcm9mLHtjb2xvcjoweDM1M2EzNyxvcGFjaXR5OjEsc2hpbmluZXNzOjE2LHNwZWN1bGFyOjB4M2Q0NTNmfSk7CmNvbnN0IGluc3VsID0gcGFydChpbnN1bFByb2YsICB7Y29sb3I6MHhkOWQzYmYsb3BhY2l0eToxLHNoaW5pbmVzczozfSk7CgovKiDmtYHpq5TmnKzouqsg4oCUIOe0lOawtO+8j+WMluWtuOa2suWFhea7v+efs+iLseeuoeWFp+iFlOOAggogICDpgJnmmK/kuIDmoLnlr6blv4PnmoTmtrLmn7Es5LiN5piv5YWn5aOB55qE5LiA5bGk55quOuiXjeiJsuS7o+ihqOa2sumrlCwKICAg55+z6Iux6IiH6Y2N6Iac5piv5YyF5Zyo5a6D5aSW6Z2i55qE5YWp5bGk44CCICovCmNvbnN0IHdldE1hdCA9IG5ldyBUSFJFRS5NZXNoUGhvbmdNYXRlcmlhbCh7CiAgY29sb3I6MHgyNTkzYjYsIGVtaXNzaXZlOjB4MGEzZDRlLCB0cmFuc3BhcmVudDp0cnVlLCBvcGFjaXR5OjAsCiAgc2lkZTpUSFJFRS5Eb3VibGVTaWRlLCBzaGluaW5lc3M6NjR9KTsKd2V0TWF0Ll9zdGFnZU8gPSAwOwpjb25zdCB3ZXRQcm9mID0gW1swLC03Nl0sWzcuNjAsLTc2XSxbNy42MCw3Nl0sWzAsNzZdLFswLC03Nl1dOwpjb25zdCB3ZXRWID0gd2V0UHJvZi5tYXAocD0+bmV3IFRIUkVFLlZlY3RvcjIocFswXSxwWzFdKSk7CmNvbnN0IHdldEdycCA9IG5ldyBUSFJFRS5Hcm91cCgpOwp3ZXRHcnAuYWRkKG5ldyBUSFJFRS5NZXNoKG5ldyBUSFJFRS5MYXRoZUdlb21ldHJ5KHdldFYsNzIsMCxNYXRoLlBJKjIpLCB3ZXRNYXQpKTsKd2V0R3JwLnVzZXJEYXRhID0ge21hdHM6W3dldE1hdF19OwpBTEwucHVzaCh3ZXRHcnApOyByb290LmFkZCh3ZXRHcnApOwoKLyogLS0tLS0tLS0tLSDph5Hpm7vmpbXnkrDoiIfnq6/lrZAgLS0tLS0tLS0tLSAqLwpjb25zdCB0ZXJtR3JwID0gbmV3IFRIUkVFLkdyb3VwKCk7CmNvbnN0IGJhbmRNYXQgPSBuZXcgVEhSRUUuTWVzaFBob25nTWF0ZXJpYWwoe2NvbG9yOjB4YzlhMjI3LHNoaW5pbmVzczoxMTAsc3BlY3VsYXI6MHhmZmYwYzAsdHJhbnNwYXJlbnQ6dHJ1ZX0pOwpjb25zdCBsZWFkTWF0ID0gbmV3IFRIUkVFLk1lc2hQaG9uZ01hdGVyaWFsKHtjb2xvcjoweDdhNjI0Mix0cmFuc3BhcmVudDp0cnVlfSk7CmJhbmRNYXQuX3N0YWdlTyA9IDA7IGxlYWRNYXQuX3N0YWdlTyA9IDA7CmNvbnN0IGJhbmRQcm9mID0gW1s4LjQyLC0xLjZdLFs4LjQyLDEuNl0sWzkuOTAsMS42XSxbOS45MCwtMS42XSxbOC40MiwtMS42XV07CmNvbnN0IGJhbmRWID0gYmFuZFByb2YubWFwKHA9Pm5ldyBUSFJFRS5WZWN0b3IyKHBbMF0scFsxXSkpOwpbNDksLTQ5XS5mb3JFYWNoKHk9PnsKICBjb25zdCByaW5nID0gbmV3IFRIUkVFLk1lc2gobmV3IFRIUkVFLkxhdGhlR2VvbWV0cnkoYmFuZFYsNzIsMCxNYXRoLlBJKjIpLCBiYW5kTWF0KTsKICByaW5nLnBvc2l0aW9uLnkgPSB5OwogIHRlcm1HcnAuYWRkKHJpbmcpOwp9KTsKW1stNi44LDQ5XSxbLTYuOCwtNDldXS5mb3JFYWNoKChbeCx5XSk9PnsKICBjb25zdCBwb3N0ID0gbmV3IFRIUkVFLk1lc2gobmV3IFRIUkVFLkN5bGluZGVyR2VvbWV0cnkoLjg1LC44NSw3KSwgbGVhZE1hdCk7CiAgcG9zdC5wb3NpdGlvbi5zZXQoeCwgeSArICh5PjA/NTotNSksIC0yLjIpOwogIHRlcm1HcnAuYWRkKHBvc3QpOwp9KTsKY29uc3QgbGVhZFJ1biA9IG5ldyBUSFJFRS5NZXNoKG5ldyBUSFJFRS5DeWxpbmRlckdlb21ldHJ5KC41NSwuNTUsOTYpLCBsZWFkTWF0KTsKbGVhZFJ1bi5wb3NpdGlvbi5zZXQoLTYuOCwwLC0yLjIpOyB0ZXJtR3JwLmFkZChsZWFkUnVuKTsKdGVybUdycC51c2VyRGF0YSA9IHttYXRzOltiYW5kTWF0LGxlYWRNYXRdfTsKcm9vdC5hZGQodGVybUdycCk7CgovKiAtLS0tLS0tLS0tIOmbu+a6kO+8j+ioiuiZn+mbu+e6nOWHuuWPoyAtLS0tLS0tLS0tICovCmNvbnN0IGNhYmxlR3JwID0gbmV3IFRIUkVFLkdyb3VwKCk7CmNvbnN0IGNvbm5NYXQgID0gbmV3IFRIUkVFLk1lc2hQaG9uZ01hdGVyaWFsKHtjb2xvcjoweDMwMzUyZixzaGluaW5lc3M6MzIsdHJhbnNwYXJlbnQ6dHJ1ZX0pOwpjb25zdCBnbGFuZE1hdCA9IG5ldyBUSFJFRS5NZXNoUGhvbmdNYXRlcmlhbCh7Y29sb3I6MHg3YTYyNDIsc2hpbmluZXNzOjIwLHRyYW5zcGFyZW50OnRydWV9KTsKY29ubk1hdC5fc3RhZ2VPID0gMDsgZ2xhbmRNYXQuX3N0YWdlTyA9IDA7CltbMTAuNSwtOS41XSxbMTUuNSwzLjVdXS5mb3JFYWNoKChbeCx6XSk9PnsKICBjb25zdCBib2R5ID0gbmV3IFRIUkVFLk1lc2gobmV3IFRIUkVFLkJveEdlb21ldHJ5KDMuNCw0LjIsMy4wKSwgY29ubk1hdCk7IGJvZHkucG9zaXRpb24uc2V0KHgsNjQuNSx6KTsKICBjb25zdCB0aXAgID0gbmV3IFRIUkVFLk1lc2gobmV3IFRIUkVFLkN5bGluZGVyR2VvbWV0cnkoMS4wNSwxLjA1LDMuNCksIGNvbm5NYXQpOyB0aXAucG9zaXRpb24uc2V0KHgsNjguMix6KTsKICBjb25zdCBnbCAgID0gbmV3IFRIUkVFLk1lc2gobmV3IFRIUkVFLkN5bGluZGVyR2VvbWV0cnkoLjYyLC42Miw3KSwgZ2xhbmRNYXQpOyBnbC5wb3NpdGlvbi5zZXQoeCw3Mi42LHopOwogIGNhYmxlR3JwLmFkZChib2R5LHRpcCxnbCk7Cn0pOwpjYWJsZUdycC51c2VyRGF0YSA9IHttYXRzOltjb25uTWF0LGdsYW5kTWF0XX07CnJvb3QuYWRkKGNhYmxlR3JwKTsKCi8qIC0tLS0tLS0tLS0g5oSf5ris5YWD5Lu2ICg0IOi3rykgLS0tLS0tLS0tLSAqLwpjb25zdCBtayA9IGMgPT4gbmV3IFRIUkVFLk1lc2hQaG9uZ01hdGVyaWFsKHtjb2xvcjpjLHRyYW5zcGFyZW50OnRydWUsb3BhY2l0eTowLHNoaW5pbmVzczoxOH0pOwpjb25zdCBzUXogPSBuZXcgVEhSRUUuTWVzaChuZXcgVEhSRUUuQm94R2VvbWV0cnkoMi42LDQuMCwyLjIpLCBtaygweGI0NTYwZSkpOyBzUXoucG9zaXRpb24uc2V0KDkuNiw0NCwwKTsKY29uc3Qgc0VsID0gbmV3IFRIUkVFLk1lc2gobmV3IFRIUkVFLkJveEdlb21ldHJ5KDIuNiw0LjAsMi4yKSwgbWsoMHhiNDU2MGUpKTsgc0VsLnBvc2l0aW9uLnNldCgtOS42LDEyLDApOwpjb25zdCBzTHYgPSBuZXcgVEhSRUUuTWVzaChuZXcgVEhSRUUuQ3lsaW5kZXJHZW9tZXRyeSgyLjYsMi42LDcpLCBtaygweDZiN2E3MCkpOwpzTHYucG9zaXRpb24uc2V0KDAsNDYsMjUuNSk7IHNMdi5yb3RhdGlvbi54ID0gTWF0aC5QSS8yOwpjb25zdCBzTGsgPSBuZXcgVEhSRUUuTWVzaChuZXcgVEhSRUUuQm94R2VvbWV0cnkoNC40LDIuNiw0LjQpLCBtaygweDZiN2E3MCkpOyBzTGsucG9zaXRpb24uc2V0KDAsLTQ4LC0yNC41KTsKY29uc3QgZHJhaW4gPSBuZXcgVEhSRUUuTWVzaChuZXcgVEhSRUUuQ3lsaW5kZXJHZW9tZXRyeSgxLjUsMS41LDUpLCBtaygweDZiN2E3MCkpOwpkcmFpbi5wb3NpdGlvbi5zZXQoMCwtNTAsLTI2KTsgZHJhaW4ucm90YXRpb24ueCA9IE1hdGguUEkvMjsKY29uc3QgdzEgPSBuZXcgVEhSRUUuTWVzaChuZXcgVEhSRUUuQ3lsaW5kZXJHZW9tZXRyeSguMzIsLjMyLDQ0KSwgbWsoMHg1YzY2NWYpKTsgdzEucG9zaXRpb24uc2V0KDkuNiw2MiwwKTsKY29uc3QgdzIgPSBuZXcgVEhSRUUuTWVzaChuZXcgVEhSRUUuQ3lsaW5kZXJHZW9tZXRyeSguMzIsLjMyLDg4KSwgbWsoMHg1YzY2NWYpKTsgdzIucG9zaXRpb24uc2V0KC05LjYsNDAsMCk7CmNvbnN0IGVudkdycCA9IG5ldyBUSFJFRS5Hcm91cCgpOwplbnZHcnAuYWRkKHNReixzRWwsc0x2LHNMayxkcmFpbix3MSx3Mik7IHJvb3QuYWRkKGVudkdycCk7CmNvbnN0IGVudk1hdHMgPSBbc1F6Lm1hdGVyaWFsLHNFbC5tYXRlcmlhbCxzTHYubWF0ZXJpYWwsc0xrLm1hdGVyaWFsLGRyYWluLm1hdGVyaWFsLHcxLm1hdGVyaWFsLHcyLm1hdGVyaWFsXTsKZW52TWF0cy5mb3JFYWNoKG09Pm0uX3N0YWdlTyA9IDApOwplbnZHcnAudXNlckRhdGEgPSB7bWF0czplbnZNYXRzfTsKLyogd2hpY2ggbWVzaCBlYWNoIGZhdWx0IGxpZ2h0cywgYW5kIHdoZXJlIGl0cyBsYWJlbCBwb2ludHMgKi8KY29uc3QgRkFVTFQgPSB7CiAgZHJ5IDoge21hdDoyLCBhdDpbMCw0NiwyNl0sICAgdDonPGI+5ray5L2N5oSf5risPC9iPjxzPuWkluaOm+ODu+mYsuS5vueHkjwvcz4nfSwKICBsZWFrOiB7bWF0OjMsIGF0OlswLC00OCwtMjVdLCB0Oic8Yj7mtKnmvI/mhJ/muKw8L2I+PHM+MjRWZGPjg7vlj6/no4HnsKfmuKzoqaY8L3M+J30sCiAgb3Zlcjoge21hdDoxLCBhdDpbLTkuNiwxMiw2XSwgdDonPGI+5YWD5Lu26YGO5rqrPC9iPjxzPjI1MMKwQzwvcz4nfSwKfTsKCi8qIOa0qea8j+a8lOekuueUqOepjea2siAqLwpjb25zdCBwdWRkbGVNYXQgPSBuZXcgVEhSRUUuTWVzaFBob25nTWF0ZXJpYWwoewogIGNvbG9yOjB4MWY4ZmI0LCBlbWlzc2l2ZToweDBiM2Y1MiwgdHJhbnNwYXJlbnQ6dHJ1ZSwgb3BhY2l0eTowLCBzaGluaW5lc3M6ODB9KTsKY29uc3QgcHVkZGxlID0gbmV3IFRIUkVFLk1lc2gobmV3IFRIUkVFLkN5bGluZGVyR2VvbWV0cnkoMjEuNiwyMS42LDEuNiw0OCwxLHRydWUpLCBwdWRkbGVNYXQpOwpwdWRkbGUucG9zaXRpb24uc2V0KDAsLTQ2LDApOyByb290LmFkZChwdWRkbGUpOwoKLyogLS0tLS0tLS0tLSAzRCDlsLrlr7jmqJnoqLsgLS0tLS0tLS0tLQogICBBbGwgdGhyZWUgZGltZW5zaW9ucyBsaXZlIGluIE9ORSBwbGFuZSAoeiA9IERaKSwgb2Zmc2V0IGNsZWFyIG9mIHRoZQogICBib2R5LiBTcHJlYWQgYWNyb3NzIGRpZmZlcmVudCBwbGFuZXMgdGhleSBqdXN0IHJlYWQgYXMgc3RyYXkgZGlhZ29uYWxzCiAgIGNyb3NzaW5nIHRoZSBtb2RlbDsgY29wbGFuYXIgdGhleSByZWFkIGFzIGEgZHJhd2luZyBsYWlkIG92ZXIgaXQuICovCmNvbnN0IGRpbU1hdCA9IG5ldyBUSFJFRS5MaW5lQmFzaWNNYXRlcmlhbCh7Y29sb3I6MHg0ZjdkMTksIHRyYW5zcGFyZW50OnRydWUsIG9wYWNpdHk6MH0pOwpjb25zdCBkaW1MaW5lID0gcHRzID0+IG5ldyBUSFJFRS5MaW5lKAogIG5ldyBUSFJFRS5CdWZmZXJHZW9tZXRyeSgpLnNldEZyb21Qb2ludHMocHRzLm1hcChwPT5uZXcgVEhSRUUuVmVjdG9yMyhwWzBdLHBbMV0scFsyXSkpKSwgZGltTWF0KTsKY29uc3QgRFogPSA0MDsgICAgICAgICAgICAgICAgICAgICAgIC8qIHRoZSBzaW5nbGUgZGltZW5zaW9uIHBsYW5lICovCmNvbnN0IGRpbUdycCA9IG5ldyBUSFJFRS5Hcm91cCgpOwovKiBhcnJvdyB0aWNrIHBhaXIgYXQgYSBwb2ludCwgb3BlbmluZyBhbG9uZyB0aGUgZ2l2ZW4gYXhpcyAqLwpmdW5jdGlvbiB0aWNrKHgseSxhbG9uZyl7CiAgcmV0dXJuIGFsb25nPT09J3knCiAgICA/IFtkaW1MaW5lKFtbeCx5LERaXSxbeC0yLjIseSsoeT4wPy00OjQpLERaXV0pLCBkaW1MaW5lKFtbeCx5LERaXSxbeCsyLjIseSsoeT4wPy00OjQpLERaXV0pXQogICAgOiBbZGltTGluZShbW3gseSxEWl0sW3grKHg+MD8tNDo0KSx5LTIuMixEWl1dKSwgZGltTGluZShbW3gseSxEWl0sW3grKHg+MD8tNDo0KSx5KzIuMixEWl1dKV07Cn0KLyog57i96ZW3IDM5MCDigJQgcnVucyBwYXJhbGxlbCB0byB0aGUgYXhpcyAqLwpkaW1HcnAuYWRkKGRpbUxpbmUoW1swLCA3NiwyNl0sWzAsIDc2LERaKzJdXSkpOwpkaW1HcnAuYWRkKGRpbUxpbmUoW1swLC03NiwyNl0sWzAsLTc2LERaKzJdXSkpOwpkaW1HcnAuYWRkKGRpbUxpbmUoW1swLCA3NixEWl0sWzAsLTc2LERaXV0pKTsKdGljaygwLCA3NiwneScpLmZvckVhY2gobD0+ZGltR3JwLmFkZChsKSk7CnRpY2soMCwtNzYsJ3knKS5mb3JFYWNoKGw9PmRpbUdycC5hZGQobCkpOwovKiDlpJblvpEgw5gxNDUg4oCUIHNwYW5zIHRoZSBzaGVsbCBqdXN0IGJleW9uZCB0aGUgdG9wIGNhcCAqLwpkaW1HcnAuYWRkKGRpbUxpbmUoW1stMjQsNTIsMF0sWy0yNCw2NCxEWl1dKSk7CmRpbUdycC5hZGQoZGltTGluZShbWyAyNCw1MiwwXSxbIDI0LDY0LERaXV0pKTsKZGltR3JwLmFkZChkaW1MaW5lKFtbLTI0LDY0LERaXSxbMjQsNjQsRFpdXSkpOwp0aWNrKC0yNCw2NCwneCcpLmZvckVhY2gobD0+ZGltR3JwLmFkZChsKSk7CnRpY2soIDI0LDY0LCd4JykuZm9yRWFjaChsPT5kaW1HcnAuYWRkKGwpKTsKLyog5rWB6YGT5YWn5b6RIMOYNDYg4oCUIHNwYW5zIHRoZSBib3JlIGp1c3QgYmV5b25kIHRoZSBib3R0b20gY2FwICovCmRpbUdycC5hZGQoZGltTGluZShbWy03LjcsLTUyLDBdLFstNy43LC02NCxEWl1dKSk7CmRpbUdycC5hZGQoZGltTGluZShbWyA3LjcsLTUyLDBdLFsgNy43LC02NCxEWl1dKSk7CmRpbUdycC5hZGQoZGltTGluZShbWy03LjcsLTY0LERaXSxbNy43LC02NCxEWl1dKSk7CnRpY2soLTcuNywtNjQsJ3gnKS5mb3JFYWNoKGw9PmRpbUdycC5hZGQobCkpOwp0aWNrKCA3LjcsLTY0LCd4JykuZm9yRWFjaChsPT5kaW1HcnAuYWRkKGwpKTsKcm9vdC5hZGQoZGltR3JwKTsKCi8qIC0tLS0tLS0tLS0g54ax5rWB566t6aCtIC0tLS0tLS0tLS0gKi8KY29uc3QgaGVhdEFycm93cyA9IFtdOwpbLTI0LDAsMjRdLmZvckVhY2goeT0+ewogIGNvbnN0IGExID0gbmV3IFRIUkVFLkFycm93SGVscGVyKG5ldyBUSFJFRS5WZWN0b3IzKC0xLDAsMCksbmV3IFRIUkVFLlZlY3RvcjMoMTUseSwtMyksNSwweDRmN2QxOSwyLjQsMS40KTsKICBjb25zdCBhMiA9IG5ldyBUSFJFRS5BcnJvd0hlbHBlcihuZXcgVEhSRUUuVmVjdG9yMyggMSwwLDApLG5ldyBUSFJFRS5WZWN0b3IzKC0xNSx5LC0zKSw1LDB4NGY3ZDE5LDIuNCwxLjQpOwogIGExLnZpc2libGUgPSBhMi52aXNpYmxlID0gZmFsc2U7CiAgcm9vdC5hZGQoYTEsYTIpOyBoZWF0QXJyb3dzLnB1c2goYTEsYTIpOwp9KTsKCi8qIC0tLS0tLS0tLS0g5rWB6auU57KS5a2QIC0tLS0tLS0tLS0gKi8KY29uc3QgTiA9IDE1MDsKY29uc3QgcEdlbyA9IG5ldyBUSFJFRS5CdWZmZXJHZW9tZXRyeSgpOwpjb25zdCBwUG9zID0gbmV3IEZsb2F0MzJBcnJheShOKjMpLCBwQ29sID0gbmV3IEZsb2F0MzJBcnJheShOKjMpOwpjb25zdCBwRGF0ID0gW107CmZ1bmN0aW9uIHNlZWRQKGkscmFuZFkpewogIGNvbnN0IHkgPSByYW5kWSA/ICgtNzAgKyBNYXRoLnJhbmRvbSgpKjE0MCkgOiAtNzA7CiAgcERhdFtpXSA9IHtyOk1hdGguc3FydChNYXRoLnJhbmRvbSgpKSwgdGg6TWF0aC5QSStNYXRoLnJhbmRvbSgpKk1hdGguUEksIHksIHNwOi4zMitNYXRoLnJhbmRvbSgpKi4yfTsKfQpmb3IobGV0IGk9MDtpPE47aSsrKSBzZWVkUChpLHRydWUpOwpwR2VvLnNldEF0dHJpYnV0ZSgncG9zaXRpb24nLG5ldyBUSFJFRS5CdWZmZXJBdHRyaWJ1dGUocFBvcywzKSk7CnBHZW8uc2V0QXR0cmlidXRlKCdjb2xvcicsICAgbmV3IFRIUkVFLkJ1ZmZlckF0dHJpYnV0ZShwQ29sLDMpKTsKY29uc3QgcHRzID0gbmV3IFRIUkVFLlBvaW50cyhwR2VvLG5ldyBUSFJFRS5Qb2ludHNNYXRlcmlhbCgKICB7c2l6ZToxLjksdmVydGV4Q29sb3JzOnRydWUsdHJhbnNwYXJlbnQ6dHJ1ZSxvcGFjaXR5OjAsc2l6ZUF0dGVudWF0aW9uOnRydWV9KSk7CnJvb3QuYWRkKHB0cyk7Ci8qIHNhdHVyYXRlZCBvbiBsaWdodDogY29vbCBibHVlIGluLCBicmFuZCBncmVlbiBvdXQgKi8KY29uc3QgY0NvbGQgPSBuZXcgVEhSRUUuQ29sb3IoMHgxZjhmYjQpLCBjSG90ID0gbmV3IFRIUkVFLkNvbG9yKDB4NWY5YzFmKSwgdGMwID0gbmV3IFRIUkVFLkNvbG9yKCk7CmxldCBoZWF0aW5nPWZhbHNlLCBmbG93aW5nPWZhbHNlLCBkcmFpbmVkPWZhbHNlLCBkcnlMZXZlbD04MDsKCmZ1bmN0aW9uIHVwZGF0ZVBhcnRpY2xlcygpewogIGZvcihsZXQgaT0wO2k8TjtpKyspewogICAgY29uc3QgZCA9IHBEYXRbaV07CiAgICBpZihmbG93aW5nKXsgZC55ICs9IGQuc3A7IGlmKGQueSA+IDcwKSBzZWVkUChpLGZhbHNlKTsgfQogICAgY29uc3QgcnIgPSBkLnIgKiA3LjM7CiAgICBpZihkcmFpbmVkICYmIGQueSA+IGRyeUxldmVsKXsgcFBvc1tpKjMrMV0gPSA5OTk5OyB9CiAgICBlbHNlIHsKICAgICAgcFBvc1tpKjNdICAgPSBycipNYXRoLmNvcyhkLnRoKTsKICAgICAgcFBvc1tpKjMrMV0gPSBkLnk7CiAgICAgIHBQb3NbaSozKzJdID0gcnIqTWF0aC5zaW4oZC50aCk7CiAgICB9CiAgICBjb25zdCBrID0gaGVhdGluZyA/IE1hdGgubWluKDEsTWF0aC5tYXgoMCwoZC55KzQwKS84MCkpIDogMDsKICAgIHRjMC5jb3B5KGNDb2xkKS5sZXJwKGNIb3Qsayk7CiAgICBwQ29sW2kqM109dGMwLnI7IHBDb2xbaSozKzFdPXRjMC5nOyBwQ29sW2kqMysyXT10YzAuYjsKICB9CiAgcEdlby5hdHRyaWJ1dGVzLnBvc2l0aW9uLm5lZWRzVXBkYXRlID0gdHJ1ZTsKICBwR2VvLmF0dHJpYnV0ZXMuY29sb3IubmVlZHNVcGRhdGUgPSB0cnVlOwp9CgovKiAtLS0tLS0tLS0tIGxhYmVscyDigJQgdGhyZWUgcGVyIHN0YWdlLCBvbmUgcmlnaHQtaGFuZCByYWlsIC0tLS0tLS0tLS0gKi8KY29uc3QgTCA9IFsKICB7YTpbMCwxMCw0XSwgICAgdDonPGI+57SU5rC077yP5YyW5a245rayPC9iPjxzPsOYNDYg566h5YWn5rWB6auUPC9zPicsIHM6WzBdLCBjbHM6J3dldCd9LAogIHthOls4LjI0LC0xNiw2XSx0Oic8Yj7pjY3ohpzliqDnhrHlsaQ8L2I+PHM+5YyF6KaG55+z6Iux5aSW5aOBPC9zPicsICAgczpbMF0sIGNsczonZmlsbSd9LAogIHthOlswLDcyLDNdLCAgICB0Oic8Yj7lh7rmtrLlj6M8L2I+PHM+5Li75rWB6YGTPC9zPicsICAgICAgICAgICAgczpbMF0sIGNsczond2V0J30sCiAge2E6WzkuOSw0OSw1XSwgIHQ6JzxiPumHkembu+alteeSsDwvYj48cz7kuI3op7jmtrI8L3M+JywgICAgICAgICAgIHM6WzFdLCBjbHM6J21ldGFsJ30sCiAge2E6WzguMjQsMjYsNl0sIHQ6JzxiPumNjeiGnOWxpDwvYj48cz7lnKjnn7Poi7HlpJblo4E8L3M+JywgICAgICAgICBzOlsxXSwgY2xzOidmaWxtJ30sCiAge2E6WzAsLTYsNF0sICAgIHQ6JzxiPua1gemrlDwvYj48cz7lj6rnorDlvpfliLDnn7Poi7Hlhaflo4E8L3M+JywgICAgIHM6WzFdLCBjbHM6J3dldCd9LAogIHthOlsxMiw1Niw1XSwgICB0Oic8Yj7kuIDpq5TmiJDlnovms5XomK08L2I+PHM+6IiH566h6Lqr5ZCM5LiA5q6155+z6IuxPC9zPicsIHM6WzJdfSwKICB7YTpbMTgsNjAsOF0sICAgdDonPGI+56uv6JOL55u05o6l6L+r57eKPC9iPjxzPueEoSBPLXJpbmc8L3M+JywgICAgczpbMl19LAogIHthOls4LjI0LC0yMCw2XSx0Oic8Yj7pjY3ohpzliqDnhrHlsaQ8L2I+PHM+55u05o6l6Y2N5Zyo55+z6Iux5LiKPC9zPicsIHM6WzNdLCBjbHM6J2ZpbG0nfSwKICB7YTpbMCwtNCw0XSwgICAgdDonPGI+54ax56m/6YGO5LiA5bGk566h5aOB6YCy5YWl5rWB6auUPC9iPicsICAgICAgICAgIHM6WzNdLCBjbHM6J3dldCd9LAogIHthOlswLDAsRFpdLCAgICAgdDonPGI+MzkwIG1tPC9iPjxzPue4vemVtzwvcz4nLCAgICAgICAgICAgICAgczpbNV19LAogIHthOlswLDY0LERaXSwgICAgdDonPGI+w5gxNDUgbW08L2I+PHM+5aSW5b6RPC9zPicsICAgICAgICAgICAgIHM6WzVdfSwKICB7YTpbMCwtNjQsRFpdLCAgIHQ6JzxiPsOYNDYgbW08L2I+PHM+5rWB6YGT5YWn5b6RPC9zPicsICAgICAgICAgIHM6WzVdfSwKXTsKY29uc3QgbGFiZWxzRGl2ID0gZG9jdW1lbnQuZ2V0RWxlbWVudEJ5SWQoJ2xhYmVscycpLCBsZWFkZXIgPSBkb2N1bWVudC5nZXRFbGVtZW50QnlJZCgnbGVhZGVyJyk7CmNvbnN0IENPTE9VUiA9IHt3ZXQ6JyMxZjhmYjQnLCBtZXRhbDonI2E4ODYyYScsIHdhcm46JyNiNDU2MGUnLCBmaWxtOicjNmI1ODQyJ307CmZ1bmN0aW9uIG1ha2VMYWJlbChkKXsKICBkLmVsID0gZG9jdW1lbnQuY3JlYXRlRWxlbWVudCgnZGl2Jyk7CiAgZC5lbC5jbGFzc05hbWUgPSAnbGJsJyArIChkLmNscyA/ICcgJytkLmNscyA6ICcnKTsKICBkLmVsLmlubmVySFRNTCA9IGQudDsgbGFiZWxzRGl2LmFwcGVuZENoaWxkKGQuZWwpOwogIGQuZG90ID0gZG9jdW1lbnQuY3JlYXRlRWxlbWVudCgnZGl2Jyk7IGQuZG90LmNsYXNzTmFtZT0nZG90JzsKICBpZihDT0xPVVJbZC5jbHNdKSBkLmRvdC5zdHlsZS5iYWNrZ3JvdW5kID0gQ09MT1VSW2QuY2xzXTsKICBsYWJlbHNEaXYuYXBwZW5kQ2hpbGQoZC5kb3QpOwogIGQubG4gPSBkb2N1bWVudC5jcmVhdGVFbGVtZW50TlMoJ2h0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnJywnbGluZScpOwogIGQubG4uc2V0QXR0cmlidXRlKCdzdHJva2UnLCBDT0xPVVJbZC5jbHNdIHx8ICcjNGY3ZDE5Jyk7CiAgZC5sbi5zZXRBdHRyaWJ1dGUoJ3N0cm9rZS13aWR0aCcsJzEnKTsgZC5sbi5zZXRBdHRyaWJ1dGUoJ29wYWNpdHknLCcwJyk7CiAgbGVhZGVyLmFwcGVuZENoaWxkKGQubG4pOyBkLnYgPSBuZXcgVEhSRUUuVmVjdG9yMygpOwogIHJldHVybiBkOwp9CkwuZm9yRWFjaChtYWtlTGFiZWwpOwovKiB0aGUgZmF1bHQgbGFiZWwgaXMgdHJhbnNpZW50IOKAlCBpdCBhcHBlYXJzIG9ubHkgd2hpbGUgYSBmYXVsdCBpcyBmaXJpbmcgKi8KY29uc3QgZmF1bHRMYmwgPSBtYWtlTGFiZWwoe2E6WzAsMCwwXSwgdDonJywgczpbXSwgY2xzOid3YXJuJ30pOwpsZXQgc3RhZ2UgPSAwLCBsYWJlbEhvbGQgPSBmYWxzZTsKCmZ1bmN0aW9uIHVwZGF0ZUxhYmVscygpewogIGNvbnN0IHZpcyA9IFtdOwogIEwuY29uY2F0KFtmYXVsdExibF0pLmZvckVhY2goZD0+ewogICAgY29uc3Qgb24gPSBkLnMuaW5jbHVkZXMoc3RhZ2UpICYmICFsYWJlbEhvbGQgJiYgZC50OwogICAgZC5lbC5zdHlsZS5vcGFjaXR5ID0gb24/MTowOyBkLmRvdC5zdHlsZS5vcGFjaXR5ID0gb24/MTowOwogICAgZC5sbi5zZXRBdHRyaWJ1dGUoJ29wYWNpdHknLCBvbj8uNjowKTsKICAgIGlmKCFvbikgcmV0dXJuOwogICAgZC52LnNldChkLmFbMF0sZC5hWzFdLGQuYVsyXSk7IHJvb3QubG9jYWxUb1dvcmxkKGQudik7IGQudi5wcm9qZWN0KGNhbWVyYSk7CiAgICBkLnN4ID0gKGQudi54Ki41Ky41KSppbm5lcldpZHRoOyBkLnN5ID0gKC1kLnYueSouNSsuNSkqaW5uZXJIZWlnaHQ7CiAgICB2aXMucHVzaChkKTsKICB9KTsKICBjb25zdCBuYXJyb3cgPSBpbm5lcldpZHRoIDwgODYwOwogIGNvbnN0IFJYID0gbmFycm93ID8gaW5uZXJXaWR0aC0xMiA6IGlubmVyV2lkdGgtMzA7CiAgY29uc3QgdG9wID0gbmFycm93ID8gMTUwIDogNjA7CiAgdmlzLnNvcnQoKGEsYik9PmEuc3ktYi5zeSk7CiAgbGV0IHByZXYgPSAtMWU5OwogIHZpcy5mb3JFYWNoKGQ9PnsKICAgIGxldCB5ID0gTWF0aC5tYXgodG9wLCBNYXRoLm1pbihpbm5lckhlaWdodC04MCwgZC5zeSkpOwogICAgeSA9IE1hdGgubWF4KHksIHByZXYrMzYpOyBwcmV2ID0geTsKICAgIGQuZWwuc3R5bGUudHJhbnNmb3JtID0gJ3RyYW5zbGF0ZSgtMTAwJSwtNTAlKSc7CiAgICBkLmVsLnN0eWxlLmxlZnQgPSBSWCsncHgnOyBkLmVsLnN0eWxlLnRvcCA9IHkrJ3B4JzsKICAgIGQuZG90LnN0eWxlLmxlZnQgPSBkLnN4KydweCc7IGQuZG90LnN0eWxlLnRvcCA9IGQuc3krJ3B4JzsKICAgIGQubG4uc2V0QXR0cmlidXRlKCd4MScsZC5zeCk7IGQubG4uc2V0QXR0cmlidXRlKCd5MScsZC5zeSk7CiAgICBkLmxuLnNldEF0dHJpYnV0ZSgneDInLCBSWCAtIGQuZWwub2Zmc2V0V2lkdGggLSA2KTsgZC5sbi5zZXRBdHRyaWJ1dGUoJ3kyJyx5KTsKICB9KTsKfQoKLyogLS0tLS0tLS0tLSBzdGFnZSBjb3B5IC0tLS0tLS0tLS0gKi8KY29uc3QgQ09QWSA9IHsKIDA6e2s6JzAxIMK3IOa/leW8j+i3r+W+kSAvIFdFVFRFRCBQQVRIJywKICAgIHQ6J+S9oOeahOiXpea2siw8ZW0+5Y+q56Kw5b6X5Yiw55+z6IuxPC9lbT7jgIInLAogICAgczon55Sx5YWn6ICM5aSW5piv5LiJ5bGkOjxiPua1gemrlCDihpIg55+z6Iux566h5aOBIOKGkiDpjY3ohpzliqDnhrHlsaQ8L2I+44CC5rWB6auU6KGM6LWw5pa85Zau5LiA5q616LaF57SU55+z6Iux5YWn5aOBLOWFqeerr+aOpeWPo+eCuiBQVEZF77yPUEZBLOaVtOainei3r+W+keaykuacieS7u+S9lemHkeWxrOOAgid9LAogMTp7azonMDIgwrcg6Zu26YeR5bGs5o6l6Ke4IC8gWkVSTyBNRVRBTCcsCiAgICB0OifpjY3ohpzoiIfph5HlsawsPGVtPumDveWcqOefs+iLseWkluWBtDwvZW0+44CCJywKICAgIHM6J+mNjeiGnOWKoOeGseWxpOWMheimhuWcqOefs+iLseWkluWjgSzph5Hpm7vmpbXnkrDlho3ljIXlnKjpjY3ohpzlpJbjgII8Yj7mtYHpq5ToiIflroPlgJHkuYvplpPmsLjpgaDpmpTokZfkuIDmlbTlsaTnn7Poi7HnrqHlo4E8L2I+4oCU4oCU6YCZ5piv57WQ5qeL5rG65a6a55qELOS4jemdoOWvhuWwgeS7tue2reaMgeOAgid9LAogMjp7azonMDMgwrcg54Sh57ir5LiA6auU5oiQ5Z6LIC8gU0VBTUxFU1MnLAogICAgdDon5rKS5pyJ5o6l57irLDxlbT7lsLHmspLmnInlvq7nspI8L2VtPuOAgicsCiAgICBzOifnrqHouqvoiIflhannq6/ms5XomK3nlLHlkIzkuIDmrrXnn7Poi7HmiJDlvaIs54Sh5o6l57ir44CB54Sh6Iag5ZCI44CC56uv6JOL55u05o6l6L+r57eK55+z6Iux5rOV6JitLDxiPua/leW8j+i3r+W+keS4iumbtiBPLXJpbmc8L2I+4oCU4oCU5qWt55WM5pyA5Li76KaB55qE5b6u57KS5L6G5rqQLOWcqOmAmeijoeS4jeWtmOWcqOOAgid9LAogMzp7azonMDQgwrcg6JaE6Iac5Y2H5rqrIC8gVEhJTiBGSUxNJywKICAgIHQ6J+eGsea6kOiyvOiRl+euoeWjgSw8ZW0+5LiN57me6YGg6LevPC9lbT7jgIInLAogICAgczon5aWI57Gz6YWN5pa56Y2N6Iac55u05o6l6Y2N5Zyo55+z6Iux5aSW5aOBLOeGseepv+mBjuS4gOWxpOeuoeWjgeWwsemAsuWFpea1gemrlOOAgjxiPuWFrOmWi+izh+aWmSA5OCUrIOmbu+eGsei9ieaPm+aViOeOhzwvYj4sMjAsMDAwIGhyIOmbu+mYu+ihsOa4m+WDhSA1JeOAgid9LAogNDp7azonMDUgwrcg5Zub6YGT5LqS6Y6WIC8gSU5URVJMT0NLJywKICAgIHQ6J+WjnuaOieeahOaZguWAmSw8ZW0+5a6D5pyD5YWI6KybPC9lbT7jgIInLAogICAgczon55+z6Iux5Z+65p2/6YGO5rqrIDIwMMKwQ+OAgeWFg+S7tumBjua6qyAyNTDCsEPjgIHlpJbmjpvlvI/mtrLkvY3mhJ/muKzpmLLkub7nh5LjgIHmtKnmvI/mhJ/muKwgMjRWZGMg5Y+v56OB57Cn5ris6Kmm44CCJ30sCiA1OntrOicwNiDCtyDmlbTmqZ/lsLrlr7ggLyBFTlZFTE9QRScsCiAgICB0OifDmDE0NSDDlyAzOTAgbW0sPGVtPuWxpOasoeS+neeEtumAj+W+l+WHuuS+hjwvZW0+44CCJywKICAgIHM6J+a2iOWFiem7keS4gOmrlOW8j+Wck+afseWkluauvCzlhaflu7rkv53muqvlsaToiIflt6Xmpa3ntJrlr6bpq5TpmLLorbfjgILntYToo53lrozmiJDlvow8Yj7pjY3ohpzjgIHnn7Poi7HjgIHpm7vmpbXnkrDkvp3nhLbnnIvlvpfopovlsaTmrKHpl5zkv4I8L2I+44CC5bC65a+45Lul5q2j5byP5ZyW6Z2i54K65rqW44CCJ30sCn07CmNvbnN0IENBTSA9IHsKIDA6e3A6Wy02LDYsMTE2XX0sIDE6e3A6Wy0zMCwxNiw3OF19LCAyOntwOlstMjYsNDQsNzJdfSwKIDM6e3A6Wy0xNCw0LDg2XX0sIDQ6e3A6Wy0zMCwxNiwxMThdfSwgNTp7cDpbLTE2LDEwLDEzMl19LAp9Owpjb25zdCBNT1YgPSB7Y3BULGNwQixocyxpbnN1bH07CmNvbnN0IFBPUyA9IHsKIDA6e2NwVDo1NSxjcEI6LTU1LGhzOjE1MCxpbnN1bDoxNTB9LAogMTp7Y3BUOjU1LGNwQjotNTUsaHM6MTUwLGluc3VsOjE1MH0sCiAyOntjcFQ6IDAsY3BCOiAgMCxoczoxNTAsaW5zdWw6MTUwfSwKIDM6e2NwVDo1NSxjcEI6LTU1LGhzOjE1MCxpbnN1bDoxNTB9LAogNDp7Y3BUOiAwLGNwQjogIDAsaHM6ICAwLGluc3VsOiAgMH0sCiA1OntjcFQ6IDAsY3BCOiAgMCxoczogIDAsaW5zdWw6ICAwfSwKfTsKLyogW2hvdXNpbmcsIGluc3VsLCB0ZXJtLCBzZW5zb3IsIGNhcHMsIHBvcnRzLCBjYWJsZSwgcXVhcnR6LCBmaWxtLCBmbHVpZCwgZGltXQoKICAgVGhlcmUgaXMgbm8gc2VjdGlvbiBjdXQgYW55IG1vcmUsIHNvIHRyYW5zcGFyZW5jeSBpcyB0aGUgT05MWSB3YXkgdGhlCiAgIGludGVyaW9yIGlzIHZpc2libGUuIFRoZSBvdXRlciBzaGVsbCBhbmQgdGhlIGluc3VsYXRpb24gYXJlIHRoZXJlZm9yZQogICBrZXB0IHdlbGwgZG93biB3aGVuZXZlciB0aGUgY29yZSBpcyB0aGUgc3ViamVjdDsgb24gdGhlIGZpbmFsIHN0YWdlIHRoZQogICBob3VzaW5nIHJpc2VzIGp1c3QgZmFyIGVub3VnaCB0byByZWFkIGFzIGEgc29saWQgY3lsaW5kZXIgKC40Mikgd2l0aG91dAogICBzZWFsaW5nIHRoZSBpbnRlcmlvciBvZmYgYWdhaW4g4oCUIHRoZSBtaXN0YWtlIHRoYXQgbWFkZSBzdGFnZSAwNiBhIGJsYW5rCiAgIG1pbGt5IHR1YmUgbGFzdCB0aW1lLiBmaWxtICjpjY3ohpwpIG5ldmVyIGRyb3BzIGJlbG93IC41OCBvbiBhbnkgc3RhZ2UuICAqLwpjb25zdCBPUEEgPSB7CiAwOlswLCAgMCwgIDAsIDAsIDAsICAxLCAgMCwgLjMwLC42NiwuNDAsIDBdLAogMTpbMCwgIDAsICAxLCAwLCAwLCAgLjQsIDAsIC4zMiwuNzYsLjI2LCAwXSwKIDI6WzAsICAwLCAuMywgMCwgLjU1LC41LCAwLCAuNjIsLjYwLCAwLCAgMF0sCiAzOlswLCAgMCwgLjUsIDAsIDAsICAuNCwgMCwgLjM0LCAxLCAuMzQsIDBdLAogNDpbLjEwLC4wOCwuNjIsMSwuMjYsLjUsIDEsIC4zNCwuODAsLjI4LCAwXSwKIDU6Wy40MiwuMTYsLjYwLC41LC40NiwxLCAxLCAuNDYsLjgyLC4yMiwgMV0sCn07Cgpjb25zdCBhbmltcyA9IFtdOyBjb25zdCBlYXNlID0gdD0+dCp0KigzLTIqdCk7CmZ1bmN0aW9uIHR3KGZuLGZyb20sdG8sZHVyLGRlbGF5KXsgYW5pbXMucHVzaCh7Zm4sZnJvbSx0byxkdXIsdDA6cGVyZm9ybWFuY2Uubm93KCkrKGRlbGF5fHwwKX0pOyB9CmZ1bmN0aW9uIHJ1bkFuaW1zKG5vdyl7CiAgZm9yKGxldCBpPWFuaW1zLmxlbmd0aC0xO2k+PTA7aS0tKXsKICAgIGNvbnN0IGEgPSBhbmltc1tpXTsgaWYobm93IDwgYS50MCkgY29udGludWU7CiAgICBsZXQgayA9IChub3ctYS50MCkvYS5kdXI7IGlmKGs+PTEpIGs9MTsKICAgIGEuZm4oYS5mcm9tKyhhLnRvLWEuZnJvbSkqZWFzZShrKSk7CiAgICBpZihrPT09MSkgYW5pbXMuc3BsaWNlKGksMSk7CiAgfQp9CgovKiAtLS0tLS0tLS0tIHRoZSBjb250ZXh0dWFsIHNsb3QgLS0tLS0tLS0tLSAqLwpjb25zdCBTTE9UX0xFR0VORCA9CiAgJzxkaXYgY2xhc3M9ImNoaXBzIj4nKwogICAgJzxkaXY+PGkgc3R5bGU9ImJhY2tncm91bmQ6IzI1OTNiNiI+PC9pPue0lOawtO+8j+WMluWtuOa2siA8cz7nrqHlhafmtYHpq5Q8L3M+PC9kaXY+JysKICAgICc8ZGl2PjxpIHN0eWxlPSJiYWNrZ3JvdW5kOiNhOGM2ZDIiPjwvaT7nn7Poi7HnrqHlo4EgPHM+5ZSv5LiA5o6l5ray5p2Q6LOqPC9zPjwvZGl2PicrCiAgICAnPGRpdj48aSBzdHlsZT0iYmFja2dyb3VuZDojM2EzMTI4Ij48L2k+6Y2N6Iac5Yqg54ax5bGkIDxzPuWMheimhuaWvOefs+iLseWkluWjgTwvcz48L2Rpdj4nKwogICAgJzxkaXY+PGkgc3R5bGU9ImJhY2tncm91bmQ6I2M5YTIyNyI+PC9pPumHkeWxrOS7tiA8cz7msLjpgaDlnKjmnIDlpJblgbQ8L3M+PC9kaXY+JysKICAnPC9kaXY+JzsKY29uc3QgU0xPVF9ERU1PID0KICAnPGRpdiBjbGFzcz0iZGVtbyI+JysKICAgICc8aDU+5LqS6Y6W5ryU56S6IMK3IOm7nuaTiuinuOeZvDwvaDU+JysKICAgICc8ZGl2IGNsYXNzPSJidG5zIj4nKwogICAgICAnPGJ1dHRvbiBkYXRhLWY9ImRyeSI+5qih5pOs5Lm+54eSPC9idXR0b24+JysKICAgICAgJzxidXR0b24gZGF0YS1mPSJsZWFrIj7mqKHmk6zmtKnmvI88L2J1dHRvbj4nKwogICAgICAnPGJ1dHRvbiBkYXRhLWY9Im92ZXIiPuaooeaTrOmBjua6qzwvYnV0dG9uPicrCiAgICAnPC9kaXY+JysKICAgICc8ZGl2IGNsYXNzPSJjaGFpbiI+JysKICAgICAgJzxkaXYgY2xhc3M9InN0Ij48aT48L2k+5oSf5ris5Zmo6Ke455m8PC9kaXY+JysKICAgICAgJzxkaXYgY2xhc3M9InN0Ij48aT48L2k+6KiK6Jmf6Ly45Ye6PC9kaXY+JysKICAgICAgJzxkaXYgY2xhc3M9InN0IGN1dCI+PGk+PC9pPuWklumDqOaOp+WItuezu+e1seaWt+mbuzwvZGl2PicrCiAgICAnPC9kaXY+JysKICAnPC9kaXY+JzsKCmxldCBmYXVsdFRpbWVycyA9IFtdLCBmYXVsdEFjdGl2ZSA9IG51bGw7CmZ1bmN0aW9uIGNsZWFyRmF1bHQoKXsKICBmYXVsdFRpbWVycy5mb3JFYWNoKHQ9PmNsZWFyVGltZW91dCh0KSk7IGZhdWx0VGltZXJzID0gW107CiAgZG9jdW1lbnQucXVlcnlTZWxlY3RvckFsbCgnLmRlbW8gYnV0dG9uJykuZm9yRWFjaChiPT5iLmNsYXNzTGlzdC5yZW1vdmUoJ2ZpcmluZycpKTsKICBkb2N1bWVudC5xdWVyeVNlbGVjdG9yQWxsKCcuY2hhaW4gLnN0JykuZm9yRWFjaChzPT5zLmNsYXNzTGlzdC5yZW1vdmUoJ2xpdCcpKTsKICBkcmFpbmVkID0gZmFsc2U7IGRyeUxldmVsID0gODA7IHB1ZGRsZU1hdC5vcGFjaXR5ID0gMDsKICBmYXVsdEFjdGl2ZSA9IG51bGw7CiAgZmF1bHRMYmwudCA9ICcnOyBmYXVsdExibC5zID0gW107IGZhdWx0TGJsLmVsLmlubmVySFRNTCA9ICcnOwp9CmZ1bmN0aW9uIHdpcmVEZW1vKCl7CiAgZG9jdW1lbnQucXVlcnlTZWxlY3RvckFsbCgnLmRlbW8gYnV0dG9uJykuZm9yRWFjaChidG49PnsKICAgIGJ0bi5hZGRFdmVudExpc3RlbmVyKCdjbGljaycsKCk9PnsKICAgICAgY29uc3Qgc2FtZSA9IGJ0bi5jbGFzc0xpc3QuY29udGFpbnMoJ2ZpcmluZycpOwogICAgICBjbGVhckZhdWx0KCk7CiAgICAgIGlmKHNhbWUpIHJldHVybjsKICAgICAgYnRuLmNsYXNzTGlzdC5hZGQoJ2ZpcmluZycpOwogICAgICBmYXVsdEFjdGl2ZSA9IGJ0bi5kYXRhc2V0LmY7CiAgICAgIGNvbnN0IEYgPSBGQVVMVFtmYXVsdEFjdGl2ZV07CgogICAgICBpZihmYXVsdEFjdGl2ZT09PSdkcnknKXsgZHJhaW5lZCA9IHRydWU7IHR3KHY9PmRyeUxldmVsPXYsIDgwLCAtMjAsIDE1MDApOyB9CiAgICAgIGlmKGZhdWx0QWN0aXZlPT09J2xlYWsnKXsgdHcodj0+cHVkZGxlTWF0Lm9wYWNpdHk9diwgMCwgLjgyLCAxMjAwKTsgfQoKICAgICAgLyogcG9pbnQgYSBsYWJlbCBhdCB0aGUgc2Vuc29yIHRoYXQganVzdCB0cmlwcGVkICovCiAgICAgIGZhdWx0TGJsLmEgPSBGLmF0OyBmYXVsdExibC50ID0gRi50OyBmYXVsdExibC5zID0gWzRdOwogICAgICBmYXVsdExibC5lbC5pbm5lckhUTUwgPSBGLnQ7CgogICAgICAvKiB0aGUgZGV2aWNlIFNJR05BTFM7IHRoZSBleHRlcm5hbCBjb250cm9sbGVyIGN1dHMgcG93ZXIgKi8KICAgICAgY29uc3Qgc3RzID0gZG9jdW1lbnQucXVlcnlTZWxlY3RvckFsbCgnLmNoYWluIC5zdCcpOwogICAgICBbODAwLDE1MDAsMjIwMF0uZm9yRWFjaCgobXMsaSk9PgogICAgICAgIGZhdWx0VGltZXJzLnB1c2goc2V0VGltZW91dCgoKT0+c3RzW2ldLmNsYXNzTGlzdC5hZGQoJ2xpdCcpLCBtcykpKTsKICAgICAgZmF1bHRUaW1lcnMucHVzaChzZXRUaW1lb3V0KCgpPT57IGhlYXRpbmcgPSBmYWxzZTsgfSwgMjIwMCkpOwogICAgfSk7CiAgfSk7Cn0KCmZ1bmN0aW9uIGdvU3RhZ2Uocyl7CiAgc3RhZ2UgPSBzOyBsYWJlbEhvbGQgPSB0cnVlOyBzZXRUaW1lb3V0KCgpPT5sYWJlbEhvbGQ9ZmFsc2UsODUwKTsKICBjbGVhckZhdWx0KCk7CiAgZG9jdW1lbnQucXVlcnlTZWxlY3RvckFsbCgnI3N0ZXBzIGJ1dHRvbltkYXRhLXNdJykuZm9yRWFjaChiPT4KICAgIGIuY2xhc3NMaXN0LnRvZ2dsZSgnb24nLCArYi5kYXRhc2V0LnM9PT1zKSk7CiAgY29uc3QgY3AgPSBDT1BZW3NdOwogIGRvY3VtZW50LmdldEVsZW1lbnRCeUlkKCdraWNrZXInKS50ZXh0Q29udGVudCA9IGNwLms7CiAgZG9jdW1lbnQuZ2V0RWxlbWVudEJ5SWQoJ2hlYWQnKS5pbm5lckhUTUwgICAgID0gY3AudDsKICBkb2N1bWVudC5nZXRFbGVtZW50QnlJZCgnYm9keScpLmlubmVySFRNTCAgICAgPSBjcC5zOwogIGNvbnN0IHNsb3QgPSBkb2N1bWVudC5nZXRFbGVtZW50QnlJZCgnc2xvdCcpOwogIHNsb3QuaW5uZXJIVE1MID0gKHM9PT0wfHxzPT09MSkgPyBTTE9UX0xFR0VORCA6IChzPT09NCA/IFNMT1RfREVNTyA6ICcnKTsKICBpZihzPT09NCkgd2lyZURlbW8oKTsKICBhbmltcy5sZW5ndGggPSAwOwoKICBjb25zdCBQID0gUE9TW3NdOwogIE9iamVjdC5rZXlzKE1PVikuZm9yRWFjaCgoayxpKT0+ewogICAgY29uc3QgZyA9IE1PVltrXS5ncnAsIGN1ciA9IGcucG9zaXRpb24ueTsKICAgIHR3KHY9PmcucG9zaXRpb24ueT12LCBjdXIsIFBba10sIDExMDAsIGkqMjApOwogIH0pOwoKICBjb25zdCBPID0gT1BBW3NdOwogIHR3KHY9PmhzLm1hdHMuZm9yRWFjaChtPT5tLl9zdGFnZU89diksICAgIGhzLm1hdHNbMF0uX3N0YWdlTywgICAgT1swXSwgMTAwMCwgcz09PTU/MzAwOjApOwogIHR3KHY9Pmluc3VsLm1hdHMuZm9yRWFjaChtPT5tLl9zdGFnZU89diksIGluc3VsLm1hdHNbMF0uX3N0YWdlTywgT1sxXSwgMTAwMCwgcz09PTU/MzAwOjApOwogIHR3KHY9PnsgdGVybUdycC51c2VyRGF0YS5tYXRzLmZvckVhY2gobT0+bS5fc3RhZ2VPPXYpOwogICAgICAgICAgdGVybUdycC5jaGlsZHJlbi5mb3JFYWNoKGM9PnsgaWYoYy51c2VyRGF0YSYmYy51c2VyRGF0YS5tYXRzKSBjLnVzZXJEYXRhLm1hdHMuZm9yRWFjaChtPT5tLl9zdGFnZU89dik7IH0pOwogICAgICAgIH0sIGJhbmRNYXQuX3N0YWdlTywgT1syXSwgMTAwMCwgcz09PTE/MjUwOjApOwogIHR3KHY9PmVudk1hdHMuZm9yRWFjaChtPT5tLl9zdGFnZU89diksIGVudk1hdHNbMF0uX3N0YWdlTywgT1szXSwgMTAwMCwgcz09PTQ/MjAwOjApOwogIHR3KHY9PnsgY3BULm1hdHMuZm9yRWFjaChtPT5tLl9zdGFnZU89dik7IGNwQi5tYXRzLmZvckVhY2gobT0+bS5fc3RhZ2VPPXYpOyB9LAogICAgIGNwVC5tYXRzWzBdLl9zdGFnZU8sIE9bNF0sIDEwMDAsIDApOwogIHR3KHY9PnsgW3B0VCxwdEIsc3AxLHNwMl0uZm9yRWFjaChwPT5wLm1hdHMuZm9yRWFjaChtPT5tLl9zdGFnZU89dikpOyB9LAogICAgIHB0VC5tYXRzWzBdLl9zdGFnZU8sIE9bNV0sIDEwMDAsIDApOwogIHR3KHY9PmNhYmxlR3JwLnVzZXJEYXRhLm1hdHMuZm9yRWFjaChtPT5tLl9zdGFnZU89diksIGNvbm5NYXQuX3N0YWdlTywgT1s2XSwgMTAwMCwgMCk7CiAgdHcodj0+cXVhcnR6Lm1hdHMuZm9yRWFjaChtPT5tLl9zdGFnZU89diksIHF1YXJ0ei5tYXRzWzBdLl9zdGFnZU8sIE9bN10sIDEwMDAsIDApOwogIHR3KHY9PmZpbG0ubWF0cy5mb3JFYWNoKG09Pm0uX3N0YWdlTz12KSwgICBmaWxtLm1hdHNbMF0uX3N0YWdlTywgICBPWzhdLCAxMDAwLCBzPT09Mz8yMDA6MCk7CiAgdHcodj0+d2V0TWF0Ll9zdGFnZU89diwgd2V0TWF0Ll9zdGFnZU8sIE9bOV0sIDEwMDAsIDApOwogIHR3KHY9PmRpbU1hdC5vcGFjaXR5PXYsIGRpbU1hdC5vcGFjaXR5LCBPWzEwXSwgOTAwLCBzPT09NT81MDA6MCk7CgogIGNvbnN0IHRndCA9IENBTVtzXSwgZnJvbSA9IGNhbVBvcy5jbG9uZSgpOwogIHR3KGs9PmNhbVBvcy5sZXJwVmVjdG9ycyhmcm9tLG5ldyBUSFJFRS5WZWN0b3IzKHRndC5wWzBdLHRndC5wWzFdLHRndC5wWzJdKSxrKSwgMCwgMSwgMTQwMCk7CgogIGZsb3dpbmcgPSAocyE9PTIgJiYgcyE9PTUpOwogIGhlYXRpbmcgPSAocz09PTMgfHwgcz09PTQpOwogIHR3KHY9PnB0cy5tYXRlcmlhbC5vcGFjaXR5PXYsIHB0cy5tYXRlcmlhbC5vcGFjaXR5LCBmbG93aW5nPy45NTowLCA4MDApOwogIGhlYXRBcnJvd3MuZm9yRWFjaChhPT5hLnZpc2libGUgPSAocz09PTMpKTsKfQoKLyogLS0tLS0tLS0tLSBjYW1lcmEgKyBpbnRlcmFjdGlvbiAtLS0tLS0tLS0tICovCmxldCBjYW1Qb3MgPSBuZXcgVEhSRUUuVmVjdG9yMyhDQU1bMF0ucFswXSxDQU1bMF0ucFsxXSxDQU1bMF0ucFsyXSk7CmNvbnN0IGZpdFpvb20gPSAoKT0+TWF0aC5tYXgoMSwgTWF0aC5taW4oMy4wLCAxLjUvY2FtZXJhLmFzcGVjdCkpOwpsZXQgem9vbSA9IGZpdFpvb20oKSwgdXNlclpvb21lZCA9IGZhbHNlOwoKZG9jdW1lbnQucXVlcnlTZWxlY3RvckFsbCgnI3N0ZXBzIGJ1dHRvbltkYXRhLXNdJykuZm9yRWFjaChiPT4KICBiLmFkZEV2ZW50TGlzdGVuZXIoJ2NsaWNrJywoKT0+eyBzdG9wQXV0bygpOyBnb1N0YWdlKCtiLmRhdGFzZXQucyk7IH0pKTsKbGV0IGF1dG9UaW1lciA9IG51bGw7CmZ1bmN0aW9uIHN0b3BBdXRvKCl7IGlmKGF1dG9UaW1lcil7IGNsZWFyVGltZW91dChhdXRvVGltZXIpOyBhdXRvVGltZXI9bnVsbDsgfSB9CmRvY3VtZW50LmdldEVsZW1lbnRCeUlkKCdwbGF5JykuYWRkRXZlbnRMaXN0ZW5lcignY2xpY2snLCgpPT57CiAgc3RvcEF1dG8oKTsgbGV0IGk9MDsKICBjb25zdCBzdGVwID0gKCk9PnsgZ29TdGFnZShpKTsgaSsrOyBpZihpPD01KSBhdXRvVGltZXI9c2V0VGltZW91dChzdGVwLDUyMDApOyB9OwogIHN0ZXAoKTsKfSk7CgpsZXQgZHJhZ2dpbmc9ZmFsc2UsIHB4PTAsIHB5PTA7CnBpdm90LnJvdGF0aW9uLnNldCguMiwtLjMsMCk7CmNvbnN0IGVsID0gcmVuZGVyZXIuZG9tRWxlbWVudDsKZWwuYWRkRXZlbnRMaXN0ZW5lcigncG9pbnRlcmRvd24nLGU9PntkcmFnZ2luZz10cnVlO3B4PWUuY2xpZW50WDtweT1lLmNsaWVudFk7fSk7CmFkZEV2ZW50TGlzdGVuZXIoJ3BvaW50ZXJ1cCcsKCk9PmRyYWdnaW5nPWZhbHNlKTsKYWRkRXZlbnRMaXN0ZW5lcigncG9pbnRlcm1vdmUnLGU9PnsKICBpZighZHJhZ2dpbmcpIHJldHVybjsKICBwaXZvdC5yb3RhdGlvbi55ICs9IChlLmNsaWVudFgtcHgpKi4wMDY7CiAgcGl2b3Qucm90YXRpb24ueCA9IE1hdGgubWF4KC0uNixNYXRoLm1pbiguNiwgcGl2b3Qucm90YXRpb24ueCArIChlLmNsaWVudFktcHkpKi4wMDQpKTsKICBweD1lLmNsaWVudFg7IHB5PWUuY2xpZW50WTsKfSk7CmVsLmFkZEV2ZW50TGlzdGVuZXIoJ3doZWVsJyxlPT57ZS5wcmV2ZW50RGVmYXVsdCgpO3VzZXJab29tZWQ9dHJ1ZTsKICB6b29tID0gTWF0aC5tYXgoLjU1LE1hdGgubWluKDMuMCwgem9vbSArIGUuZGVsdGFZKi4wMDEyKSk7fSx7cGFzc2l2ZTpmYWxzZX0pOwpsZXQgcGluY2gwID0gMDsKZWwuYWRkRXZlbnRMaXN0ZW5lcigndG91Y2htb3ZlJyxlPT57CiAgaWYoZS50b3VjaGVzLmxlbmd0aD09PTIpewogICAgY29uc3QgZCA9IE1hdGguaHlwb3QoZS50b3VjaGVzWzBdLmNsaWVudFgtZS50b3VjaGVzWzFdLmNsaWVudFgsCiAgICAgICAgICAgICAgICAgICAgICAgICBlLnRvdWNoZXNbMF0uY2xpZW50WS1lLnRvdWNoZXNbMV0uY2xpZW50WSk7CiAgICBpZihwaW5jaDApeyB1c2VyWm9vbWVkPXRydWU7IHpvb20gPSBNYXRoLm1heCguNTUsTWF0aC5taW4oMy4wLCB6b29tKihwaW5jaDAvZCkpKTsgfQogICAgcGluY2gwID0gZDsgZHJhZ2dpbmcgPSBmYWxzZTsKICB9Cn0se3Bhc3NpdmU6dHJ1ZX0pOwplbC5hZGRFdmVudExpc3RlbmVyKCd0b3VjaGVuZCcsKCk9PnBpbmNoMD0wKTsKYWRkRXZlbnRMaXN0ZW5lcigncmVzaXplJywoKT0+ewogIGNhbWVyYS5hc3BlY3QgPSBpbm5lcldpZHRoL2lubmVySGVpZ2h0OyBjYW1lcmEudXBkYXRlUHJvamVjdGlvbk1hdHJpeCgpOwogIHJlbmRlcmVyLnNldFBpeGVsUmF0aW8oRFBSKTsgcmVuZGVyZXIuc2V0U2l6ZShpbm5lcldpZHRoLGlubmVySGVpZ2h0KTsKICBpZighdXNlclpvb21lZCkgem9vbSA9IGZpdFpvb20oKTsKfSk7CgovKiAtLS0tLS0tLS0tIGluaXQgKyBsb29wIC0tLS0tLS0tLS0gKi8KaHMuZ3JwLnBvc2l0aW9uLnkgPSAxNTA7IGluc3VsLmdycC5wb3NpdGlvbi55ID0gMTUwOwpjcFQuZ3JwLnBvc2l0aW9uLnkgPSA1NTsgY3BCLmdycC5wb3NpdGlvbi55ID0gLTU1Owpnb1N0YWdlKDApOwoKLyogLS0tLS0tLS0tLSBkZXRlcm1pbmlzdGljIHBhaW50IG9yZGVyIC0tLS0tLS0tLS0KICAgRXZlcnkgc2hlbGwgaXMgY29uY2VudHJpYywgc28gdGhlaXIgYm91bmRpbmcgY2VudHJlcyBjb2luY2lkZSBhbmQKICAgdGhyZWUuanMncyBkaXN0YW5jZSBzb3J0IGZvciB0cmFuc3BhcmVudCBvYmplY3RzIGlzIGEgdGllIOKAlCB0aGUgb3JkZXIKICAgZmxpcHMgYXMgeW91IHJvdGF0ZSBhbmQgcGFydHMgZmxpY2tlciBvdXQuIFBpbiBpdCBleHBsaWNpdGx5LgoKICAgV2l0aCBmdWxsIGN5bGluZGVycyAobm8gc2VjdGlvbiBjdXQpIHRoZSBvcmRlciBydW5zIElOU0lERS1PVVQ6IHRoZQogICBmbHVpZCBwYWludHMgZmlyc3QgYW5kIHRoZSBob3VzaW5nIGxhc3QsIHNvIGVhY2ggb3V0ZXIgc2hlbGwgdGludHMgd2hhdAogICBzaXRzIGluc2lkZSBpdCwgdGhlIHdheSBsb29raW5nIHRocm91Z2ggdHJhbnNsdWNlbnQgd2FsbHMgYWN0dWFsbHkKICAgd29ya3MuIChVbmRlciB0aGUgb2xkIGhhbGYtY3V0IHRoaXMgcmFuIHRoZSBvdGhlciB3YXkgcm91bmQuKSAqLwpmdW5jdGlvbiBvcmRlcihvLG4peyBvLnRyYXZlcnNlKGM9PnsgaWYoYy5pc01lc2ggfHwgYy5pc1BvaW50cyB8fCBjLmlzTGluZSkgYy5yZW5kZXJPcmRlciA9IG47IH0pOyB9Cm9yZGVyKHdldEdycCwxKTsKcHRzLnJlbmRlck9yZGVyID0gMjsKb3JkZXIocXVhcnR6LmdycCwzKTsKb3JkZXIoZmlsbS5ncnAsNCk7Cm9yZGVyKHRlcm1HcnAsNSk7Cm9yZGVyKGluc3VsLmdycCw2KTsKb3JkZXIoY3BULmdycCw3KTsgb3JkZXIoY3BCLmdycCw3KTsKb3JkZXIoaHMuZ3JwLDgpOwpvcmRlcihwdFQuZ3JwLDkpOyBvcmRlcihwdEIuZ3JwLDkpOyBvcmRlcihzcDEuZ3JwLDkpOyBvcmRlcihzcDIuZ3JwLDkpOwpvcmRlcihlbnZHcnAsMTApOyBvcmRlcihjYWJsZUdycCwxMCk7IHB1ZGRsZS5yZW5kZXJPcmRlciA9IDEwOwpvcmRlcihkaW1HcnAsMTEpOwoKY29uc3QgQUxMTUFUUyA9IFtdOwpBTEwuZm9yRWFjaChnPT57CiAgaWYoZy51c2VyRGF0YSAmJiBnLnVzZXJEYXRhLm1hdHMpIEFMTE1BVFMucHVzaCguLi5nLnVzZXJEYXRhLm1hdHMpOwp9KTsKQUxMTUFUUy5wdXNoKC4uLnRlcm1HcnAudXNlckRhdGEubWF0cywgLi4uY2FibGVHcnAudXNlckRhdGEubWF0cywgLi4uZW52TWF0cyk7CnRlcm1HcnAuY2hpbGRyZW4uZm9yRWFjaChjPT57IGlmKGMudXNlckRhdGEgJiYgYy51c2VyRGF0YS5tYXRzKSBBTExNQVRTLnB1c2goLi4uYy51c2VyRGF0YS5tYXRzKTsgfSk7CgpmdW5jdGlvbiBsb29wKG5vdyl7CiAgcmVxdWVzdEFuaW1hdGlvbkZyYW1lKGxvb3ApOwogIHJ1bkFuaW1zKG5vdyk7CiAgdXBkYXRlUGFydGljbGVzKCk7CgogIEFMTE1BVFMuZm9yRWFjaChtPT57CiAgICBpZihtLl9zdGFnZU89PT11bmRlZmluZWQpIHJldHVybjsKICAgIG0ub3BhY2l0eSArPSAobS5fc3RhZ2VPIC0gbS5vcGFjaXR5KSouMTU7CiAgICAvKiBLZWVwIHRoZXNlIGNvbnN0YW50LiBGbGlwcGluZyBkZXB0aFdyaXRlIGFzIG9wYWNpdHkgdHdlZW5zIHBhc3QgYQogICAgICAgdGhyZXNob2xkIG1ha2VzIHBhcnRzIHBvcCBpbiBhbmQgb3V0IG1pZC1hbmltYXRpb24sIGFuZCBhbnkgZGVwdGgKICAgICAgIHdyaXRlIGZyb20gYSB0cmFuc2x1Y2VudCBzaGVsbCBoaWRlcyB0aGluZ3MgdGhhdCBzaG91bGQgc2hvdyB0aHJvdWdoCiAgICAgICBpdC4gRXhwbGljaXQgcmVuZGVyT3JkZXIgYWJvdmUgaXMgd2hhdCBrZWVwcyB0aGUgbGF5ZXJpbmcgc3RhYmxlLiAqLwogICAgbS50cmFuc3BhcmVudCA9IHRydWU7CiAgICBtLmRlcHRoV3JpdGUgID0gZmFsc2U7CiAgfSk7CgogIC8qIOa1gemrlOe3qeaFouWRvOWQuCDigJQgMDEvMDIg6K6T5ray5p+x6Ieq5bex6Kqq6KmxICovCiAgaWYoc3RhZ2U9PT0wIHx8IHN0YWdlPT09MSl7CiAgICBjb25zdCBiID0gLjE2ICsgLjA4Kk1hdGguc2luKG5vdyouMDAyMik7CiAgICB3ZXRNYXQuZW1pc3NpdmUuc2V0UkdCKC4wMiwgYiouNDgsIGIqLjY0KTsKICB9CgogIC8qIOmNjeiGnOmAmumbuzvpgY7muqvmvJTnpLrovYnntIUgKi8KICBpZihmYXVsdEFjdGl2ZT09PSdvdmVyJyl7CiAgICBjb25zdCBnID0gLjUgKyAuMzIqTWF0aC5zaW4obm93Ki4wMTIpOwogICAgZmlsbS5tYXRzWzBdLmVtaXNzaXZlLnNldFJHQihnLGcqLjEwLGcqLjA0KTsKICB9IGVsc2UgaWYoc3RhZ2U9PT0zIHx8IHN0YWdlPT09NCl7CiAgICBjb25zdCBnID0gLjI0ICsgLjEyKk1hdGguc2luKG5vdyouMDA0KTsKICAgIGZpbG0ubWF0c1swXS5lbWlzc2l2ZS5zZXRSR0IoZyxnKi4zMixnKi4wNSk7CiAgfSBlbHNlIHsKICAgIC8qIHVucG93ZXJlZCwgYnV0IHRoZSBjb2F0aW5nIHN0aWxsIGtlZXBzIGEgZmFpbnQgdG9uZSBvZiBpdHMgb3duIOKAlAogICAgICAgaXQgaXMgbmV2ZXIgYWxsb3dlZCB0byByZWFkIGFzIHBsYWluIGJsYWNrICovCiAgICBmaWxtLm1hdHNbMF0uZW1pc3NpdmUuc2V0UkdCKC4wNSwuMDM1LC4wMik7CiAgfQoKICAvKiDlj6rmnInooqvop7jnmbznmoTpgqPkuIDpoYbmhJ/muKzlmajmnIPploMg4oCUIOWFtumkmOS/neaMgeWuiemdnCAqLwogIGlmKHN0YWdlPT09NCAmJiBmYXVsdEFjdGl2ZSl7CiAgICBjb25zdCBmaXJlID0gLjUgKyAuNSpNYXRoLnNpbihub3cqLjAxNik7CiAgICBjb25zdCBtID0gZW52TWF0c1tGQVVMVFtmYXVsdEFjdGl2ZV0ubWF0XTsKICAgIGlmKG0gJiYgbS5lbWlzc2l2ZSkgbS5lbWlzc2l2ZS5zZXRSR0IoLjg1KmZpcmUsLjE2KmZpcmUsLjA4KmZpcmUpOwogIH0gZWxzZSB7CiAgICBlbnZNYXRzLmZvckVhY2gobT0+eyBpZihtLmVtaXNzaXZlKSBtLmVtaXNzaXZlLnNldFJHQigwLDAsMCk7IH0pOwogIH0KCiAgY2FtZXJhLnBvc2l0aW9uLnNldChjYW1Qb3MueCp6b29tLCBjYW1Qb3MueSwgY2FtUG9zLnoqem9vbSk7CiAgY2FtZXJhLmxvb2tBdCgwLDAsMCk7CiAgdXBkYXRlTGFiZWxzKCk7CiAgcmVuZGVyZXIucmVuZGVyKHNjZW5lLGNhbWVyYSk7Cn0KcmVxdWVzdEFuaW1hdGlvbkZyYW1lKGxvb3ApOwo8L3NjcmlwdD4KPC9ib2R5Pgo8L2h0bWw+Cg==</script>
+  <!-- 側邊導航 -->
+  <nav class="side-nav" aria-label="章節導航">
+    <a href="#hero" class="active" data-label="首頁"></a>
+    <a href="#products" data-label="產品"></a>
+    <a href="#tech" data-label="技術"></a>
+    <a href="#specs" data-label="規格"></a>
+    <a href="#control" data-label="控制"></a>
+    <a href="#contact" data-label="聯絡"></a>
+  </nav>
 
 <script>
-  // language toggle
+  // 語言切換
   const btns = document.querySelectorAll('.langtog button');
   function setLang(lang){
     document.documentElement.lang = (lang === 'en') ? 'en' : 'zh-Hant';
     document.querySelectorAll('[data-zh]').forEach(el=>{
       const v = el.getAttribute(lang === 'en' ? 'data-en' : 'data-zh');
-      if(v !== null){
-        // preserve inner html (some entries contain <b>, <em>, <br>, <span>)
-        el.innerHTML = v;
-      }
+      if(v !== null) el.innerHTML = v;
     });
-    // SVG text bilinguals
     document.querySelectorAll('[data-zh-svg]').forEach(el=>{
       const v = el.getAttribute(lang === 'en' ? 'data-en-svg' : 'data-zh-svg');
       if(v !== null) el.textContent = v;
@@ -1081,73 +1553,28 @@
   }
   btns.forEach(b => b.addEventListener('click', () => setLang(b.dataset.lang)));
 
-  // section highlight on scroll
-  const links = document.querySelectorAll('nav.top a');
-  const sections = ['products','tech','specs','control','contact'].map(id => document.getElementById(id));
+  // 滾動進度條 + 導航收縮
+  const progress = document.querySelector('.scroll-progress');
+  const header = document.querySelector('header');
+  const navLinks = document.querySelectorAll('nav.top a');
+  const sections = ['products','tech','specs','control','contact']
+    .map(id => document.getElementById(id));
+
   window.addEventListener('scroll', () => {
-    const y = window.scrollY + 100;
+    const scrolled = window.scrollY;
+    const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+    progress.style.width = (scrolled / docHeight * 100) + '%';
+
+    if(scrolled > 20){
+      header.classList.add('scrolled');
+    } else {
+      header.classList.remove('scrolled');
+    }
+
+    // 導航高亮
     let active = null;
-    sections.forEach(s => { if(s && s.offsetTop <= y) active = s.id; });
-    links.forEach(a => a.classList.toggle('on', a.getAttribute('href') === '#' + active));
-  });
-
-  // burger toggle (mobile)
-  const burger = document.querySelector('.burger');
-  const nav = document.querySelector('nav.top');
-  burger.addEventListener('click', () => {
-    const open = nav.style.display === 'flex';
-    if(open){ nav.style.display = ''; }
-    else{
-      nav.style.cssText = 'display:flex;position:fixed;top:56px;left:0;right:0;background:#fff;flex-direction:column;padding:16px;border-bottom:1px solid var(--rule);z-index:99';
-    }
-  });
-
-  /* ---------- 02.01 3D demo: lazy-load the self-contained model page ---------- */
-  (function(){
-    const stage  = document.getElementById('d3-stage');
-    const frame  = document.getElementById('d3-frame');
-    const veil   = document.getElementById('d3-veil');
-    const payload= document.getElementById('d3-payload');
-    if(!stage || !frame || !payload) return;
-
-    let loaded = false;
-    function boot(){
-      if(loaded) return; loaded = true;
-      try{
-        const bin   = atob(payload.textContent.trim());
-        const bytes = Uint8Array.from(bin, ch => ch.charCodeAt(0));
-        frame.srcdoc = new TextDecoder('utf-8').decode(bytes);
-      }catch(err){
-        veil.innerHTML = '<span>3D MODEL UNAVAILABLE</span>';
-        console.error('3D demo failed to load:', err);
-        return;
-      }
-      frame.addEventListener('load', () => {
-        setTimeout(() => veil.classList.add('gone'), 350);
-      }, { once:true });
-    }
-
-    if('IntersectionObserver' in window){
-      const io = new IntersectionObserver((es, o) => {
-        es.forEach(e => { if(e.isIntersecting){ boot(); o.disconnect(); } });
-      }, { rootMargin:'320px' });
-      io.observe(stage);
-    }else{
-      boot();
-    }
-
-    document.getElementById('d3-full').addEventListener('click', () => {
-      boot();
-      const req = stage.requestFullscreen || stage.webkitRequestFullscreen;
-      if(req) req.call(stage);
+    sections.forEach(s => {
+      if(s && s.offsetTop - 100 <= scrolled) active = s.id;
     });
-
-    document.getElementById('d3-reload').addEventListener('click', () => {
-      veil.classList.remove('gone');
-      loaded = false; frame.removeAttribute('srcdoc');
-      setTimeout(boot, 60);
-    });
-  })();
-</script>
-</body>
-</html>
+    navLinks.forEach(a => {
+      a.classList.toggle('on', a.getAttribute('href')
