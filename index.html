@@ -617,9 +617,12 @@
       <div class="info">
         <h3 data-zh="純水單顆加熱模組" data-en="Single Heating Module">純水單顆加熱模組</h3>
         <div class="en">SINGLE HEATING MODULE / 10 kW</div>
-        <p data-zh="扁平薄板型單顆加熱模組,PP 外殼、PPS 水道板,可依需求以單顆、串聯、併聯三種模式配置,對應不同流量與升溫需求。"
-           data-en="Flat, single-body heating module with PP housing and PPS flow plate. Configurable in single / series / parallel modes to meet varied flow and temperature-rise requirements.">
-          扁平薄板型單顆加熱模組,PP 外殼、PPS 水道板,可依需求以單顆、串聯、併聯三種模式配置,對應不同流量與升溫需求。
+        <p data-zh="把 In-line 加熱器攤平成一片。PP 上蓋 / 鍍膜發熱層 / PPS 蛇行水道板 / PP 底座四層疊合,總厚僅 <b>35 mm</b>,可直接塞進既有機台的夾層空間。"
+           data-en="An in-line heater flattened into a sheet. Four layers — PP cover, heating film, PPS serpentine flow plate, PP base — stack to just <b>35 mm</b>, thin enough to drop into the spare layer of an existing tool.">
+          把 In-line 加熱器攤平成一片。PP 上蓋 / 鍍膜發熱層 / PPS 蛇行水道板 / PP 底座四層疊合,總厚僅 <b>35 mm</b>,可直接塞進既有機台的夾層空間。
+        </p>
+        <p data-zh="需要更高升溫就<b>串聯</b>,需要更大流量就<b>併聯</b>——同一顆模組,兩個方向都能長。" data-en="Need more rise? Put them in <b>series</b>. Need more flow? Put them in <b>parallel</b>. One module, scalable in both directions.">
+          需要更高升溫就<b>串聯</b>,需要更大流量就<b>併聯</b>——同一顆模組,兩個方向都能長。
         </p>
         <div class="keyspec">
           <div><div class="k">POWER</div><div class="v">10 kW</div></div>
@@ -630,52 +633,115 @@
           <div><div class="k" data-zh="水道板" data-en="FLOW PLATE">FLOW PLATE</div><div class="v">PPS</div></div>
         </div>
       </div>
-      <div class="drawing">
-        <!-- Module flat schematic + 3 modes -->
-        <svg viewBox="0 0 480 340" xmlns="http://www.w3.org/2000/svg">
-          <!-- single module -->
-          <text x="0" y="20" class="td-lbl-mute">SINGLE / 單顆</text>
-          <rect x="0" y="30" width="140" height="60" class="td-line"/>
-          <rect x="10" y="40" width="120" height="40" class="td-thin"/>
-          <circle cx="5" cy="60" r="4" class="td-line"/>
-          <circle cx="145" cy="60" r="4" class="td-line"/>
-          <text x="60" y="105" class="td-lbl-mute">200 × 250 × 35</text>
+      <div class="drawing wide">
+        <!-- Module: exploded stack + the three operating modes -->
+        <svg viewBox="0 0 480 400" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="mFilmG" x1="0" y1="0" x2="1" y2="0">
+              <stop offset="0" stop-color="var(--ink)" stop-opacity=".18"/>
+              <stop offset=".5" stop-color="var(--heat)" stop-opacity=".55"/>
+              <stop offset="1" stop-color="var(--ink)" stop-opacity=".18"/>
+            </linearGradient>
+            <marker id="mArrow" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto">
+              <path d="M0 0 L7 3.5 L0 7 z" fill="var(--signal)"/>
+            </marker>
+          </defs>
+
+          <!-- ── exploded stack ─────────────────────────────── -->
+          <text x="0" y="12" class="td-lbl-mute" data-zh-svg="疊層結構・分解" data-en-svg="EXPLODED STACK">疊層結構・分解</text>
+
+          <!-- PP top housing -->
+          <g class="lv-layer" style="--d:0s">
+            <path d="M 40 46 L 210 30 L 300 52 L 130 68 Z" class="td-line" fill="var(--card)"/>
+            <path d="M 40 46 L 40 54 L 130 76 L 130 68 Z" class="td-thin" fill="var(--rule)"/>
+            <path d="M 130 68 L 130 76 L 300 60 L 300 52 Z" class="td-thin" fill="var(--rule)"/>
+          </g>
+          <line x1="305" y1="52" x2="345" y2="46" class="td-thin"/>
+          <text x="350" y="44" class="td-label" data-zh-svg="PP 上蓋" data-en-svg="PP COVER">PP 上蓋</text>
+
+          <!-- thin film layer -->
+          <g class="lv-layer" style="--d:.12s">
+            <path d="M 40 92 L 210 76 L 300 98 L 130 114 Z" fill="url(#mFilmG)" stroke="var(--ink)" stroke-width="1"/>
+          </g>
+          <line x1="305" y1="98" x2="345" y2="92" class="td-thin"/>
+          <text x="350" y="90" class="td-label" data-zh-svg="鍍膜發熱層" data-en-svg="HEATING FILM">鍍膜發熱層</text>
+          <text x="350" y="101" class="td-lbl-mute" data-zh-svg="乾側・不觸液" data-en-svg="dry side">乾側・不觸液</text>
+
+          <!-- PPS flow plate with serpentine channel -->
+          <g class="lv-layer" style="--d:.24s">
+            <path d="M 40 140 L 210 124 L 300 146 L 130 162 Z" class="td-line" fill="var(--card)"/>
+            <path d="M 40 140 L 40 152 L 130 174 L 130 162 Z" class="td-thin" fill="var(--rule)"/>
+            <path d="M 130 162 L 130 174 L 300 158 L 300 146 Z" class="td-thin" fill="var(--rule)"/>
+            <!-- serpentine water path drawn in the plate's plane -->
+            <path d="M 68 145 L 176 135 L 196 140 L 88 150 L 108 155 L 216 145 L 236 150 L 128 160"
+                  fill="none" stroke="var(--signal)" stroke-width="2.4" stroke-linejoin="round"
+                  stroke-linecap="round" opacity=".9"/>
+            <path d="M 68 145 L 176 135 L 196 140 L 88 150 L 108 155 L 216 145 L 236 150 L 128 160"
+                  fill="none" stroke="var(--card)" stroke-width="1" stroke-linecap="round"
+                  stroke-dasharray="5 13" class="lv-serp"/>
+          </g>
+          <line x1="305" y1="146" x2="345" y2="140" class="td-thin"/>
+          <text x="350" y="138" class="td-label" data-zh-svg="PPS 水道板" data-en-svg="PPS FLOW PLATE">PPS 水道板</text>
+          <text x="350" y="149" class="td-lbl-mute" data-zh-svg="蛇行流道" data-en-svg="serpentine">蛇行流道</text>
+
+          <!-- PP base -->
+          <g class="lv-layer" style="--d:.36s">
+            <path d="M 40 190 L 210 174 L 300 196 L 130 212 Z" class="td-line" fill="var(--card)"/>
+            <path d="M 40 190 L 40 200 L 130 222 L 130 212 Z" class="td-thin" fill="var(--rule)"/>
+            <path d="M 130 212 L 130 222 L 300 206 L 300 196 Z" class="td-thin" fill="var(--rule)"/>
+          </g>
+          <line x1="305" y1="196" x2="345" y2="190" class="td-thin"/>
+          <text x="350" y="188" class="td-label" data-zh-svg="PP 底座" data-en-svg="PP BASE">PP 底座</text>
+
+          <!-- stack rule + envelope dimension -->
+          <line x1="24" y1="46" x2="24" y2="200" class="td-dim"/>
+          <line x1="20" y1="46" x2="28" y2="46" class="td-dim"/>
+          <line x1="20" y1="200" x2="28" y2="200" class="td-dim"/>
+          <text x="18" y="128" class="td-dim-label" text-anchor="end">35</text>
+          <text x="170" y="238" class="td-dim-label" text-anchor="middle">200 × 250 × 35 mm</text>
+
+          <!-- ── three operating modes ──────────────────────── -->
+          <line x1="0" y1="256" x2="480" y2="256" class="td-thin"/>
+          <text x="0" y="274" class="td-lbl-mute" data-zh-svg="三種配置" data-en-svg="THREE CONFIGURATIONS">三種配置</text>
+
+          <!-- single -->
+          <text x="0" y="296" class="td-label" data-zh-svg="單顆" data-en-svg="SINGLE">單顆</text>
+          <text x="0" y="307" class="td-lbl-mute">10 kW</text>
+          <line x1="46" y1="316" x2="60" y2="316" class="td-thin" stroke="var(--signal)" marker-end="url(#mArrow)"/>
+          <rect x="62" y="304" width="46" height="24" class="td-line" fill="var(--card)"/>
+          <line x1="110" y1="316" x2="126" y2="316" class="td-thin" stroke="var(--signal)" marker-end="url(#mArrow)"/>
 
           <!-- series -->
-          <text x="0" y="145" class="td-lbl-mute">SERIES / 串聯 · 升溫最大化</text>
-          <g>
-            <rect x="0" y="155" width="90" height="40" class="td-line"/>
-            <circle cx="-3" cy="175" r="3" class="td-line"/>
-            <line x1="90" y1="175" x2="105" y2="175" class="td-thin"/>
-            <rect x="105" y="155" width="90" height="40" class="td-line"/>
-            <line x1="195" y1="175" x2="210" y2="175" class="td-thin"/>
-            <rect x="210" y="155" width="90" height="40" class="td-line"/>
-            <circle cx="303" cy="175" r="3" class="td-line"/>
-          </g>
+          <text x="150" y="296" class="td-label" data-zh-svg="串聯" data-en-svg="SERIES">串聯</text>
+          <text x="150" y="307" class="td-lbl-mute" data-zh-svg="升溫最大化" data-en-svg="max ΔT">升溫最大化</text>
+          <line x1="150" y1="316" x2="162" y2="316" class="td-thin" stroke="var(--signal)" marker-end="url(#mArrow)"/>
+          <rect x="164" y="304" width="34" height="24" class="td-line" fill="var(--card)"/>
+          <line x1="198" y1="316" x2="210" y2="316" class="td-thin" stroke="var(--signal)" marker-end="url(#mArrow)"/>
+          <rect x="212" y="304" width="34" height="24" class="td-line" fill="var(--card)"/>
+          <line x1="246" y1="316" x2="258" y2="316" class="td-thin" stroke="var(--signal)" marker-end="url(#mArrow)"/>
+          <rect x="260" y="304" width="34" height="24" class="td-line" fill="var(--card)"/>
+          <line x1="294" y1="316" x2="306" y2="316" class="td-thin" stroke="var(--signal)" marker-end="url(#mArrow)"/>
+          <text x="164" y="342" class="td-lbl-mute" data-zh-svg="同一股流體連續受熱三次" data-en-svg="one stream heated three times">同一股流體連續受熱三次</text>
 
           <!-- parallel -->
-          <text x="0" y="225" class="td-lbl-mute">PARALLEL / 併聯 · 流量最大化</text>
-          <g>
-            <line x1="0" y1="270" x2="20" y2="270" class="td-thin"/>
-            <line x1="20" y1="240" x2="20" y2="300" class="td-thin"/>
-            <line x1="20" y1="240" x2="40" y2="240" class="td-thin"/>
-            <line x1="20" y1="270" x2="40" y2="270" class="td-thin"/>
-            <line x1="20" y1="300" x2="40" y2="300" class="td-thin"/>
-            <rect x="40" y="225" width="90" height="30" class="td-line"/>
-            <rect x="40" y="255" width="90" height="30" class="td-line"/>
-            <rect x="40" y="285" width="90" height="30" class="td-line"/>
-            <line x1="130" y1="240" x2="150" y2="240" class="td-thin"/>
-            <line x1="130" y1="270" x2="150" y2="270" class="td-thin"/>
-            <line x1="130" y1="300" x2="150" y2="300" class="td-thin"/>
-            <line x1="150" y1="240" x2="150" y2="300" class="td-thin"/>
-            <line x1="150" y1="270" x2="170" y2="270" class="td-thin"/>
-          </g>
-
-          <!-- signal accent dot -->
-          <circle cx="440" cy="290" r="4" class="td-fill-signal"/>
-          <text x="380" y="295" class="td-lbl-mute" text-anchor="end">MODE FLEX</text>
+          <text x="352" y="296" class="td-label" data-zh-svg="併聯" data-en-svg="PARALLEL">併聯</text>
+          <text x="352" y="307" class="td-lbl-mute" data-zh-svg="流量最大化" data-en-svg="max flow">流量最大化</text>
+          <line x1="352" y1="330" x2="366" y2="330" class="td-thin" stroke="var(--signal)"/>
+          <line x1="366" y1="308" x2="366" y2="352" class="td-thin" stroke="var(--signal)"/>
+          <line x1="366" y1="308" x2="380" y2="308" class="td-thin" stroke="var(--signal)" marker-end="url(#mArrow)"/>
+          <line x1="366" y1="330" x2="380" y2="330" class="td-thin" stroke="var(--signal)" marker-end="url(#mArrow)"/>
+          <line x1="366" y1="352" x2="380" y2="352" class="td-thin" stroke="var(--signal)" marker-end="url(#mArrow)"/>
+          <rect x="386" y="300" width="40" height="16" class="td-line" fill="var(--card)"/>
+          <rect x="386" y="322" width="40" height="16" class="td-line" fill="var(--card)"/>
+          <rect x="386" y="344" width="40" height="16" class="td-line" fill="var(--card)"/>
+          <line x1="426" y1="308" x2="440" y2="308" class="td-thin" stroke="var(--signal)"/>
+          <line x1="426" y1="330" x2="440" y2="330" class="td-thin" stroke="var(--signal)"/>
+          <line x1="426" y1="352" x2="440" y2="352" class="td-thin" stroke="var(--signal)"/>
+          <line x1="440" y1="308" x2="440" y2="352" class="td-thin" stroke="var(--signal)"/>
+          <line x1="440" y1="330" x2="456" y2="330" class="td-thin" stroke="var(--signal)" marker-end="url(#mArrow)"/>
+          <text x="352" y="378" class="td-lbl-mute" data-zh-svg="流量分三路・壓損不疊加" data-en-svg="flow split three ways">流量分三路・壓損不疊加</text>
         </svg>
-        <div class="cap" data-zh="三種運轉模式" data-en="Three operating modes">三種運轉模式</div>
+        <div class="cap" data-zh="疊層結構與三種配置・示意" data-en="Layer stack and three configurations · schematic">疊層結構與三種配置・示意</div>
       </div>
     </div>
   </section>
@@ -690,71 +756,92 @@
 
     <div class="grid">
       <div class="txt">
-        <h2 data-zh="薄膜在乾側,<br>石英在濕側。" data-en="Film on the dry side,<br>quartz on the wet side.">薄膜在乾側,<br>石英在濕側。</h2>
-        <p data-zh="奈米配方發熱層直接鍍在石英管的<b>外壁</b>,通電後薄膜升溫,再透過石英管壁把熱傳到內側流體。整個過程中<b>金屬導體零接觸流體</b>,不會有金屬離子溶出、也沒有 O-ring 之類的顆粒源。"
-           data-en="The nano-formulated heating film is deposited on the <b>outside wall</b> of the quartz tube. Power heats the film; heat transfers through the quartz wall to the fluid on the inside. <b>Zero metal contact with the fluid</b> — no metal-ion leaching, and no O-rings as a particle source.">
-          奈米配方發熱層直接鍍在石英管的<b>外壁</b>,通電後薄膜升溫,再透過石英管壁把熱傳到內側流體。整個過程中<b>金屬導體零接觸流體</b>,不會有金屬離子溶出、也沒有 O-ring 之類的顆粒源。
-        </p>
-        <p data-zh="薄膜熱容小、熱時間常數短,升溫斜率遠優於管外纏繞式與 IR 燈式;同體積下所能輸出的功率密度也更高。"
-           data-en="The film has low thermal mass and a short thermal time constant — faster ramp than wire-wrapped or IR-lamp architectures, with higher power density at the same envelope.">
-          薄膜熱容小、熱時間常數短,升溫斜率遠優於管外纏繞式與 IR 燈式;同體積下所能輸出的功率密度也更高。
-        </p>
+        <h2 data-zh="熱源在乾側,<br>藥液在濕側。" data-en="Heat on the dry side,<br>chemistry on the wet side.">熱源在乾側,<br>藥液在濕側。</h2>
+        <p class="lead" data-zh="幾乎所有加熱器的失效,都發生在<b>發熱體與液體的交界</b>。我們的做法是讓那個交界根本不存在。"
+           data-en="Nearly every heater failure happens at the <b>boundary between element and liquid</b>. Our approach removes that boundary entirely."
+        >幾乎所有加熱器的失效,都發生在<b>發熱體與液體的交界</b>。我們的做法是讓那個交界根本不存在。</p>
+        <p data-zh="奈米配方發熱層直接鍍在石英管<b>外壁</b>。通電後薄膜升溫,熱穿過約 1 mm 的石英壁進入流體。導體與藥液之間永遠隔著一整層石英——這是<b>結構決定的,不靠塗層或密封件維持</b>。"
+           data-en="The nano-formulated film is deposited on the <b>outer wall</b> of the quartz tube. Power heats the film; the heat crosses roughly 1 mm of quartz into the fluid. A full wall always separates conductor from chemistry — <b>a consequence of the structure, not of any coating or seal</b>."
+        >奈米配方發熱層直接鍍在石英管<b>外壁</b>。通電後薄膜升溫,熱穿過約 1 mm 的石英壁進入流體。導體與藥液之間永遠隔著一整層石英——這是<b>結構決定的,不靠塗層或密封件維持</b>。</p>
+        <p data-zh="因此沒有金屬離子溶出的來源,濕式路徑上也沒有 O-ring——業界最主要的微粒來源,在這個結構裡不存在。"
+           data-en="There is therefore no source of metal-ion leaching, and no O-ring anywhere on the wetted path — the industry's principal particle source simply isn't present."
+        >因此沒有金屬離子溶出的來源,濕式路徑上也沒有 O-ring——業界最主要的微粒來源,在這個結構裡不存在。</p>
+        <div class="proof">
+          <div><span class="pn">1</span><span data-zh="熱源與流體之間只有石英" data-en="Only quartz between heat and fluid">熱源與流體之間只有石英</span></div>
+          <div><span class="pn">2</span><span data-zh="濕式路徑零 O-ring" data-en="Zero O-rings on the wetted path">濕式路徑零 O-ring</span></div>
+          <div><span class="pn">3</span><span data-zh="薄膜熱容小,升溫斜率陡" data-en="Low film mass, steep ramp">薄膜熱容小,升溫斜率陡</span></div>
+        </div>
       </div>
       <div class="diagram">
-        <svg viewBox="0 0 500 380" xmlns="http://www.w3.org/2000/svg">
-          <!-- axis label -->
-          <text x="240" y="18" text-anchor="middle" class="td-lbl-mute">CROSS-SECTION · RADIAL</text>
+        <!-- Radial cross-section: the heat path, layer by layer -->
+        <svg viewBox="0 0 500 420" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <radialGradient id="tFluid" cx=".38" cy=".34" r=".8">
+              <stop offset="0" stop-color="#57b6d6" stop-opacity=".38"/>
+              <stop offset="1" stop-color="#1f8fb4" stop-opacity=".16"/>
+            </radialGradient>
+            <linearGradient id="tHeatBar" x1="0" y1="1" x2="0" y2="0">
+              <stop offset="0" stop-color="#1f8fb4"/>
+              <stop offset="1" stop-color="var(--heat)"/>
+            </linearGradient>
+            <marker id="tArr" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+              <path d="M0 0 L8 4 L0 8 z" fill="var(--heat)"/>
+            </marker>
+          </defs>
+
+          <text x="196" y="16" text-anchor="middle" class="td-lbl-mute"
+                data-zh-svg="徑向剖面・由外而內" data-en-svg="RADIAL SECTION · OUTSIDE IN">徑向剖面・由外而內</text>
 
           <!-- concentric layers -->
-          <!-- housing -->
-          <circle cx="240" cy="200" r="150" class="td-line"/>
-          <!-- insulation -->
-          <circle cx="240" cy="200" r="120" class="td-thin"/>
-          <!-- film (dark ring) -->
-          <circle cx="240" cy="200" r="90" fill="none" stroke="#0a0a0a" stroke-width="5"/>
-          <!-- quartz -->
-          <circle cx="240" cy="200" r="85" class="td-line"/>
-          <!-- bore -->
-          <circle cx="240" cy="200" r="60" class="td-line"/>
-          <!-- fluid tint -->
-          <circle cx="240" cy="200" r="58" class="td-fill-signal" opacity=".08"/>
+          <circle cx="196" cy="212" r="152" class="td-line"/>
+          <circle cx="196" cy="212" r="150" fill="var(--rule)" opacity=".35"/>
+          <circle cx="196" cy="212" r="122" class="td-thin" fill="var(--card)"/>
+          <circle cx="196" cy="212" r="92" fill="none" stroke="var(--ink)" stroke-width="6" class="lv-filmring"/>
+          <circle cx="196" cy="212" r="86" class="td-line" fill="#eaf4f8"/>
+          <circle cx="196" cy="212" r="62" class="td-line" fill="url(#tFluid)"/>
 
-          <!-- radial callouts -->
-          <line x1="300" y1="200" x2="420" y2="200" class="td-thin"/>
-          <text x="425" y="197" class="td-label">FLUID</text>
-          <text x="425" y="209" class="td-lbl-mute" data-zh-svg="流體" data-en-svg="wetted path">流體</text>
-
-          <line x1="325" y1="200" x2="425" y2="150" class="td-thin"/>
-          <text x="430" y="147" class="td-label">QUARTZ</text>
-          <text x="430" y="159" class="td-lbl-mute" data-zh-svg="超純石英" data-en-svg="ultrapure">石英</text>
-
-          <line x1="330" y1="200" x2="430" y2="100" class="td-thin"/>
-          <text x="435" y="97" class="td-label">FILM</text>
-          <text x="435" y="109" class="td-lbl-mute" data-zh-svg="奈米薄膜" data-en-svg="dry side">奈米薄膜</text>
-
-          <line x1="360" y1="200" x2="435" y2="60" class="td-thin"/>
-          <text x="440" y="57" class="td-label">INSUL</text>
-          <text x="440" y="69" class="td-lbl-mute" data-zh-svg="保溫層" data-en-svg="insulation">保溫層</text>
-
-          <line x1="390" y1="200" x2="440" y2="20" class="td-thin"/>
-          <text x="445" y="17" class="td-label">HOUSING</text>
-          <text x="445" y="29" class="td-lbl-mute" data-zh-svg="外殼" data-en-svg="housing">外殼</text>
-
-          <line x1="180" y1="200" x2="60" y2="200" class="td-thin"/>
-          <text x="55" y="197" text-anchor="end" class="td-label">BORE</text>
-          <text x="55" y="209" text-anchor="end" class="td-lbl-mute" data-zh-svg="流道 Ø46" data-en-svg="Ø46 mm">流道 Ø46</text>
-
-          <!-- radiating heat lines -->
-          <g stroke="#b4560e" stroke-width="1" fill="none">
-            <line x1="240" y1="115" x2="240" y2="140"/>
-            <line x1="325" y1="200" x2="300" y2="200"/>
-            <line x1="240" y1="285" x2="240" y2="260"/>
-            <line x1="155" y1="200" x2="180" y2="200"/>
+          <!-- heat crossing the wall -->
+          <g stroke="var(--heat)" stroke-width="1.6" marker-end="url(#tArr)" class="lv-flux">
+            <line x1="196" y1="120" x2="196" y2="156"/>
+            <line x1="288" y1="212" x2="252" y2="212"/>
+            <line x1="196" y1="304" x2="196" y2="268"/>
+            <line x1="104" y1="212" x2="140" y2="212"/>
+            <line x1="261" y1="147" x2="235" y2="173"/>
+            <line x1="131" y1="277" x2="157" y2="251"/>
           </g>
 
-          <!-- center marker -->
-          <line x1="235" y1="200" x2="245" y2="200" class="td-thin"/>
-          <line x1="240" y1="195" x2="240" y2="205" class="td-thin"/>
+          <!-- centre mark -->
+          <line x1="188" y1="212" x2="204" y2="212" class="td-thin"/>
+          <line x1="196" y1="204" x2="196" y2="220" class="td-thin"/>
+
+          <!-- leaders -->
+          <line x1="196" y1="60" x2="196" y2="42" class="td-thin"/>
+          <line x1="196" y1="42" x2="392" y2="42" class="td-thin"/>
+          <text x="398" y="39" class="td-label" data-zh-svg="保溫層" data-en-svg="INSULATION">保溫層</text>
+          <text x="398" y="51" class="td-lbl-mute" data-zh-svg="抑制外表面溫度" data-en-svg="limits skin temp">抑制外表面溫度</text>
+
+          <line x1="196" y1="120" x2="196" y2="86" class="td-thin"/>
+          <line x1="196" y1="86" x2="392" y2="86" class="td-thin"/>
+          <text x="398" y="83" class="td-label" data-zh-svg="鍍膜發熱層" data-en-svg="HEATING FILM">鍍膜發熱層</text>
+          <text x="398" y="95" class="td-lbl-mute" data-zh-svg="乾側・零金屬觸液" data-en-svg="dry side · no metal">乾側・零金屬觸液</text>
+
+          <line x1="252" y1="278" x2="330" y2="330" class="td-thin"/>
+          <text x="336" y="328" class="td-label" data-zh-svg="石英管壁" data-en-svg="QUARTZ WALL">石英管壁</text>
+          <text x="336" y="340" class="td-lbl-mute" data-zh-svg="約 1 mm・唯一隔離" data-en-svg="~1 mm · the barrier">約 1 mm・唯一隔離</text>
+
+          <line x1="196" y1="212" x2="86" y2="356" class="td-thin"/>
+          <text x="80" y="360" text-anchor="end" class="td-label" data-zh-svg="藥液 Ø46" data-en-svg="CHEMISTRY Ø46">藥液 Ø46</text>
+          <text x="80" y="372" text-anchor="end" class="td-lbl-mute" data-zh-svg="只接觸石英" data-en-svg="touches quartz only">只接觸石英</text>
+
+          <!-- temperature ladder -->
+          <text x="440" y="150" class="td-lbl-mute" data-zh-svg="溫度" data-en-svg="TEMP">溫度</text>
+          <rect x="446" y="158" width="10" height="150" fill="url(#tHeatBar)" opacity=".85"/>
+          <rect x="446" y="158" width="10" height="150" class="td-thin"/>
+          <line x1="444" y1="164" x2="458" y2="164" class="td-thin"/>
+          <text x="462" y="167" class="td-lbl-mute" data-zh-svg="膜面最高" data-en-svg="film peak">膜面最高</text>
+          <line x1="444" y1="302" x2="458" y2="302" class="td-thin"/>
+          <text x="462" y="305" class="td-lbl-mute" data-zh-svg="液體出口" data-en-svg="fluid out">液體出口</text>
+          <text x="440" y="330" class="td-lbl-mute" data-zh-svg="熱只走一個方向:向內" data-en-svg="heat runs one way: inward">熱只走一個方向:向內</text>
         </svg>
       </div>
     </div>
@@ -773,11 +860,12 @@
         <span data-zh="與其它加熱方式的差異" data-en="Compared with other heating methods">與其它加熱方式的差異</span>
         <span class="rule"></span>
       </div>
-      <table>
+      <table class="cmp">
         <thead>
           <tr>
             <th data-zh="加熱方式" data-en="Method">加熱方式</th>
-            <th data-zh="流體接觸" data-en="Fluid Contact">流體接觸</th>
+            <th class="c-sec" data-zh="結構" data-en="Structure">結構</th>
+            <th data-zh="流體碰到什麼" data-en="Fluid touches">流體碰到什麼</th>
             <th data-zh="熱容 / 響應" data-en="Mass / Response">熱容 / 響應</th>
             <th data-zh="典型效率" data-en="Typical Efficiency">典型效率</th>
             <th data-zh="常見弱點" data-en="Common Weakness">常見弱點</th>
@@ -785,31 +873,65 @@
         </thead>
         <tbody>
           <tr class="own">
-            <td data-zh="薄膜 × 石英(本廠)" data-en="Thin-film on quartz (this product)">薄膜 × 石英(本廠)</td>
-            <td data-zh="僅石英" data-en="Quartz only">僅石英</td>
+            <td data-zh="鍍膜 × 石英<span class='tag'>本廠</span>" data-en="Thin film on quartz<span class='tag'>OURS</span>">鍍膜 × 石英<span class="tag">本廠</span></td>
+            <td class="c-sec">
+              <svg viewBox="0 0 56 34" class="mini" aria-hidden="true">
+                <rect x="4" y="6" width="48" height="22" rx="2" class="td-thin" fill="#eaf4f8"/>
+                <rect x="4" y="6" width="48" height="3" fill="var(--ink)"/>
+                <rect x="4" y="25" width="48" height="3" fill="var(--ink)"/>
+                <rect x="8" y="12" width="40" height="10" fill="#1f8fb4" opacity=".3"/>
+              </svg>
+            </td>
+            <td data-zh="<b>只有石英</b>" data-en="<b>Quartz only</b>">只有石英</td>
             <td data-zh="極小 / 秒級" data-en="Very low / seconds">極小 / 秒級</td>
-            <td>98%+</td>
-            <td data-zh="薄膜端子區為應力重點" data-en="Film termination is stress-critical">薄膜端子區為應力重點</td>
+            <td class="c-eff"><span class="bar" style="--w:98%"></span><span class="num">98%+</span></td>
+            <td data-zh="鍍膜端子區為應力重點" data-en="Film termination is stress-critical">鍍膜端子區為應力重點</td>
           </tr>
           <tr>
-            <td data-zh="纏繞式加熱管(金屬絲)" data-en="Wire-wrapped tube">纏繞式加熱管(金屬絲)</td>
+            <td data-zh="纏繞式加熱管" data-en="Wire-wrapped tube">纏繞式加熱管</td>
+            <td class="c-sec">
+              <svg viewBox="0 0 56 34" class="mini" aria-hidden="true">
+                <rect x="4" y="6" width="48" height="22" rx="2" class="td-thin" fill="#eaf4f8"/>
+                <path d="M6 6 q4 -4 8 0 q4 -4 8 0 q4 -4 8 0 q4 -4 8 0 q4 -4 8 0" fill="none" stroke="var(--mute)" stroke-width="2"/>
+                <path d="M6 28 q4 4 8 0 q4 4 8 0 q4 4 8 0 q4 4 8 0 q4 4 8 0" fill="none" stroke="var(--mute)" stroke-width="2"/>
+                <rect x="8" y="12" width="40" height="10" fill="#1f8fb4" opacity=".3"/>
+              </svg>
+            </td>
             <td data-zh="石英 / PFA" data-en="Quartz / PFA">石英 / PFA</td>
             <td data-zh="中等 / 十秒級" data-en="Medium / tens of sec">中等 / 十秒級</td>
-            <td>85–92%</td>
-            <td data-zh="纏繞不均勻易生局部熱點" data-en="Uneven wrap causes hot spots">纏繞不均勻易生局部熱點</td>
+            <td class="c-eff"><span class="bar" style="--w:89%"></span><span class="num">85–92%</span></td>
+            <td data-zh="纏繞不均易生局部熱點" data-en="Uneven wrap causes hot spots">纏繞不均易生局部熱點</td>
           </tr>
           <tr>
             <td data-zh="IR 燈 / 鹵素燈" data-en="IR / Halogen lamp">IR 燈 / 鹵素燈</td>
+            <td class="c-sec">
+              <svg viewBox="0 0 56 34" class="mini" aria-hidden="true">
+                <rect x="4" y="6" width="48" height="22" rx="2" class="td-thin" fill="#eaf4f8"/>
+                <circle cx="16" cy="17" r="3.4" fill="var(--heat)" opacity=".75"/>
+                <circle cx="40" cy="17" r="3.4" fill="var(--heat)" opacity=".75"/>
+                <g stroke="var(--heat)" stroke-width="1" opacity=".5">
+                  <line x1="21" y1="17" x2="27" y2="17"/><line x1="29" y1="17" x2="35" y2="17"/>
+                </g>
+                <rect x="8" y="12" width="40" height="10" fill="#1f8fb4" opacity=".22"/>
+              </svg>
+            </td>
             <td data-zh="石英(非接觸)" data-en="Quartz (non-contact)">石英(非接觸)</td>
             <td data-zh="低 / 秒級" data-en="Low / seconds">低 / 秒級</td>
-            <td>60–85%</td>
+            <td class="c-eff"><span class="bar" style="--w:72%"></span><span class="num">60–85%</span></td>
             <td data-zh="燈管壽命短、需頻繁更換" data-en="Short lamp life; frequent replacement">燈管壽命短、需頻繁更換</td>
           </tr>
           <tr>
             <td data-zh="PFA 內埋線圈" data-en="PFA-embedded coil">PFA 內埋線圈</td>
-            <td>PFA</td>
+            <td class="c-sec">
+              <svg viewBox="0 0 56 34" class="mini" aria-hidden="true">
+                <rect x="4" y="6" width="48" height="22" rx="2" class="td-thin" fill="#f2efe6"/>
+                <path d="M10 22 q5 -12 10 0 q5 -12 10 0 q5 -12 10 0" fill="none" stroke="var(--mute)" stroke-width="2"/>
+                <rect x="8" y="12" width="40" height="10" fill="#1f8fb4" opacity=".3"/>
+              </svg>
+            </td>
+            <td data-zh="PFA<span class='warn'>・線圈就在液中</span>" data-en="PFA<span class='warn'> · coil sits in the liquid</span>">PFA<span class="warn">・線圈就在液中</span></td>
             <td data-zh="低 / 秒級" data-en="Low / seconds">低 / 秒級</td>
-            <td>90–95%</td>
+            <td class="c-eff"><span class="bar" style="--w:93%"></span><span class="num">90–95%</span></td>
             <td data-zh="PFA 老化與應力龜裂" data-en="PFA aging & stress cracking">PFA 老化與應力龜裂</td>
           </tr>
         </tbody>
@@ -826,50 +948,77 @@
       <span class="mono" data-zh="以正式圖面為準" data-en="Formal drawing takes precedence">以正式圖面為準</span>
     </div>
 
-    <div class="grid">
+    <div class="grid sheets">
       <!-- chemical -->
       <div class="col">
-        <h4 data-zh="化學液型" data-en="Chemical">化學液型</h4>
-        <div class="en">INLINE CHEMICAL / 3–4 kW</div>
+        <div class="chd">
+          <div class="cno">01</div>
+          <div>
+            <h4 data-zh="化學液型" data-en="Chemical">化學液型</h4>
+            <div class="en">INLINE CHEMICAL / 3–4 kW</div>
+          </div>
+        </div>
+        <div class="hero-fig"><b>3–4</b><i>kW</i><em data-zh="單機額定" data-en="per unit">單機額定</em></div>
+        <div class="grp" data-zh="電氣" data-en="Electrical">電氣</div>
         <div class="row"><span class="k" data-zh="額定功率" data-en="Rated Power">額定功率</span><span class="v">3 / 4 kW</span></div>
         <div class="row"><span class="k" data-zh="電源" data-en="Voltage">電源</span><span class="v">220 / 380 V</span></div>
+        <div class="row"><span class="k" data-zh="轉換效率" data-en="Efficiency">轉換效率</span><span class="v hi">98 %+</span></div>
+        <div class="grp" data-zh="機構" data-en="Mechanical">機構</div>
         <div class="row"><span class="k" data-zh="外形尺寸" data-en="Envelope">外形尺寸</span><span class="v">145 × 145 × 390 mm</span></div>
         <div class="row"><span class="k" data-zh="石英內徑" data-en="Quartz ID">石英內徑</span><span class="v">Ø46 mm</span></div>
-        <div class="row"><span class="k" data-zh="轉換效率" data-en="Efficiency">轉換效率</span><span class="v">98 %+</span></div>
         <div class="row"><span class="k" data-zh="外殼材質" data-en="Housing">外殼材質</span><span class="v tbd">—</span></div>
+        <div class="row"><span class="k" data-zh="流體接口" data-en="Fluid port">流體接口</span><span class="v tbd">—</span></div>
+        <div class="grp" data-zh="控制與界限" data-en="Control &amp; limits">控制與界限</div>
         <div class="row"><span class="k" data-zh="溫控方式" data-en="Control">溫控方式</span><span class="v tbd">—</span></div>
         <div class="row"><span class="k" data-zh="感測型式" data-en="Sensing">感測型式</span><span class="v tbd">—</span></div>
         <div class="row"><span class="k" data-zh="最低流量" data-en="Min flow">最低流量</span><span class="v tbd">—</span></div>
         <div class="row"><span class="k" data-zh="出口溫度上限" data-en="Max outlet temp">出口溫度上限</span><span class="v tbd">—</span></div>
-        <div class="row"><span class="k" data-zh="流體接口" data-en="Fluid port">流體接口</span><span class="v tbd">—</span></div>
         <div class="note" data-zh="— 為待正式規格書確認欄位" data-en="— fields pending formal datasheet">— 為待正式規格書確認欄位</div>
       </div>
       <!-- DI -->
       <div class="col">
-        <h4 data-zh="純水型" data-en="DI Water">純水型</h4>
-        <div class="en">INLINE DI / DI-10 / 20 / 30</div>
+        <div class="chd">
+          <div class="cno">02</div>
+          <div>
+            <h4 data-zh="純水型" data-en="DI Water">純水型</h4>
+            <div class="en">INLINE DI / DI-10 / 20 / 30</div>
+          </div>
+        </div>
+        <div class="hero-fig"><b>10–30</b><i>kW</i><em data-zh="三種功率階" data-en="three tiers">三種功率階</em></div>
+        <div class="grp" data-zh="電氣" data-en="Electrical">電氣</div>
         <div class="row"><span class="k" data-zh="額定功率" data-en="Rated Power">額定功率</span><span class="v">10 / 20 / 30 kW</span></div>
         <div class="row"><span class="k" data-zh="電源" data-en="Voltage">電源</span><span class="v">380 V</span></div>
+        <div class="row"><span class="k" data-zh="轉換效率" data-en="Efficiency">轉換效率</span><span class="v hi">98 %+</span></div>
+        <div class="grp" data-zh="機構" data-en="Mechanical">機構</div>
         <div class="row"><span class="k" data-zh="安裝" data-en="Mount">安裝</span><span class="v" data-zh="背掛式" data-en="Wall-mount">背掛式</span></div>
+        <div class="row"><span class="k" data-zh="機殼尺寸" data-en="Cabinet">機殼尺寸</span><span class="v">600 × 900 × 255 mm</span></div>
+        <div class="row"><span class="k" data-zh="適用流體" data-en="Media">適用流體</span><span class="v" data-zh="超純水 / DI" data-en="UPW / DI">超純水 / DI</span></div>
+        <div class="grp" data-zh="控制與界限" data-en="Control &amp; limits">控制與界限</div>
         <div class="row"><span class="k" data-zh="控制" data-en="Control">控制</span><span class="v">SCR phase</span></div>
         <div class="row"><span class="k" data-zh="測溫" data-en="Temp sensor">測溫</span><span class="v" data-zh="紅外線" data-en="IR pyrometer">紅外線</span></div>
         <div class="row"><span class="k" data-zh="流量計" data-en="Flow meter">流量計</span><span class="v">KEYENCE clamp-on</span></div>
         <div class="row"><span class="k" data-zh="溫度範圍" data-en="Temp range">溫度範圍</span><span class="v">30 – 85 °C</span></div>
-        <div class="row"><span class="k" data-zh="適用流體" data-en="Media">適用流體</span><span class="v" data-zh="超純水 / DI" data-en="UPW / DI">超純水 / DI</span></div>
-        <div class="row"><span class="k" data-zh="轉換效率" data-en="Efficiency">轉換效率</span><span class="v">98 %+</span></div>
-        <div class="row"><span class="k" data-zh="機殼尺寸" data-en="Cabinet">機殼尺寸</span><span class="v">600 × 900 × 255 mm</span></div>
         <div class="note" data-zh="規格依機型別於報價階段提供" data-en="Model-specific specs provided at quotation">規格依機型別於報價階段提供</div>
       </div>
       <!-- Module -->
       <div class="col">
-        <h4 data-zh="單顆模組" data-en="Single Module">單顆模組</h4>
-        <div class="en">SINGLE MODULE / 10 kW</div>
+        <div class="chd">
+          <div class="cno">03</div>
+          <div>
+            <h4 data-zh="單顆模組" data-en="Single Module">單顆模組</h4>
+            <div class="en">SINGLE MODULE / 10 kW</div>
+          </div>
+        </div>
+        <div class="hero-fig"><b>35</b><i>mm</i><em data-zh="疊層總厚" data-en="stack thickness">疊層總厚</em></div>
+        <div class="grp" data-zh="電氣" data-en="Electrical">電氣</div>
         <div class="row"><span class="k" data-zh="額定功率" data-en="Rated Power">額定功率</span><span class="v">10 kW</span></div>
         <div class="row"><span class="k" data-zh="溫度範圍" data-en="Temp range">溫度範圍</span><span class="v">25 – 80 °C</span></div>
+        <div class="grp" data-zh="機構" data-en="Mechanical">機構</div>
         <div class="row"><span class="k" data-zh="外形尺寸" data-en="Envelope">外形尺寸</span><span class="v">200 × 250 × 35 mm</span></div>
         <div class="row"><span class="k" data-zh="接口" data-en="Port">接口</span><span class="v">1/2"</span></div>
         <div class="row"><span class="k" data-zh="外殼" data-en="Housing">外殼</span><span class="v">PP</span></div>
         <div class="row"><span class="k" data-zh="水道板" data-en="Flow plate">水道板</span><span class="v">PPS</span></div>
+        <div class="grp" data-zh="配置" data-en="Configuration">配置</div>
         <div class="row"><span class="k" data-zh="運轉模式" data-en="Modes">運轉模式</span><span class="v" data-zh="單顆 / 串聯 / 併聯" data-en="Single / Series / Parallel">單顆 / 串聯 / 併聯</span></div>
         <div class="row"><span class="k" data-zh="適用流體" data-en="Media">適用流體</span><span class="v" data-zh="超純水 / DI" data-en="UPW / DI">超純水 / DI</span></div>
         <div class="note" data-zh="模組可組合於既有系統中擴充" data-en="Modules combine to expand existing systems">模組可組合於既有系統中擴充</div>
@@ -1149,6 +1298,82 @@
     });
   })();
 </script>
+
+<style>
+  /* ═══ styles for the rebuilt 技術 / 對照表 / 規格 / 模組 blocks ═══ */
+
+  /* --- tech: lead paragraph + proof list --- */
+  .tech .txt .lead{font-size:17px;line-height:1.55;color:var(--ink);
+    max-width:30ch;margin-bottom:18px;font-weight:500}
+  .tech .txt .proof{margin-top:26px;border-top:1px solid var(--ink);padding-top:4px}
+  .tech .txt .proof div{display:flex;gap:12px;align-items:baseline;
+    padding:10px 0;border-bottom:1px solid var(--rule);font-size:13.5px;color:var(--ink)}
+  .tech .txt .proof .pn{font-weight:800;font-size:11px;color:var(--signal);
+    min-width:14px;font-stretch:87%;letter-spacing:.06em}
+
+  /* the film ring and heat flux, alive */
+  @keyframes filmRing{0%,100%{stroke:var(--ink)}50%{stroke:var(--heat)}}
+  .lv-filmring{animation:filmRing 4s ease-in-out infinite}
+  @keyframes fluxRun{0%,100%{opacity:.22}50%{opacity:1}}
+  .lv-flux line{animation:fluxRun 2.8s ease-in-out infinite}
+  .lv-flux line:nth-child(2){animation-delay:.24s}
+  .lv-flux line:nth-child(3){animation-delay:.48s}
+  .lv-flux line:nth-child(4){animation-delay:.72s}
+  .lv-flux line:nth-child(5){animation-delay:.96s}
+  .lv-flux line:nth-child(6){animation-delay:1.2s}
+
+  /* --- module: exploded layers drift apart, water runs the channel --- */
+  @keyframes layerFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-3px)}}
+  .lv-layer{animation:layerFloat 5s ease-in-out infinite;animation-delay:var(--d,0s)}
+  @keyframes serpRun{to{stroke-dashoffset:-36}}
+  .lv-serp{animation:serpRun 1.6s linear infinite}
+  .prod .drawing.wide svg{max-height:400px}
+
+  /* --- comparison table --- */
+  .compare table.cmp th.c-sec,.compare table.cmp td.c-sec{width:74px;padding-left:8px;padding-right:8px}
+  .compare table.cmp .mini{width:56px;height:34px;display:block}
+  .compare table.cmp .tag{display:inline-block;margin-left:8px;padding:1px 6px;
+    background:var(--signal);color:#fff;font-size:9px;font-stretch:87%;font-weight:700;
+    letter-spacing:.1em;vertical-align:middle;border-radius:2px}
+  .compare table.cmp .warn{color:var(--heat);font-size:11.5px}
+  .compare table.cmp td.c-eff{white-space:nowrap;min-width:118px}
+  .compare table.cmp .bar{display:block;height:4px;background:var(--rule);
+    margin-bottom:5px;position:relative;overflow:hidden;max-width:92px}
+  .compare table.cmp .bar::after{content:"";position:absolute;inset:0 auto 0 0;
+    width:var(--w);background:var(--mute);transition:width .9s cubic-bezier(.22,.61,.36,1)}
+  .compare table.cmp tr.own .bar::after{background:var(--signal)}
+  .compare table.cmp .num{font-variant-numeric:tabular-nums;font-size:12.5px}
+  .compare table.cmp tr.own td{background:rgba(117,179,42,.05)}
+  .compare table.cmp tbody tr{transition:background .18s}
+  .compare table.cmp tbody tr:hover td{background:rgba(20,32,26,.035)}
+  .compare table.cmp tr.own:hover td{background:rgba(117,179,42,.09)}
+
+  /* --- spec sheets --- */
+  .specs .grid.sheets{gap:0}
+  .specs .sheets .chd{display:flex;gap:14px;align-items:flex-start;margin-bottom:18px}
+  .specs .sheets .cno{font-size:11px;font-weight:800;color:var(--signal);
+    font-stretch:87%;letter-spacing:.1em;padding-top:3px}
+  .specs .sheets h4{margin-bottom:2px}
+  .specs .sheets .hero-fig{display:flex;align-items:baseline;gap:5px;flex-wrap:wrap;
+    padding:14px 0 16px;margin-bottom:6px;border-bottom:1px solid var(--ink)}
+  .specs .sheets .hero-fig b{font-size:40px;font-weight:800;letter-spacing:-.035em;
+    line-height:1;font-variant-numeric:tabular-nums;color:var(--ink)}
+  .specs .sheets .hero-fig i{font-style:normal;font-size:15px;font-weight:600;color:var(--mute)}
+  .specs .sheets .hero-fig em{font-style:normal;font-size:11px;color:var(--mute);
+    margin-left:auto;font-stretch:87%;letter-spacing:.08em;text-transform:uppercase}
+  .specs .sheets .grp{font-size:9.5px;font-stretch:87%;font-weight:700;letter-spacing:.16em;
+    text-transform:uppercase;color:var(--signal);padding:16px 0 5px;margin-top:2px}
+  .specs .sheets .row .v.hi{color:var(--signal);font-weight:700}
+
+  @media (max-width:900px){
+    .tech .txt .lead{font-size:15px;max-width:none}
+    .compare table.cmp th.c-sec,.compare table.cmp td.c-sec{display:none}
+    .specs .sheets .hero-fig b{font-size:32px}
+  }
+  @media (prefers-reduced-motion:reduce){
+    .lv-filmring,.lv-flux line,.lv-layer,.lv-serp{animation:none!important}
+  }
+</style>
 
 <!-- ═══════════════════════════════════════════════════════════════
      LIVE LAYER — appended enhancement block.
