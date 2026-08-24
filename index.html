@@ -1149,5 +1149,238 @@
     });
   })();
 </script>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     LIVE LAYER — appended enhancement block.
+     Everything below is ADDITIVE: no markup or rule above this point
+     is modified. It attaches behaviour by querying existing elements
+     and injecting new ones, so it can be deleted wholesale to revert.
+     Honours prefers-reduced-motion, and every feature is wrapped so a
+     failure in one cannot take down the others.
+     ═══════════════════════════════════════════════════════════════ -->
+<style>
+  /* ---- indicator lamps on the cabinet drawings ---- */
+  @keyframes lampRed{0%,44%{opacity:.14}52%,92%{opacity:1}100%{opacity:.14}}
+  @keyframes lampGrn{0%,100%{opacity:.28}50%{opacity:1}}
+  @keyframes lampAmb{0%,66%{opacity:.12}72%,86%{opacity:.95}100%{opacity:.12}}
+  .lv-red{animation:lampRed 1.9s steps(1,end) infinite}
+  .lv-grn{animation:lampGrn 2.6s ease-in-out infinite}
+  .lv-amb{animation:lampAmb 3.1s steps(1,end) infinite}
+  .lv-ring{animation:lampRed 1.9s steps(1,end) infinite}
+
+  /* relay bank ticking over, one after another */
+  @keyframes relayTick{0%,86%,100%{fill:transparent}90%{fill:var(--heat)}}
+  .lv-relay{animation:relayTick 2.4s steps(1,end) infinite}
+
+  /* HMI screen refresh sweep */
+  @keyframes hmiSweep{0%{opacity:0;transform:translateY(0)}
+                      12%{opacity:.5}88%{opacity:.5}100%{opacity:0;transform:translateY(52px)}}
+  .lv-scan{animation:hmiSweep 3.4s linear infinite}
+
+  /* fluid travelling along the flow arrows */
+  @keyframes flowRun{to{stroke-dashoffset:-44}}
+  .lv-flow{stroke:var(--signal);stroke-width:2;fill:none;stroke-linecap:round;
+    stroke-dasharray:7 15;animation:flowRun 1.5s linear infinite;opacity:.85}
+
+  /* the thin film carrying current */
+  @keyframes filmHeat{0%,100%{fill:var(--ink)}50%{fill:var(--heat)}}
+  .lv-film{animation:filmHeat 3.6s ease-in-out infinite}
+
+  /* ---- brand mark: a power-on breath, not a blink ---- */
+  @keyframes markBreathe{0%,100%{filter:brightness(1) saturate(1)}
+                         50%{filter:brightness(1.18) saturate(1.15)}}
+  .lv-mark{animation:markBreathe 4.2s ease-in-out infinite}
+  @keyframes pwrDot{0%,100%{opacity:.25;transform:scale(.82)}50%{opacity:1;transform:scale(1)}}
+  .lv-pwr{display:inline-block;width:6px;height:6px;border-radius:50%;
+    background:var(--brand);margin-left:9px;vertical-align:middle;
+    box-shadow:0 0 0 0 rgba(117,179,42,.5);animation:pwrDot 2.2s ease-in-out infinite}
+  footer .lv-pwr{background:var(--brand)}
+
+  /* ---- section reveal ---- */
+  .lv-rise{opacity:0;transform:translateY(16px);
+    transition:opacity .7s cubic-bezier(.22,.61,.36,1),transform .7s cubic-bezier(.22,.61,.36,1)}
+  .lv-rise.lv-in{opacity:1;transform:none}
+
+  /* ---- live row marker on the comparison table ---- */
+  @keyframes ownPulse{0%,100%{opacity:.35}50%{opacity:1}}
+  .compare .own td:first-child{position:relative}
+  .compare .own td:first-child::after{content:"";position:absolute;left:-10px;top:50%;
+    width:3px;height:16px;margin-top:-8px;background:var(--signal);animation:ownPulse 2.4s ease-in-out infinite}
+
+  /* ---- header gains a hairline once you leave the top ---- */
+  header{transition:box-shadow .25s,background-color .25s}
+  header.lv-stuck{box-shadow:0 1px 0 rgba(20,32,26,.10)}
+
+  @media (prefers-reduced-motion:reduce){
+    .lv-red,.lv-grn,.lv-amb,.lv-ring,.lv-relay,.lv-scan,.lv-flow,.lv-film,
+    .lv-mark,.lv-pwr,.compare .own td:first-child::after{animation:none!important}
+    .lv-rise{opacity:1!important;transform:none!important;transition:none!important}
+  }
+</style>
+<script>
+(function(){
+  "use strict";
+  var SVGNS = "http://www.w3.org/2000/svg";
+  var reduce = window.matchMedia &&
+               window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  /* run each feature in isolation so one bad selector can't kill the rest */
+  function safe(fn){ try{ fn(); }catch(e){ /* non-fatal by design */ } }
+  function el(n,a){ var e=document.createElementNS(SVGNS,n);
+    for(var k in a) e.setAttribute(k,a[k]); return e; }
+
+  /* ── 1. indicator lamps on the cabinet drawings ───────────────── */
+  safe(function(){
+    /* E-STOP rings: drawn with the stop colour, so find them by that */
+    document.querySelectorAll('svg circle[stroke="#a92b1c"]').forEach(function(c){
+      c.classList.add('lv-ring');
+      var lamp = el('circle',{ cx:c.getAttribute('cx'), cy:c.getAttribute('cy'),
+        r: Math.max(3, parseFloat(c.getAttribute('r')||6)*0.52), fill:'#a92b1c' });
+      lamp.setAttribute('class','lv-red');
+      c.parentNode.insertBefore(lamp, c.nextSibling);
+    });
+    /* small signal dots become running-status lamps */
+    document.querySelectorAll('svg circle.td-fill-signal').forEach(function(c){
+      var r = parseFloat(c.getAttribute('r')||0);
+      if(r > 0 && r <= 10) c.classList.add('lv-grn');
+    });
+    /* the SW selector on the DI cabinet gets an amber "armed" lamp */
+    document.querySelectorAll('svg circle[cx="277"][cy="130"]').forEach(function(c){
+      var lamp = el('circle',{cx:277,cy:130,r:4,fill:'#b4560e'});
+      lamp.setAttribute('class','lv-amb');
+      c.parentNode.insertBefore(lamp, c.nextSibling);
+    });
+  });
+
+  /* ── 2. relay bank ticking over in sequence ───────────────────── */
+  safe(function(){
+    var relays = document.querySelectorAll('svg rect[width="14"][height="14"]');
+    relays.forEach(function(r,i){
+      r.classList.add('lv-relay');
+      r.style.animationDelay = (i*0.28).toFixed(2)+'s';
+    });
+  });
+
+  /* ── 3. HMI screens get a refresh sweep ───────────────────────── */
+  safe(function(){
+    document.querySelectorAll('svg text').forEach(function(t){
+      if((t.textContent||'').trim() !== 'HMI') return;
+      var svg = t.ownerSVGElement; if(!svg) return;
+      /* find the tinted screen rect nearest this label */
+      var best=null, bx=parseFloat(t.getAttribute('x')||0), by=parseFloat(t.getAttribute('y')||0);
+      svg.querySelectorAll('rect.td-fill-signal').forEach(function(r){
+        var x=parseFloat(r.getAttribute('x')), y=parseFloat(r.getAttribute('y')),
+            w=parseFloat(r.getAttribute('width')), h=parseFloat(r.getAttribute('height'));
+        if(bx>=x-4 && bx<=x+w+4 && by>=y-4 && by<=y+h+18) best={x:x,y:y,w:w,h:h};
+      });
+      if(!best) return;
+      var line = el('rect',{x:best.x+3, y:best.y+4, width:best.w-6, height:1.4,
+                            fill:'var(--signal)'});
+      line.setAttribute('class','lv-scan');
+      line.style.animationDuration = (2.8 + Math.random()*1.2).toFixed(2)+'s';
+      t.parentNode.insertBefore(line, t);
+    });
+  });
+
+  /* ── 4. fluid running along the flow arrows ───────────────────── */
+  safe(function(){
+    /* chemical heater: bottom inlet up through the bore, out the top */
+    document.querySelectorAll('svg').forEach(function(svg){
+      var bore = svg.querySelector('rect[x="218"][y="60"]');
+      if(!bore) return;
+      var p = el('path',{d:'M 240 322 L 240 6'});
+      p.setAttribute('class','lv-flow');
+      svg.appendChild(p);
+    });
+    /* DI cabinet: left to right through the heater tube */
+    document.querySelectorAll('svg').forEach(function(svg){
+      var tube = svg.querySelector('rect[x="150"][y="195"]');
+      if(!tube) return;
+      var p = el('path',{d:'M 112 210 L 368 210'});
+      p.setAttribute('class','lv-flow');
+      svg.appendChild(p);
+    });
+  });
+
+  /* ── 5. thin film carrying current ────────────────────────────── */
+  safe(function(){
+    document.querySelectorAll('svg rect.td-fill-film').forEach(function(r,i){
+      r.classList.add('lv-film');
+      r.style.animationDelay = (i*0.5).toFixed(2)+'s';
+    });
+  });
+
+  /* ── 6. brand mark: breathing + a power lamp beside it ────────── */
+  safe(function(){
+    document.querySelectorAll('img.mark').forEach(function(m){
+      m.classList.add('lv-mark');
+      var dot = document.createElement('span');
+      dot.className = 'lv-pwr';
+      if(m.parentNode) m.parentNode.insertBefore(dot, m.nextSibling);
+    });
+  });
+
+  /* ── 7. hero figures count up when they arrive ────────────────── */
+  safe(function(){
+    if(reduce || !('IntersectionObserver' in window)) return;
+    var figs = document.querySelectorAll('.specrow .fig, .tech .kpi .fig');
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(en){
+        if(!en.isIntersecting) return;
+        io.unobserve(en.target);
+        var node = en.target.firstChild;
+        if(!node || node.nodeType !== 3) return;      /* only a leading text node */
+        var raw = node.nodeValue.trim();
+        var target = parseFloat(raw);
+        if(!isFinite(target) || raw !== String(target)) return;  /* skip "3–4", "Ø46" */
+        var dec = (raw.split('.')[1]||'').length, t0 = null, dur = 900;
+        function step(ts){
+          if(t0===null) t0 = ts;
+          var k = Math.min(1,(ts-t0)/dur);
+          k = 1-Math.pow(1-k,3);
+          node.nodeValue = (target*k).toFixed(dec);
+          if(k<1) requestAnimationFrame(step); else node.nodeValue = raw;
+        }
+        node.nodeValue = dec ? (0).toFixed(dec) : '0';
+        requestAnimationFrame(step);
+      });
+    },{threshold:.5});
+    figs.forEach(function(f){ io.observe(f); });
+  });
+
+  /* ── 8. sections rise into place ──────────────────────────────── */
+  safe(function(){
+    if(reduce || !('IntersectionObserver' in window)) return;
+    var targets = document.querySelectorAll(
+      '.prod .item, .tech .grid, .tech .kpi, .compare table, .specs .col, .ctrl .grid, .contact .grid');
+    if(!targets.length) return;
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(en){
+        if(!en.isIntersecting) return;
+        en.target.classList.add('lv-in');
+        io.unobserve(en.target);
+      });
+    },{threshold:.12, rootMargin:'0px 0px -40px 0px'});
+    targets.forEach(function(t,i){
+      t.classList.add('lv-rise');
+      t.style.transitionDelay = Math.min(i,4)*60 + 'ms';
+      io.observe(t);
+    });
+  });
+
+  /* ── 9. header hairline once scrolled ─────────────────────────── */
+  safe(function(){
+    var h = document.querySelector('header'); if(!h) return;
+    var tick = false;
+    addEventListener('scroll', function(){
+      if(tick) return; tick = true;
+      requestAnimationFrame(function(){
+        h.classList.toggle('lv-stuck', scrollY > 8);
+        tick = false;
+      });
+    }, {passive:true});
+  });
+})();
+</script>
+
 </body>
 </html>
