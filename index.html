@@ -635,7 +635,7 @@
       </div>
       <div class="drawing wide">
         <!-- Module: exploded stack + the three operating modes -->
-        <svg viewBox="0 0 480 400" xmlns="http://www.w3.org/2000/svg">
+        <svg viewBox="0 0 480 512" xmlns="http://www.w3.org/2000/svg">
           <defs>
             <linearGradient id="mFilmG" x1="0" y1="0" x2="1" y2="0">
               <stop offset="0" stop-color="var(--ink)" stop-opacity=".18"/>
@@ -700,46 +700,61 @@
           <text x="18" y="128" class="td-dim-label" text-anchor="end">35</text>
           <text x="170" y="238" class="td-dim-label" text-anchor="middle">200 × 250 × 35 mm</text>
 
-          <!-- ── three operating modes ──────────────────────── -->
-          <line x1="0" y1="256" x2="480" y2="256" class="td-thin"/>
-          <text x="0" y="274" class="td-lbl-mute" data-zh-svg="三種配置" data-en-svg="THREE CONFIGURATIONS">三種配置</text>
+          <!-- ── three operating modes ──────────────────────────
+               Each mode gets its OWN vertical band: label row, then
+               schematic row, then caption row. Nothing shares a band,
+               so no text can collide with a symbol.               -->
+          <line x1="0" y1="262" x2="480" y2="262" class="td-thin"/>
+          <text x="0" y="280" class="td-lbl-mute" data-zh-svg="三種配置" data-en-svg="THREE CONFIGURATIONS">三種配置</text>
 
-          <!-- single -->
-          <text x="0" y="296" class="td-label" data-zh-svg="單顆" data-en-svg="SINGLE">單顆</text>
-          <text x="0" y="307" class="td-lbl-mute">10 kW</text>
-          <line x1="46" y1="316" x2="60" y2="316" class="td-thin" stroke="var(--signal)" marker-end="url(#mArrow)"/>
-          <rect x="62" y="304" width="46" height="24" class="td-line" fill="var(--card)"/>
-          <line x1="110" y1="316" x2="126" y2="316" class="td-thin" stroke="var(--signal)" marker-end="url(#mArrow)"/>
+          <!-- ── 單顆 ── label row y=306 · schematic y=318–342 -->
+          <text x="0" y="306" class="td-label" data-zh-svg="單顆" data-en-svg="SINGLE">單顆</text>
+          <text x="478" y="306" text-anchor="end" class="td-lbl-mute">10 kW</text>
+          <line x1="0" y1="312" x2="480" y2="312" class="td-thin" opacity=".45"/>
+          <g class="lv-mode" style="--d:0s">
+            <line x1="20" y1="330" x2="44" y2="330" class="td-thin" stroke="var(--signal)" marker-end="url(#mArrow)"/>
+            <rect x="48" y="318" width="58" height="24" class="td-line" fill="var(--card)"/>
+            <line x1="106" y1="330" x2="132" y2="330" class="td-thin" stroke="var(--signal)" marker-end="url(#mArrow)"/>
+          </g>
+          <text x="148" y="334" class="td-lbl-mute" data-zh-svg="基本單元・10 kW 一顆" data-en-svg="base unit · one 10 kW module">基本單元・10 kW 一顆</text>
 
-          <!-- series -->
-          <text x="150" y="296" class="td-label" data-zh-svg="串聯" data-en-svg="SERIES">串聯</text>
-          <text x="150" y="307" class="td-lbl-mute" data-zh-svg="升溫最大化" data-en-svg="max ΔT">升溫最大化</text>
-          <line x1="150" y1="316" x2="162" y2="316" class="td-thin" stroke="var(--signal)" marker-end="url(#mArrow)"/>
-          <rect x="164" y="304" width="34" height="24" class="td-line" fill="var(--card)"/>
-          <line x1="198" y1="316" x2="210" y2="316" class="td-thin" stroke="var(--signal)" marker-end="url(#mArrow)"/>
-          <rect x="212" y="304" width="34" height="24" class="td-line" fill="var(--card)"/>
-          <line x1="246" y1="316" x2="258" y2="316" class="td-thin" stroke="var(--signal)" marker-end="url(#mArrow)"/>
-          <rect x="260" y="304" width="34" height="24" class="td-line" fill="var(--card)"/>
-          <line x1="294" y1="316" x2="306" y2="316" class="td-thin" stroke="var(--signal)" marker-end="url(#mArrow)"/>
-          <text x="164" y="342" class="td-lbl-mute" data-zh-svg="同一股流體連續受熱三次" data-en-svg="one stream heated three times">同一股流體連續受熱三次</text>
+          <!-- ── 串聯 ── label row y=372 · schematic y=384–408 -->
+          <text x="0" y="372" class="td-label" data-zh-svg="串聯" data-en-svg="SERIES">串聯</text>
+          <text x="478" y="372" text-anchor="end" class="td-lbl-mute" data-zh-svg="升溫最大化" data-en-svg="max temperature rise">升溫最大化</text>
+          <line x1="0" y1="378" x2="480" y2="378" class="td-thin" opacity=".45"/>
+          <g class="lv-mode" style="--d:.15s">
+            <line x1="20" y1="396" x2="40" y2="396" class="td-thin" stroke="var(--signal)" marker-end="url(#mArrow)"/>
+            <rect x="44" y="384" width="46" height="24" class="td-line" fill="var(--card)"/>
+            <line x1="90" y1="396" x2="110" y2="396" class="td-thin" stroke="var(--signal)" marker-end="url(#mArrow)"/>
+            <rect x="114" y="384" width="46" height="24" class="td-line" fill="var(--card)"/>
+            <line x1="160" y1="396" x2="180" y2="396" class="td-thin" stroke="var(--signal)" marker-end="url(#mArrow)"/>
+            <rect x="184" y="384" width="46" height="24" class="td-line" fill="var(--card)"/>
+            <line x1="230" y1="396" x2="252" y2="396" class="td-thin" stroke="var(--signal)" marker-end="url(#mArrow)"/>
+          </g>
+          <text x="268" y="393" class="td-lbl-mute" data-zh-svg="同一股流體連續受熱三次" data-en-svg="one stream heated three times">同一股流體連續受熱三次</text>
+          <text x="268" y="404" class="td-lbl-mute" data-zh-svg="ΔT 疊加・流量不變" data-en-svg="ΔT adds up · flow unchanged">ΔT 疊加・流量不變</text>
 
-          <!-- parallel -->
-          <text x="352" y="296" class="td-label" data-zh-svg="併聯" data-en-svg="PARALLEL">併聯</text>
-          <text x="352" y="307" class="td-lbl-mute" data-zh-svg="流量最大化" data-en-svg="max flow">流量最大化</text>
-          <line x1="352" y1="330" x2="366" y2="330" class="td-thin" stroke="var(--signal)"/>
-          <line x1="366" y1="308" x2="366" y2="352" class="td-thin" stroke="var(--signal)"/>
-          <line x1="366" y1="308" x2="380" y2="308" class="td-thin" stroke="var(--signal)" marker-end="url(#mArrow)"/>
-          <line x1="366" y1="330" x2="380" y2="330" class="td-thin" stroke="var(--signal)" marker-end="url(#mArrow)"/>
-          <line x1="366" y1="352" x2="380" y2="352" class="td-thin" stroke="var(--signal)" marker-end="url(#mArrow)"/>
-          <rect x="386" y="300" width="40" height="16" class="td-line" fill="var(--card)"/>
-          <rect x="386" y="322" width="40" height="16" class="td-line" fill="var(--card)"/>
-          <rect x="386" y="344" width="40" height="16" class="td-line" fill="var(--card)"/>
-          <line x1="426" y1="308" x2="440" y2="308" class="td-thin" stroke="var(--signal)"/>
-          <line x1="426" y1="330" x2="440" y2="330" class="td-thin" stroke="var(--signal)"/>
-          <line x1="426" y1="352" x2="440" y2="352" class="td-thin" stroke="var(--signal)"/>
-          <line x1="440" y1="308" x2="440" y2="352" class="td-thin" stroke="var(--signal)"/>
-          <line x1="440" y1="330" x2="456" y2="330" class="td-thin" stroke="var(--signal)" marker-end="url(#mArrow)"/>
-          <text x="352" y="378" class="td-lbl-mute" data-zh-svg="流量分三路・壓損不疊加" data-en-svg="flow split three ways">流量分三路・壓損不疊加</text>
+          <!-- ── 併聯 ── label row y=438 · schematic y=450–500 -->
+          <text x="0" y="438" class="td-label" data-zh-svg="併聯" data-en-svg="PARALLEL">併聯</text>
+          <text x="478" y="438" text-anchor="end" class="td-lbl-mute" data-zh-svg="流量最大化" data-en-svg="max flow rate">流量最大化</text>
+          <line x1="0" y1="444" x2="480" y2="444" class="td-thin" opacity=".45"/>
+          <g class="lv-mode" style="--d:.3s">
+            <line x1="20" y1="476" x2="38" y2="476" class="td-thin" stroke="var(--signal)"/>
+            <line x1="38" y1="456" x2="38" y2="496" class="td-thin" stroke="var(--signal)"/>
+            <line x1="38" y1="456" x2="52" y2="456" class="td-thin" stroke="var(--signal)" marker-end="url(#mArrow)"/>
+            <line x1="38" y1="476" x2="52" y2="476" class="td-thin" stroke="var(--signal)" marker-end="url(#mArrow)"/>
+            <line x1="38" y1="496" x2="52" y2="496" class="td-thin" stroke="var(--signal)" marker-end="url(#mArrow)"/>
+            <rect x="58" y="448" width="52" height="17" class="td-line" fill="var(--card)"/>
+            <rect x="58" y="468" width="52" height="17" class="td-line" fill="var(--card)"/>
+            <rect x="58" y="488" width="52" height="17" class="td-line" fill="var(--card)"/>
+            <line x1="110" y1="456" x2="128" y2="456" class="td-thin" stroke="var(--signal)"/>
+            <line x1="110" y1="476" x2="128" y2="476" class="td-thin" stroke="var(--signal)"/>
+            <line x1="110" y1="496" x2="128" y2="496" class="td-thin" stroke="var(--signal)"/>
+            <line x1="128" y1="456" x2="128" y2="496" class="td-thin" stroke="var(--signal)"/>
+            <line x1="128" y1="476" x2="150" y2="476" class="td-thin" stroke="var(--signal)" marker-end="url(#mArrow)"/>
+          </g>
+          <text x="168" y="472" class="td-lbl-mute" data-zh-svg="流量分三路・壓損不疊加" data-en-svg="flow splits three ways">流量分三路・壓損不疊加</text>
+          <text x="168" y="483" class="td-lbl-mute" data-zh-svg="流量 ×3・ΔT 不變" data-en-svg="3× flow · ΔT unchanged">流量 ×3・ΔT 不變</text>
         </svg>
         <div class="cap" data-zh="疊層結構與三種配置・示意" data-en="Layer stack and three configurations · schematic">疊層結構與三種配置・示意</div>
       </div>
@@ -1603,6 +1618,192 @@
         tick = false;
       });
     }, {passive:true});
+  });
+})();
+</script>
+
+
+<!-- ═══════════════════════════════════════════════════════════════
+     LIVE LAYER 2 — motion for the rebuilt sections.
+     Additive, like layer 1: nothing above is modified, and the whole
+     block can be deleted to revert. Reduced-motion honoured.
+     ═══════════════════════════════════════════════════════════════ -->
+<style>
+  /* section rules draw themselves left to right */
+  .secmark .rule{transform-origin:left center;transform:scaleX(0);
+    transition:transform .9s cubic-bezier(.22,.61,.36,1)}
+  .secmark.lv-seen .rule{transform:none}
+
+  /* headings wipe up from a clipped line */
+  .lv-wipe{display:block;overflow:hidden}
+  .lv-wipe > span{display:block;transform:translateY(105%);
+    transition:transform .85s cubic-bezier(.22,.61,.36,1)}
+  .lv-wipe.lv-seen > span{transform:none}
+
+  /* the three proof points arrive one after another */
+  .tech .proof div{opacity:0;transform:translateX(-10px);
+    transition:opacity .55s ease,transform .55s cubic-bezier(.22,.61,.36,1)}
+  .tech .proof.lv-seen div{opacity:1;transform:none}
+  .tech .proof.lv-seen div:nth-child(2){transition-delay:.1s}
+  .tech .proof.lv-seen div:nth-child(3){transition-delay:.2s}
+  .tech .proof .pn{transition:color .3s}
+  .tech .proof div:hover .pn{color:var(--heat)}
+
+  /* key-spec cells stagger in, and lift on hover */
+  .prod .keyspec > div{opacity:0;transform:translateY(8px);
+    transition:opacity .5s ease,transform .5s cubic-bezier(.22,.61,.36,1),background .18s}
+  .prod .keyspec.lv-seen > div{opacity:1;transform:none}
+  .prod .keyspec > div:hover{background:rgba(117,179,42,.06)}
+  .prod .keyspec .v{transition:color .18s}
+  .prod .keyspec > div:hover .v{color:var(--signal)}
+
+  /* efficiency bars grow from zero when scrolled to */
+  .compare table.cmp .bar::after{width:0}
+  .compare table.cmp .bar.lv-seen::after{width:var(--w)}
+
+  /* spec rows respond to the cursor */
+  .specs .sheets .row{transition:background .16s,padding-left .16s}
+  .specs .sheets .row:hover{background:rgba(117,179,42,.06);padding-left:6px}
+  .specs .sheets .col{transition:background .25s}
+  .specs .sheets .hero-fig b{transition:color .25s}
+  .specs .sheets .col:hover .hero-fig b{color:var(--signal)}
+
+  /* module: mode schematics slide in as a group */
+  .lv-mode{opacity:0;transform:translateX(-14px);
+    transition:opacity .6s ease,transform .6s cubic-bezier(.22,.61,.36,1);
+    transition-delay:var(--d,0s)}
+  svg.lv-seen .lv-mode{opacity:1;transform:none}
+
+  /* callout leaders draw themselves once their drawing is in view */
+  .lv-draw{stroke-dasharray:var(--len);stroke-dashoffset:var(--len);
+    transition:stroke-dashoffset .9s cubic-bezier(.22,.61,.36,1)}
+  svg.lv-seen .lv-draw{stroke-dashoffset:0}
+
+  /* a slow highlight travelling across the thin-film ring diagram */
+  @keyframes tempPulse{0%,100%{opacity:.75}50%{opacity:1}}
+  .tech .diagram rect[fill^="url(#tHeatBar"]{animation:tempPulse 3.4s ease-in-out infinite}
+
+  @media (prefers-reduced-motion:reduce){
+    .secmark .rule,.lv-wipe > span,.tech .proof div,.prod .keyspec > div,
+    .lv-mode,.lv-draw{transition:none!important;transform:none!important;opacity:1!important;
+      stroke-dashoffset:0!important}
+    .compare table.cmp .bar::after{width:var(--w)!important}
+    .tech .diagram rect[fill^="url(#tHeatBar"]{animation:none!important}
+  }
+</style>
+<script>
+(function(){
+  "use strict";
+  function safe(f){ try{ f(); }catch(e){} }
+  var reduce = window.matchMedia &&
+               window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  var IO = window.IntersectionObserver;
+
+  /* fires cb once, the first time el scrolls into view */
+  function once(el, cb, th){
+    if(!IO){ cb(el); return; }
+    var o = new IntersectionObserver(function(en){
+      en.forEach(function(e){
+        if(!e.isIntersecting) return;
+        o.unobserve(e.target); cb(e.target);
+      });
+    },{threshold: th || .2});
+    o.observe(el);
+  }
+  function mark(el){ el.classList.add('lv-seen'); }
+
+  /* ── section rules + section headings ─────────────────────── */
+  safe(function(){
+    document.querySelectorAll('.secmark').forEach(function(m){ once(m, mark, .5); });
+  });
+
+  /* wrap the big headings so they can wipe up from a clipped edge.
+     Only wraps if not already wrapped, and preserves inner markup —
+     the language toggle rewrites innerHTML, so re-wrap after a switch. */
+  safe(function(){
+    if(reduce) return;
+    function wrap(){
+      document.querySelectorAll('.tech .txt h2, .ctrl h2, .contact h2').forEach(function(h){
+        if(h.querySelector(':scope > span.lv-inner')) return;
+        var span = document.createElement('span');
+        span.className = 'lv-inner';
+        span.innerHTML = h.innerHTML;
+        h.innerHTML = '';
+        h.appendChild(span);
+        h.classList.add('lv-wipe');
+        once(h, mark, .3);
+      });
+    }
+    wrap();
+    document.querySelectorAll('.langtog button').forEach(function(b){
+      b.addEventListener('click', function(){ setTimeout(wrap, 30); });
+    });
+  });
+
+  /* ── proof list + key-spec grids ──────────────────────────── */
+  safe(function(){
+    document.querySelectorAll('.tech .proof, .prod .keyspec').forEach(function(g){
+      once(g, mark, .25);
+    });
+  });
+
+  /* ── efficiency bars grow when the table arrives ──────────── */
+  safe(function(){
+    var bars = document.querySelectorAll('.compare table.cmp .bar');
+    if(!bars.length) return;
+    var tbl = bars[0].closest('table');
+    once(tbl, function(){
+      bars.forEach(function(b,i){
+        setTimeout(function(){ b.classList.add('lv-seen'); }, i*130);
+      });
+    }, .2);
+  });
+
+  /* ── SVG drawings: leaders draw on, mode groups slide in ───── */
+  safe(function(){
+    document.querySelectorAll('.prod .drawing svg, .tech .diagram svg').forEach(function(svg){
+      if(!reduce){
+        /* give every callout leader a dash length equal to its own length */
+        svg.querySelectorAll('line.td-thin').forEach(function(ln){
+          var L = 0;
+          try{ L = ln.getTotalLength ? ln.getTotalLength() : 0; }catch(e){}
+          if(!L){
+            var dx = (+ln.getAttribute('x2')) - (+ln.getAttribute('x1'));
+            var dy = (+ln.getAttribute('y2')) - (+ln.getAttribute('y1'));
+            L = Math.sqrt(dx*dx + dy*dy) || 0;
+          }
+          if(L > 8 && L < 400){
+            ln.classList.add('lv-draw');
+            ln.style.setProperty('--len', L.toFixed(1));
+            ln.style.transitionDelay = (Math.random()*.35).toFixed(2)+'s';
+          }
+        });
+      }
+      once(svg, mark, .15);
+    });
+  });
+
+  /* ── spec hero figures count up ───────────────────────────── */
+  safe(function(){
+    if(reduce || !IO) return;
+    document.querySelectorAll('.specs .sheets .hero-fig b').forEach(function(b){
+      once(b, function(el){
+        var node = el.firstChild;
+        if(!node || node.nodeType !== 3) return;
+        var raw = node.nodeValue.trim(), target = parseFloat(raw);
+        /* ranges like "3–4" and "10–30" are left exactly as authored */
+        if(!isFinite(target) || raw !== String(target)) return;
+        var t0 = null;
+        function step(ts){
+          if(t0 === null) t0 = ts;
+          var k = Math.min(1,(ts-t0)/800); k = 1-Math.pow(1-k,3);
+          node.nodeValue = String(Math.round(target*k));
+          if(k < 1) requestAnimationFrame(step); else node.nodeValue = raw;
+        }
+        node.nodeValue = '0';
+        requestAnimationFrame(step);
+      }, .6);
+    });
   });
 })();
 </script>
