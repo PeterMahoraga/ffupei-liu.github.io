@@ -1807,6 +1807,718 @@
   });
 })();
 </script>
+<!-- ═══════════════════════════════════════════════════════════════
+     UPGRADE PACK v3 — 決策工具層
+     完全附加式:貼在 </body> 之前即可,上方任何一行都不需要修改,
+     整塊刪除即可還原。新增內容以 JS 注入,並自動掛上 data-zh /
+     data-en,沿用頁面既有的語言切換機制。
+     新增:應用場景 / 材質相容性 / 選型與能耗試算 / 導入流程 /
+           常見問題 / 線上詢價單 / SEO Meta + JSON-LD / 列印版面 /
+           無障礙與行動端固定 CTA
+     ═══════════════════════════════════════════════════════════════ -->
+<style>
+  /* ---------- 共用 ---------- */
+  .secmark .no{font-variant-numeric:tabular-nums;color:var(--mute)!important}
+  .up-note{font-stretch:87%;font-weight:600;font-size:10px;letter-spacing:.08em;
+    color:var(--mute);text-transform:uppercase;padding:12px 0;border-top:1px solid var(--rule);margin-top:16px}
+  .up-sub{font-size:13.5px;color:var(--mute);line-height:1.7;max-width:60ch;margin:-6px 0 22px}
 
+  /* ---------- 應用場景 ---------- */
+  .up-apps .g{display:grid;grid-template-columns:repeat(3,1fr);gap:0;
+    border-top:1px solid var(--ink);border-left:1px solid var(--rule)}
+  .up-apps .c{border-right:1px solid var(--rule);border-bottom:1px solid var(--rule);
+    padding:20px;background:var(--card);transition:background .18s}
+  .up-apps .c:hover{background:rgba(117,179,42,.05)}
+  .up-apps .c .n{font-stretch:87%;font-weight:700;font-size:10px;letter-spacing:.12em;
+    color:var(--signal);margin-bottom:8px}
+  .up-apps .c h4{font-size:17px;font-weight:700;margin-bottom:10px;letter-spacing:-.01em}
+  .up-apps .c dl{display:grid;grid-template-columns:auto 1fr;gap:0 12px;font-size:12.5px}
+  .up-apps .c dt{color:var(--mute);padding:4px 0}
+  .up-apps .c dd{padding:4px 0;font-variant-numeric:tabular-nums;text-align:right}
+  .up-apps .c dd b{color:var(--signal);font-weight:600}
+
+  /* ---------- 相容性 ---------- */
+  .up-compat table{width:100%;border-collapse:collapse;font-size:13px;background:var(--card)}
+  .up-compat th,.up-compat td{padding:12px 12px;text-align:left;border-bottom:1px solid var(--rule)}
+  .up-compat th{font-stretch:87%;font-weight:600;font-size:10px;letter-spacing:.12em;
+    color:var(--mute);text-transform:uppercase;border-bottom:1px solid var(--ink)}
+  .up-compat td.m{text-align:center;width:96px;font-weight:700;font-variant-numeric:tabular-nums}
+  .up-compat .ok{color:var(--signal)}
+  .up-compat .cond{color:var(--heat)}
+  .up-compat .no{color:var(--stop)}
+  .up-compat tbody tr:hover td{background:rgba(20,32,26,.035)}
+  .up-compat td.rem{color:var(--mute);font-size:12px;line-height:1.6}
+
+  /* ---------- 試算器 ---------- */
+  .up-calc .wrap{display:grid;grid-template-columns:1fr 1fr;gap:0;
+    border-top:1px solid var(--ink);border-left:1px solid var(--rule)}
+  .up-calc .pane{border-right:1px solid var(--rule);border-bottom:1px solid var(--rule);
+    padding:24px;background:var(--card)}
+  .up-calc h4{font-size:19px;font-weight:700;margin-bottom:4px;letter-spacing:-.015em}
+  .up-calc .eq{font-stretch:87%;font-weight:600;font-size:10.5px;letter-spacing:.06em;
+    color:var(--mute);margin-bottom:18px}
+  .up-calc .f{display:grid;grid-template-columns:1fr 132px;align-items:center;gap:10px;
+    padding:9px 0;border-bottom:1px solid var(--rule)}
+  .up-calc .f label{font-size:13px;color:var(--ink)}
+  .up-calc .f label i{font-style:normal;color:var(--mute);font-size:11px;margin-left:5px}
+  .up-calc input,.up-calc select{width:100%;padding:8px 10px;font-family:inherit;font-size:13px;
+    border:1px solid var(--rule);background:var(--paper);color:var(--ink);border-radius:2px;
+    font-variant-numeric:tabular-nums;transition:border-color .15s}
+  .up-calc input:focus,.up-calc select:focus{outline:none;border-color:var(--signal)}
+  .up-calc .out{margin-top:20px;border-top:1px solid var(--ink);padding-top:16px}
+  .up-calc .big{display:flex;align-items:baseline;gap:6px;margin-bottom:4px}
+  .up-calc .big b{font-size:44px;font-weight:800;letter-spacing:-.035em;line-height:1;
+    font-variant-numeric:tabular-nums;color:var(--ink)}
+  .up-calc .big i{font-style:normal;font-size:15px;font-weight:600;color:var(--mute)}
+  .up-calc .big em{font-style:normal;margin-left:auto;font-stretch:87%;font-weight:600;
+    font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--mute)}
+  .up-calc .r{display:flex;justify-content:space-between;gap:14px;padding:8px 0;
+    border-bottom:1px solid var(--rule);font-size:13px}
+  .up-calc .r span:first-child{color:var(--mute)}
+  .up-calc .r span:last-child{font-weight:500;font-variant-numeric:tabular-nums;text-align:right}
+  .up-calc .r span.hi{color:var(--signal);font-weight:700}
+  .up-calc .warn{margin-top:12px;padding:10px 12px;background:rgba(180,86,14,.08);
+    border-left:2px solid var(--heat);font-size:12px;line-height:1.65;color:var(--ink)}
+  .up-btn{display:inline-flex;align-items:center;gap:8px;padding:9px 16px;border:1px solid var(--ink);
+    font-stretch:87%;font-weight:600;font-size:11px;letter-spacing:.1em;text-transform:uppercase;
+    background:transparent;color:var(--ink);cursor:pointer;transition:background .15s,color .15s;border-radius:2px}
+  .up-btn:hover{background:var(--ink);color:var(--paper)}
+  .up-btn.pri{background:var(--signal);border-color:var(--signal);color:#fff}
+  .up-btn.pri:hover{background:var(--ink);border-color:var(--ink)}
+  .up-acts{display:flex;gap:8px;flex-wrap:wrap;margin-top:18px}
+
+  /* ---------- 導入流程 ---------- */
+  .up-flow .g{display:grid;grid-template-columns:repeat(5,1fr);gap:0;
+    border-top:1px solid var(--ink);border-left:1px solid var(--rule)}
+  .up-flow .s{border-right:1px solid var(--rule);border-bottom:1px solid var(--rule);
+    padding:18px;background:var(--card);position:relative}
+  .up-flow .s .n{font-stretch:87%;font-weight:800;font-size:10px;letter-spacing:.14em;
+    color:var(--signal);margin-bottom:10px}
+  .up-flow .s .t{font-size:14.5px;font-weight:700;margin-bottom:6px}
+  .up-flow .s .d{font-size:12px;color:var(--mute);line-height:1.65}
+  .up-flow .s::after{content:"";position:absolute;left:0;top:0;width:0;height:2px;
+    background:var(--brand);transition:width .8s cubic-bezier(.22,.61,.36,1)}
+  .up-flow .g.lv-seen .s::after{width:100%}
+  .up-flow .g.lv-seen .s:nth-child(2)::after{transition-delay:.12s}
+  .up-flow .g.lv-seen .s:nth-child(3)::after{transition-delay:.24s}
+  .up-flow .g.lv-seen .s:nth-child(4)::after{transition-delay:.36s}
+  .up-flow .g.lv-seen .s:nth-child(5)::after{transition-delay:.48s}
+
+  /* ---------- FAQ ---------- */
+  .up-faq .list{border-top:1px solid var(--ink);background:var(--card)}
+  .up-faq details{border-bottom:1px solid var(--rule)}
+  .up-faq summary{list-style:none;cursor:pointer;padding:16px 44px 16px 18px;position:relative;
+    font-size:14.5px;font-weight:500;transition:background .15s}
+  .up-faq summary::-webkit-details-marker{display:none}
+  .up-faq summary:hover{background:rgba(117,179,42,.05)}
+  .up-faq summary::after{content:"+";position:absolute;right:18px;top:14px;font-size:18px;
+    color:var(--signal);font-weight:400;transition:transform .2s}
+  .up-faq details[open] summary::after{content:"–"}
+  .up-faq .a{padding:0 44px 18px 18px;font-size:13.5px;line-height:1.85;color:#43514a;max-width:78ch}
+  .up-faq .a b{color:var(--signal);font-weight:600}
+  .up-faq .a .tbd{color:var(--heat);font-weight:600}
+
+  /* ---------- 詢價單 ---------- */
+  .up-rfq .wrap{display:grid;grid-template-columns:1fr 1fr;gap:0;
+    border-top:1px solid var(--ink);border-left:1px solid var(--rule)}
+  .up-rfq .pane{border-right:1px solid var(--rule);border-bottom:1px solid var(--rule);
+    padding:24px;background:var(--card)}
+  .up-rfq .f{display:grid;grid-template-columns:110px 1fr;align-items:center;gap:10px;
+    padding:8px 0;border-bottom:1px solid var(--rule)}
+  .up-rfq .f label{font-size:12.5px;color:var(--mute)}
+  .up-rfq input,.up-rfq textarea{width:100%;padding:8px 10px;font-family:inherit;font-size:13px;
+    border:1px solid var(--rule);background:var(--paper);color:var(--ink);border-radius:2px}
+  .up-rfq input:focus,.up-rfq textarea:focus{outline:none;border-color:var(--signal)}
+  .up-rfq textarea{min-height:64px;resize:vertical;line-height:1.6}
+  .up-rfq #up-sheet{width:100%;min-height:330px;font-family:inherit;font-size:12.5px;line-height:1.75;
+    padding:14px;border:1px solid var(--rule);background:var(--paper);color:var(--ink);
+    border-radius:2px;resize:vertical;white-space:pre}
+  .up-rfq .ok{margin-top:10px;font-size:12px;color:var(--signal);font-weight:600;opacity:0;transition:opacity .25s}
+  .up-rfq .ok.on{opacity:1}
+
+  /* ---------- 浮動元件 ---------- */
+  #up-top{position:fixed;right:18px;bottom:18px;z-index:90;width:40px;height:40px;
+    border:1px solid var(--rule);background:rgba(255,255,255,.94);color:var(--ink);
+    display:flex;align-items:center;justify-content:center;border-radius:2px;cursor:pointer;
+    opacity:0;pointer-events:none;transition:opacity .25s,background .15s;font-size:15px}
+  #up-top.on{opacity:1;pointer-events:auto}
+  #up-top:hover{background:var(--ink);color:var(--paper)}
+  #up-bar{position:fixed;left:0;right:0;bottom:0;z-index:95;display:none;gap:1px;
+    background:var(--rule);border-top:1px solid var(--rule)}
+  #up-bar a{flex:1;padding:13px 8px;text-align:center;background:rgba(255,255,255,.97);
+    font-stretch:87%;font-weight:600;font-size:11px;letter-spacing:.08em;text-transform:uppercase}
+  #up-bar a.pri{background:var(--signal);color:#fff}
+  .up-skip{position:absolute;left:-9999px;top:0;z-index:200;background:var(--ink);color:var(--paper);
+    padding:10px 16px;font-size:12px}
+  .up-skip:focus{left:8px;top:8px}
+
+  @media (max-width:900px){
+    .up-apps .g{grid-template-columns:1fr}
+    .up-calc .wrap,.up-rfq .wrap{grid-template-columns:1fr}
+    .up-flow .g{grid-template-columns:1fr 1fr}
+    .up-compat td.rem{display:none}
+    .up-compat th.rem{display:none}
+    #up-bar{display:flex}
+    main{padding-bottom:52px}
+    #up-top{bottom:60px}
+    .up-calc .big b{font-size:34px}
+  }
+
+  /* ---------- 列印 ---------- */
+  @media print{
+    header,nav.top,.langtog,.burger,.demo3d,#up-bar,#up-top,.up-acts,footer .fine{display:none!important}
+    main{padding-top:0}
+    body{background:#fff;font-size:10.5pt}
+    section{padding:0;max-width:none}
+    .prod .item,.tech .grid,.specs .col,.up-apps .c,.up-calc .pane{break-inside:avoid;
+      opacity:1!important;transform:none!important}
+    .up-faq details{break-inside:avoid}
+    .up-faq .a{display:block!important}
+    a[href^="http"]::after{content:" (" attr(href) ")";font-size:8pt;color:#666}
+  }
+</style>
+<script>
+(function(){
+"use strict";
+
+/* ─────────── 可調設定 ─────────── */
+var CFG = {
+  EMAIL      : 'service@rewatt.com.tw',
+  PRICE      : 3.5,     /* 電價 NT$/kWh(工業用概估,可於頁面調整) */
+  EF         : 0.494,   /* 電力排放係數 kgCO2e/kWh */
+  BASE_EFF   : 85,      /* 比較基準:一般加熱方式效率 % */
+  OUR_EFF    : 98,      /* 本廠公開資料 % */
+  PATCH_HF   : true     /* 修正化學液型文案中的 HF 相容性敘述(見說明) */
+};
+
+function safe(f){ try{ f(); }catch(e){ if(window.console) console.error('[upgrade-pack]',e); } }
+function h(s){ var t=document.createElement('template'); t.innerHTML=s.trim(); return t.content.firstElementChild; }
+function $(s,r){ return (r||document).querySelector(s); }
+function lang(){ return document.documentElement.lang==='en' ? 'en' : 'zh'; }
+function tx(zh,en){ return lang()==='en'?en:zh; }
+function num(id){ var e=document.getElementById(id); return e?parseFloat(e.value):NaN; }
+function fmt(v,d){ if(!isFinite(v)) return '—';
+  return v.toLocaleString('en-US',{minimumFractionDigits:d===undefined?1:d,maximumFractionDigits:d===undefined?1:d}); }
+
+/* 區段標頭,沿用頁面既有 .secmark 結構 */
+function secmark(no,zh,en,mzh,men){
+  return '<div class="secmark"><span class="no">'+no+'</span>'+
+         '<span data-zh="'+zh+'" data-en="'+en+'">'+zh+'</span><span class="rule"></span>'+
+         '<span class="mono" data-zh="'+mzh+'" data-en="'+men+'">'+mzh+'</span></div>';
+}
+
+/* ═══════════ 1. 應用場景 ═══════════ */
+var APPS = [
+  ['A1','晶圓清洗 SC1 / SC2','Wafer Clean SC1 / SC2','稀氨水+雙氧水 / 稀鹽酸+雙氧水','Dilute NH₄OH+H₂O₂ / HCl+H₂O₂','40 – 75 °C','化學液型 3–4 kW','Chemical 3–4 kW'],
+  ['A2','濕式蝕刻 / 剝離','Wet Etch / Strip','依配方(需個案確認)','Recipe dependent (case by case)','依製程','化學液型 3–4 kW','Chemical 3–4 kW'],
+  ['A3','顯影後沖洗','Post-Develop Rinse','超純水 / DI','UPW / DI','30 – 60 °C','DI-10 / DI-20','DI-10 / DI-20'],
+  ['A4','CMP 後清洗','Post-CMP Clean','超純水 / DI','UPW / DI','40 – 70 °C','DI-20 / DI-30','DI-20 / DI-30'],
+  ['A5','既有機台夾層改造','Retrofit Inside Existing Tool','超純水 / DI','UPW / DI','25 – 80 °C','單顆模組 35 mm 串/併聯','35 mm module, series/parallel'],
+  ['A6','高溫磷酸槽','High-Temp H₃PO₄ Bath','磷酸','Phosphoric acid','150 – 165 °C','石英磷酸槽產品線(非 inline)','Quartz bath line (not inline)']
+];
+function appsHTML(){
+  var cards = APPS.map(function(a){
+    return '<div class="c"><div class="n">'+a[0]+'</div>'+
+      '<h4 data-zh="'+a[1]+'" data-en="'+a[2]+'">'+a[1]+'</h4><dl>'+
+      '<dt data-zh="流體" data-en="Fluid">流體</dt><dd data-zh="'+a[3]+'" data-en="'+a[4]+'">'+a[3]+'</dd>'+
+      '<dt data-zh="常見溫度" data-en="Typical temp">常見溫度</dt><dd>'+a[5]+'</dd>'+
+      '<dt data-zh="建議機型" data-en="Suggested">建議機型</dt><dd><b data-zh="'+a[6]+'" data-en="'+a[7]+'">'+a[6]+'</b></dd>'+
+      '</dl></div>';
+  }).join('');
+  return '<section class="up-apps" id="apps">'+
+    secmark('06','應用場景','Applications','依流體與溫度對應','Matched by fluid and temperature')+
+    '<p class="up-sub" data-zh="以流體種類與目標溫度對應機型。溫度為該製程的常見區間,實際設定值以客戶製程規範為準;藥液相容性請一併參照下方材質表。" data-en="Model selection is driven by fluid type and target temperature. Ranges below are typical for each process, not specifications — actual setpoints follow the customer&#39;s process. Check the material table below for chemical compatibility.">以流體種類與目標溫度對應機型。溫度為該製程的常見區間,實際設定值以客戶製程規範為準;藥液相容性請一併參照下方材質表。</p>'+
+    '<div class="g">'+cards+'</div>'+
+    '<div class="up-note" data-zh="以上為應用對應建議,非保證規格 — 請以選型試算與正式報價為準" data-en="Application guidance, not guaranteed specification — refer to sizing and formal quotation">以上為應用對應建議,非保證規格 — 請以選型試算與正式報價為準</div>'+
+  '</section>';
+}
+
+/* ═══════════ 2. 材質相容性 ═══════════ */
+var COMPAT = [
+  ['超純水 / DI','UPW / DI','ok','○','ok','○','標準機型直接適用','Standard models apply directly'],
+  ['SC1(稀 NH₄OH + H₂O₂)','SC1 (dilute NH₄OH + H₂O₂)','ok','○','ok','○','常見清洗配方,標準機型','Common clean recipe, standard models'],
+  ['SC2(稀 HCl + H₂O₂)','SC2 (dilute HCl + H₂O₂)','ok','○','ok','○','常見清洗配方,標準機型','Common clean recipe, standard models'],
+  ['稀硫酸 / 硫酸雙氧水','Dilute H₂SO₄ / SPM','ok','○','ok','○','高溫應用需確認墊片與接口等級','High temp: confirm gasket and port rating'],
+  ['IPA','IPA','ok','○','ok','○','材質相容,但屬易燃性液體,需防爆與通風評估','Material compatible, but flammable — requires area classification review'],
+  ['熱鹼 KOH / TMAH','Hot KOH / TMAH','cond','△','ok','○','高溫鹼液會緩慢侵蝕石英,需依濃度與溫度評估壽命','Hot alkali slowly attacks quartz — life must be evaluated by concentration and temperature'],
+  ['含氟藥液 HF / BOE','Fluorine-bearing HF / BOE','no','✗','ok','○','氫氟酸會侵蝕石英(SiO₂),不建議以石英流道加熱','HF attacks quartz (SiO₂) — a quartz flow path is not recommended']
+];
+function compatHTML(){
+  var rows = COMPAT.map(function(c){
+    return '<tr><td data-zh="'+c[0]+'" data-en="'+c[1]+'">'+c[0]+'</td>'+
+      '<td class="m '+c[2]+'">'+c[3]+'</td><td class="m '+c[4]+'">'+c[5]+'</td>'+
+      '<td class="rem" data-zh="'+c[6]+'" data-en="'+c[7]+'">'+c[6]+'</td></tr>';
+  }).join('');
+  return '<section class="up-compat" id="compat">'+
+    secmark('06.01','濕式路徑材質相容性','Wetted-Path Compatibility','石英 · PTFE / PFA','Quartz · PTFE / PFA')+
+    '<p class="up-sub" data-zh="流體只接觸石英與 PTFE / PFA,因此相容性由這兩種材質決定。下表為材質層級的判斷,實際仍受濃度、溫度與停留時間影響,建議個案確認。" data-en="The fluid contacts only quartz and PTFE / PFA, so compatibility is decided by those two materials. The table is a material-level judgement; concentration, temperature and residence time still govern the real case.">流體只接觸石英與 PTFE / PFA,因此相容性由這兩種材質決定。下表為材質層級的判斷,實際仍受濃度、溫度與停留時間影響,建議個案確認。</p>'+
+    '<table><thead><tr>'+
+      '<th data-zh="流體" data-en="Fluid">流體</th>'+
+      '<th class="m" data-zh="石英流道" data-en="Quartz bore">石英流道</th>'+
+      '<th class="m" data-zh="PTFE / PFA 接口" data-en="PTFE / PFA ports">PTFE / PFA 接口</th>'+
+      '<th class="rem" data-zh="備註" data-en="Notes">備註</th>'+
+    '</tr></thead><tbody>'+rows+'</tbody></table>'+
+    '<div class="up-note" data-zh="○ 適用 · △ 條件性適用,需評估 · ✗ 不建議 — 相容性判斷不等於製程保證" data-en="○ suitable · △ conditional, evaluation required · ✗ not recommended — compatibility is not a process guarantee">○ 適用 · △ 條件性適用,需評估 · ✗ 不建議 — 相容性判斷不等於製程保證</div>'+
+  '</section>';
+}
+
+/* ═══════════ 3. 選型與能耗試算 ═══════════ */
+/* 流體物性為概估值(可依實際配方調整):[cp kJ/kg·K, ρ kg/L] */
+var FLUID = {
+  di  : {cp:4.18, rho:1.00, zh:'超純水 / DI',       en:'UPW / DI',            line:'di'},
+  sc1 : {cp:3.95, rho:1.01, zh:'SC1(稀氨水系)',    en:'SC1 (dilute NH₄OH)',  line:'chem'},
+  sc2 : {cp:3.85, rho:1.02, zh:'SC2(稀鹽酸系)',    en:'SC2 (dilute HCl)',    line:'chem'},
+  h2so4:{cp:3.40, rho:1.10, zh:'稀硫酸系',          en:'Dilute H₂SO₄',        line:'chem'}
+};
+function calcHTML(){
+  var opts = Object.keys(FLUID).map(function(k){
+    return '<option value="'+k+'">'+FLUID[k].zh+'</option>';
+  }).join('');
+  return '<section class="up-calc" id="sizing">'+
+    secmark('07','選型與能耗試算','Sizing &amp; Energy','輸入製程條件,即時估算','Enter process conditions')+
+    '<p class="up-sub" data-zh="輸入流量與溫升,即可估出所需熱功率與建議機型;右側同步估算相對於一般加熱方式的年電費與碳排差距。所有假設值都列在畫面上,可直接修改。" data-en="Enter flow and temperature rise to estimate required power and a suggested model; the right panel estimates the annual energy and carbon gap against a conventional heater. Every assumption is on screen and editable.">輸入流量與溫升,即可估出所需熱功率與建議機型;右側同步估算相對於一般加熱方式的年電費與碳排差距。所有假設值都列在畫面上,可直接修改。</p>'+
+    '<div class="wrap">'+
+      /* ---- 功率試算 ---- */
+      '<div class="pane">'+
+        '<h4 data-zh="加熱功率試算" data-en="Heating Power">加熱功率試算</h4>'+
+        '<div class="eq">P = Q ÷ 60 × ρ × cp × ΔT ÷ η</div>'+
+        '<div class="f"><label data-zh="流體" data-en="Fluid">流體</label><select id="up-fluid">'+opts+'</select></div>'+
+        '<div class="f"><label><span data-zh="流量" data-en="Flow rate">流量</span><i>L/min</i></label><input id="up-q" type="number" min="0.1" step="0.5" value="10"></div>'+
+        '<div class="f"><label><span data-zh="入口溫度" data-en="Inlet temp">入口溫度</span><i>°C</i></label><input id="up-ti" type="number" step="1" value="23"></div>'+
+        '<div class="f"><label><span data-zh="目標出口溫度" data-en="Target outlet">目標出口溫度</span><i>°C</i></label><input id="up-to" type="number" step="1" value="65"></div>'+
+        '<div class="f"><label><span data-zh="轉換效率" data-en="Efficiency">轉換效率</span><i>%</i></label><input id="up-eff" type="number" min="50" max="100" step="1" value="'+CFG.OUR_EFF+'"></div>'+
+        '<div class="out">'+
+          '<div class="big"><b id="up-kw">—</b><i>kW</i><em data-zh="所需輸入電功率" data-en="Input power required">所需輸入電功率</em></div>'+
+          '<div class="r"><span data-zh="有效熱負載" data-en="Useful heat load">有效熱負載</span><span id="up-heat">—</span></div>'+
+          '<div class="r"><span data-zh="溫升 ΔT" data-en="Temperature rise ΔT">溫升 ΔT</span><span id="up-dt">—</span></div>'+
+          '<div class="r"><span data-zh="建議機型" data-en="Suggested model">建議機型</span><span class="hi" id="up-model">—</span></div>'+
+          '<div class="r"><span data-zh="配置" data-en="Configuration">配置</span><span id="up-conf">—</span></div>'+
+          '<div class="warn" id="up-warn" style="display:none"></div>'+
+        '</div>'+
+      '</div>'+
+      /* ---- 能耗試算 ---- */
+      '<div class="pane">'+
+        '<h4 data-zh="年電費與碳排差距" data-en="Annual Energy &amp; Carbon">年電費與碳排差距</h4>'+
+        '<div class="eq" data-zh="以左側熱負載為基準,比較不同轉換效率的輸入電量" data-en="Same heat load, compared at different conversion efficiencies">以左側熱負載為基準,比較不同轉換效率的輸入電量</div>'+
+        '<div class="f"><label><span data-zh="每日運轉" data-en="Daily operation">每日運轉</span><i>h</i></label><input id="up-hrs" type="number" min="0" max="24" step="1" value="16"></div>'+
+        '<div class="f"><label><span data-zh="年運轉天數" data-en="Days per year">年運轉天數</span><i>d</i></label><input id="up-days" type="number" min="1" max="365" step="1" value="300"></div>'+
+        '<div class="f"><label><span data-zh="電價" data-en="Electricity price">電價</span><i>NT$/kWh</i></label><input id="up-price" type="number" min="0" step="0.1" value="'+CFG.PRICE+'"></div>'+
+        '<div class="f"><label><span data-zh="比較基準效率" data-en="Baseline efficiency">比較基準效率</span><i>%</i></label><input id="up-base" type="number" min="30" max="100" step="1" value="'+CFG.BASE_EFF+'"></div>'+
+        '<div class="f"><label><span data-zh="電力排放係數" data-en="Grid emission factor">電力排放係數</span><i>kg/kWh</i></label><input id="up-ef" type="number" min="0" step="0.001" value="'+CFG.EF+'"></div>'+
+        '<div class="out">'+
+          '<div class="big"><b id="up-save">—</b><i>NT$</i><em data-zh="年電費差距" data-en="Annual cost gap">年電費差距</em></div>'+
+          '<div class="r"><span data-zh="本機年耗電" data-en="This unit, annual">本機年耗電</span><span id="up-e1">—</span></div>'+
+          '<div class="r"><span data-zh="基準年耗電" data-en="Baseline, annual">基準年耗電</span><span id="up-e2">—</span></div>'+
+          '<div class="r"><span data-zh="年減碳量" data-en="Annual CO₂e avoided">年減碳量</span><span class="hi" id="up-co2">—</span></div>'+
+        '</div>'+
+        '<div class="up-note" data-zh="試算為工程估算,不含管線散熱、待機與控制損失;效率 98% 為公開資料,基準效率與電價、排放係數皆可自行調整。" data-en="Engineering estimate only — excludes line losses, standby and control losses. The 98% figure is published data; baseline efficiency, tariff and emission factor are all user-adjustable.">試算為工程估算,不含管線散熱、待機與控制損失;效率 98% 為公開資料,基準效率與電價、排放係數皆可自行調整。</div>'+
+      '</div>'+
+    '</div>'+
+    '<div class="up-acts">'+
+      '<button class="up-btn pri" id="up-toRfq"><span data-zh="帶入詢價單" data-en="Send to RFQ">帶入詢價單</span></button>'+
+      '<button class="up-btn" id="up-print"><span data-zh="列印 / 存成 PDF" data-en="Print / Save as PDF">列印 / 存成 PDF</span></button>'+
+    '</div>'+
+  '</section>';
+}
+
+var LAST = null;   /* 最近一次試算結果,供詢價單帶入 */
+
+function recalc(){
+  var f = FLUID[($('#up-fluid')||{}).value] || FLUID.di;
+  var q=num('up-q'), ti=num('up-ti'), to=num('up-to'), eff=num('up-eff')/100;
+  var warn = document.getElementById('up-warn');
+  if(!isFinite(q)||!isFinite(ti)||!isFinite(to)||!isFinite(eff)||q<=0||eff<=0){ return; }
+  var dT = to-ti;
+  var heat = q/60*f.rho*f.cp*dT;          /* kW 熱負載 */
+  var kw   = heat/eff;                     /* kW 輸入電功率 */
+
+  /* 機型建議 */
+  var model, conf, msg='';
+  if(f.line==='di'){
+    var tiers=[10,20,30], pick=null;
+    for(var i=0;i<tiers.length;i++){ if(kw<=tiers[i]){ pick=tiers[i]; break; } }
+    if(pick){ model='DI-'+pick; conf=tx('單機','Single unit'); }
+    else{ var n=Math.ceil(kw/30); model='DI-30 × '+n; conf=tx(n+' 台串聯(ΔT 疊加)', n+' units in series (ΔT adds up)'); }
+    if(kw<=10) msg = tx('若同時需要更大流量,可改以 10 kW 單顆模組併聯,厚度僅 35 mm,適合機台夾層改造。',
+                        'For higher flow at the same rise, 10 kW modules in parallel (35 mm thick) fit inside an existing tool.');
+  }else{
+    if(kw<=3){ model=tx('化學液型 3 kW','Chemical 3 kW'); conf=tx('單機','Single unit'); }
+    else if(kw<=4){ model=tx('化學液型 4 kW','Chemical 4 kW'); conf=tx('單機','Single unit'); }
+    else{ var m=Math.ceil(kw/4); model=tx('化學液型 4 kW × '+m,'Chemical 4 kW × '+m);
+          conf=tx(m+' 台串聯(ΔT 疊加)', m+' units in series (ΔT adds up)');
+          msg = tx('單機額定為 3–4 kW,超過需串聯或改採其他機型,建議與工程窗口確認實際配置。',
+                   'Single-unit rating is 3–4 kW; above that, units go in series or another model applies — confirm the configuration with engineering.'); }
+  }
+  if(dT<=0) msg = tx('目標出口溫度需高於入口溫度。','Target outlet temperature must be above the inlet.');
+  if(to>85 && f.line==='di') msg = tx('純水機型公開溫度範圍為 30–85 °C,超出區間請個案確認。',
+                                      'Published DI range is 30–85 °C — above that, please confirm case by case.');
+
+  document.getElementById('up-kw').textContent    = dT>0?fmt(kw,2):'—';
+  document.getElementById('up-heat').textContent  = dT>0?fmt(heat,2)+' kW':'—';
+  document.getElementById('up-dt').textContent    = fmt(dT,1)+' K';
+  document.getElementById('up-model').textContent = dT>0?model:'—';
+  document.getElementById('up-conf').textContent  = dT>0?conf:'—';
+  if(warn){ warn.style.display = msg?'block':'none'; warn.textContent = msg; }
+
+  /* 能耗 */
+  var hrs=num('up-hrs'), days=num('up-days'), price=num('up-price'),
+      base=num('up-base')/100, ef=num('up-ef');
+  if(isFinite(hrs)&&isFinite(days)&&isFinite(base)&&base>0&&dT>0){
+    var H = hrs*days;
+    var e1 = heat/eff*H, e2 = heat/base*H;      /* kWh */
+    var dE = e2-e1;
+    document.getElementById('up-e1').textContent  = fmt(e1,0)+' kWh';
+    document.getElementById('up-e2').textContent  = fmt(e2,0)+' kWh';
+    document.getElementById('up-save').textContent= fmt(dE*(isFinite(price)?price:0),0);
+    document.getElementById('up-co2').textContent = fmt(dE*(isFinite(ef)?ef:0),0)+' kg CO₂e';
+  }
+
+  LAST = {fluid:lang()==='en'?f.en:f.zh, q:q, ti:ti, to:to, dT:dT, heat:heat, kw:kw, model:model, conf:conf};
+}
+
+/* ═══════════ 4. 導入流程 ═══════════ */
+var FLOW = [
+  ['01','需求確認','Requirements','流體、流量、溫升、電壓、安裝空間與訊號介面','Fluid, flow, rise, voltage, space and signal interface'],
+  ['02','選型與提案','Sizing &amp; Proposal','依製程條件提出機型、配置與界面草案','Model, configuration and interface draft from the process data'],
+  ['03','正式報價','Quotation','含正式圖面、規格書與交期','With formal drawing, datasheet and lead time'],
+  ['04','樣機與現場試機','Sample &amp; On-site Trial','安裝、參數調校、與客戶控制系統整合驗證','Install, tune, and verify integration with the customer control system'],
+  ['05','量產供貨','Production Supply','備品、保養與後續機種擴充','Spares, maintenance and follow-on models']
+];
+function flowHTML(){
+  var s = FLOW.map(function(f){
+    return '<div class="s"><div class="n">'+f[0]+'</div>'+
+      '<div class="t" data-zh="'+f[1]+'" data-en="'+f[2]+'">'+f[1]+'</div>'+
+      '<div class="d" data-zh="'+f[3]+'" data-en="'+f[4]+'">'+f[3]+'</div></div>';
+  }).join('');
+  return '<section class="up-flow" id="flow">'+
+    secmark('08','導入流程','Engagement Process','需求 → 試機 → 量產','Requirement → trial → production')+
+    '<div class="g">'+s+'</div>'+
+    '<div class="up-note" data-zh="各階段時程依機種、備料與客戶端排程而異,於報價階段確認" data-en="Stage timing varies by model, material lead time and customer schedule — confirmed at quotation">各階段時程依機種、備料與客戶端排程而異,於報價階段確認</div>'+
+  '</section>';
+}
+
+/* ═══════════ 5. FAQ ═══════════ */
+var FAQ = [
+  ['流體會接觸到金屬嗎?','Does the fluid ever contact metal?',
+   '不會。發熱的鍍膜層鍍在石英管<b>外壁</b>,金電極環也在石英外側,流體只接觸石英與端部的 PTFE / PFA 接口。這是結構決定的,不依賴塗層或密封件維持。',
+   'No. The heating film is deposited on the <b>outer</b> wall of the quartz tube and the gold electrode rings also sit outside it. The fluid contacts only quartz and the PTFE / PFA end ports — a consequence of the structure, not of a coating or seal.'],
+  ['濕式路徑上真的沒有 O-ring?','Are there really no O-rings on the wetted path?',
+   '沒有。石英管與兩端法蘭為一體成型,由端蓋直接迫緊石英法蘭密封,濕式路徑上不設 O-ring。業界常見的彈性體微粒與溶出來源因此不存在。',
+   'None. The quartz tube and its end flanges are one piece, sealed by the end caps clamping the flange directly. The elastomer particle and extractable source common in the industry is therefore absent.'],
+  ['乾燒怎麼防護?','How is dry-fire protected?',
+   '外掛式液位感測器偵測無液狀態,與石英基板過溫(200 °C)、元件過溫(250 °C)、洩漏(24 Vdc,可磁簧測試)共四路獨立訊號。<b>加熱器輸出訊號,由外部控制系統斷電</b>,本機不自行切斷動力。',
+   'An external level sensor detects the dry condition, alongside quartz-substrate over-temp (200 °C), element over-temp (250 °C) and leak detection (24 Vdc, reed-testable) — four independent channels. <b>The heater signals; the external controller cuts power</b> — the unit does not switch its own supply.'],
+  ['最低流量、出口溫度上限是多少?','What are the minimum flow and maximum outlet temperature?',
+   '這兩項<span class="tbd">尚未於正式規格書確認</span>,頁面規格總表中以「—」標示。純水機型公開溫度範圍為 30–85 °C,模組為 25–80 °C;化學液型請於詢價時提供製程條件,由工程窗口回覆。',
+   'Both are <span class="tbd">pending the formal datasheet</span> and shown as “—” in the spec table. Published ranges are 30–85 °C for DI models and 25–80 °C for the module; for chemical models, send your process conditions with the enquiry.'],
+  ['控制訊號怎麼跟機台整合?','How does it integrate with our tool controller?',
+   '控制箱前面板集中 HMI、溫控器、選擇開關、指示燈、緊急停止與流量計,內部為 MCCB、電力控制模組(SCR / SSR 相位)、繼電器與端子台,動力與訊號分離。實際對外介面型式(乾接點 / 類比 / 通訊)<span class="tbd">依專案定義</span>,可依客戶端規格配合。',
+   'The front panel carries HMI, temperature controller, selector, indicator, E-stop and flow meter; inside are the MCCB, power control module (SCR / SSR phase), relays and terminal blocks with power and signal separated. The exact external interface (dry contact / analog / fieldbus) is <span class="tbd">defined per project</span> and built to the customer specification.'],
+  ['含氟藥液(HF / BOE)可以用嗎?','Can it run HF or BOE?',
+   '不建議。氫氟酸會侵蝕石英(SiO₂),石英流道並不適合含氟藥液;熱鹼(KOH / TMAH)也會緩慢侵蝕石英,需依濃度與溫度評估壽命。請參照上方材質相容性表,並於詢價時註明實際配方。',
+   'Not recommended. HF attacks quartz (SiO₂), so a quartz flow path is unsuitable for fluorine-bearing chemistry; hot alkali (KOH / TMAH) also attacks quartz slowly and needs a life evaluation. See the compatibility table above and state your actual recipe when enquiring.'],
+  ['壽命與衰減有數據嗎?','Is there lifetime data?',
+   '公開資料為薄膜實驗室試驗 20,000 小時後電阻衰減約 5%。實際壽命受製程溫度、循環次數與流體條件影響,建議以現場試機累積實機數據。',
+   'Published data: about 5% resistance decay after a 20,000-hour laboratory film test. Field life depends on process temperature, cycling and fluid conditions — on-site trial data is the meaningful reference.'],
+  ['交期與試機怎麼安排?','What about lead time and trials?',
+   '依機種與備料而異,於報價階段確認。標準流程為需求確認 → 選型提案 → 正式報價 → 樣機與現場試機 → 量產供貨,詳見上方導入流程。',
+   'Varies by model and material lead time, confirmed at quotation. The standard path is requirements → sizing proposal → quotation → sample and on-site trial → production supply, as shown in the process above.']
+];
+function faqHTML(){
+  var items = FAQ.map(function(f){
+    return '<details><summary><span data-zh="'+f[0]+'" data-en="'+f[1]+'">'+f[0]+'</span></summary>'+
+      '<div class="a" data-zh="'+f[2].replace(/"/g,'&quot;')+'" data-en="'+f[3].replace(/"/g,'&quot;')+'">'+f[2]+'</div></details>';
+  }).join('');
+  return '<section class="up-faq" id="faq">'+
+    secmark('09','常見問題','FAQ','工程端最常問的八題','The eight engineers ask most')+
+    '<div class="list">'+items+'</div>'+
+  '</section>';
+}
+
+/* ═══════════ 6. 詢價單 ═══════════ */
+function rfqHTML(){
+  function fld(id,zh,en,ph){ return '<div class="f"><label data-zh="'+zh+'" data-en="'+en+'">'+zh+'</label>'+
+    '<input id="'+id+'" type="text" placeholder="'+(ph||'')+'"></div>'; }
+  return '<section class="up-rfq" id="rfq">'+
+    secmark('10','線上詢價 / 選型單','Enquiry Sheet','一鍵產生製程條件表','Generates a process condition sheet')+
+    '<p class="up-sub" data-zh="填入聯絡方式,系統會把上方試算的製程條件一併整理成一份詢價單,可直接複製或以 Email 寄出。資料不會經過第三方伺服器。" data-en="Fill in your contact details and the sheet is assembled together with the process conditions from the sizing tool above — copy it or send it by email. Nothing is posted to a third-party server.">填入聯絡方式,系統會把上方試算的製程條件一併整理成一份詢價單,可直接複製或以 Email 寄出。資料不會經過第三方伺服器。</p>'+
+    '<div class="wrap">'+
+      '<div class="pane">'+
+        fld('up-co','公司名稱','Company')+
+        fld('up-name','聯絡人','Contact')+
+        fld('up-mail','Email','Email')+
+        fld('up-tel','電話','Phone')+
+        fld('up-volt','電源規格','Power supply','220 V / 380 V')+
+        fld('up-qty','需求數量','Quantity')+
+        fld('up-date','希望交期','Target date')+
+        '<div class="f"><label data-zh="其他需求" data-en="Notes">其他需求</label><textarea id="up-memo"></textarea></div>'+
+        '<div class="up-acts">'+
+          '<button class="up-btn pri" id="up-gen"><span data-zh="產生詢價單" data-en="Generate sheet">產生詢價單</span></button>'+
+          '<button class="up-btn" id="up-copy"><span data-zh="複製" data-en="Copy">複製</span></button>'+
+          '<button class="up-btn" id="up-mailto"><span data-zh="以 Email 寄出" data-en="Send by email">以 Email 寄出</span></button>'+
+        '</div>'+
+        '<div class="ok" id="up-ok" data-zh="已複製到剪貼簿" data-en="Copied to clipboard">已複製到剪貼簿</div>'+
+      '</div>'+
+      '<div class="pane">'+
+        '<textarea id="up-sheet" spellcheck="false"></textarea>'+
+        '<div class="up-note" data-zh="送出前請確認製程條件正確 · 回覆窗口 service@rewatt.com.tw" data-en="Please check the process conditions before sending · service@rewatt.com.tw">送出前請確認製程條件正確 · 回覆窗口 service@rewatt.com.tw</div>'+
+      '</div>'+
+    '</div>'+
+  '</section>';
+}
+
+function buildSheet(){
+  var g=function(id){ var e=document.getElementById(id); return e&&e.value?e.value.trim():'—'; };
+  var en = lang()==='en';
+  var L = en
+    ? ['REWATT HEATINGTEC — ENQUIRY / SIZING SHEET','Company','Contact','Email','Phone','Power supply','Quantity','Target date','Notes',
+       'PROCESS CONDITIONS','Fluid','Flow rate','Inlet temp','Target outlet','Temperature rise','Useful heat load','Input power required','Suggested model','Configuration',
+       'Estimated with the on-site sizing tool; formal drawing and datasheet take precedence.']
+    : ['REWATT HEATINGTEC — 詢價 / 選型單','公司名稱','聯絡人','Email','電話','電源規格','需求數量','希望交期','其他需求',
+       '製程條件','流體','流量','入口溫度','目標出口溫度','溫升 ΔT','有效熱負載','所需輸入電功率','建議機型','配置',
+       '本表由網站選型工具估算,實際以正式圖面與規格書為準。'];
+  var p = LAST || {};
+  var pad=function(s){ return (s+'                ').slice(0,16); };
+  var out=[];
+  out.push(L[0]); out.push('='.repeat(46)); out.push('');
+  out.push(pad(L[1])+': '+g('up-co'));
+  out.push(pad(L[2])+': '+g('up-name'));
+  out.push(pad(L[3])+': '+g('up-mail'));
+  out.push(pad(L[4])+': '+g('up-tel'));
+  out.push(pad(L[5])+': '+g('up-volt'));
+  out.push(pad(L[6])+': '+g('up-qty'));
+  out.push(pad(L[7])+': '+g('up-date'));
+  out.push('');
+  out.push('— '+L[9]+' —');
+  out.push(pad(L[10])+': '+(p.fluid||'—'));
+  out.push(pad(L[11])+': '+(isFinite(p.q)?p.q+' L/min':'—'));
+  out.push(pad(L[12])+': '+(isFinite(p.ti)?p.ti+' °C':'—'));
+  out.push(pad(L[13])+': '+(isFinite(p.to)?p.to+' °C':'—'));
+  out.push(pad(L[14])+': '+(isFinite(p.dT)?fmt(p.dT,1)+' K':'—'));
+  out.push(pad(L[15])+': '+(isFinite(p.heat)?fmt(p.heat,2)+' kW':'—'));
+  out.push(pad(L[16])+': '+(isFinite(p.kw)?fmt(p.kw,2)+' kW':'—'));
+  out.push(pad(L[17])+': '+(p.model||'—'));
+  out.push(pad(L[18])+': '+(p.conf||'—'));
+  out.push('');
+  out.push('— '+L[8]+' —');
+  out.push(g('up-memo'));
+  out.push('');
+  out.push(L[19]);
+  return out.join('\n');
+}
+
+/* ═══════════ 注入 ═══════════ */
+safe(function(){
+  var main = document.querySelector('main'); if(!main) return;
+  var products=document.getElementById('products'), specs=document.getElementById('specs'),
+      contact=document.getElementById('contact');
+  function after(ref,html){ var n=h(html); if(ref&&ref.parentNode) ref.parentNode.insertBefore(n,ref.nextSibling); else main.appendChild(n); return n; }
+  function before(ref,html){ var n=h(html); if(ref&&ref.parentNode) ref.parentNode.insertBefore(n,ref); else main.appendChild(n); return n; }
+
+  var aps = after(products, appsHTML());
+  after(aps, compatHTML());
+  after(specs, calcHTML());
+  before(contact, flowHTML());
+  before(contact, faqHTML());
+  before(contact, rfqHTML());
+});
+
+/* 導覽列補上新錨點 */
+safe(function(){
+  var nav=document.querySelector('nav.top'); if(!nav) return;
+  function link(href,zh,en,beforeSel){
+    var a=document.createElement('a'); a.href=href;
+    a.setAttribute('data-zh',zh); a.setAttribute('data-en',en); a.textContent=zh;
+    var ref=beforeSel?nav.querySelector('a[href="'+beforeSel+'"]'):null;
+    if(ref) nav.insertBefore(a,ref); else nav.appendChild(a);
+  }
+  link('#apps','應用','Apps','#tech');
+  link('#sizing','選型','Sizing','#control');
+  link('#faq','FAQ','FAQ','#contact');
+  /* 自行處理捲動高亮(既有腳本只認得原本五個連結) */
+  var ids=['products','apps','compat','tech','specs','sizing','control','flow','faq','rfq','contact'];
+  var tick=false;
+  addEventListener('scroll',function(){
+    if(tick) return; tick=true;
+    requestAnimationFrame(function(){
+      var y=scrollY+120, active=null;
+      ids.forEach(function(id){ var s=document.getElementById(id); if(s&&s.offsetTop<=y) active=id; });
+      nav.querySelectorAll('a').forEach(function(a){
+        a.classList.toggle('on', a.getAttribute('href')==='#'+active);
+        if(a.getAttribute('href')==='#'+active) a.setAttribute('aria-current','true');
+        else a.removeAttribute('aria-current');
+      });
+      tick=false;
+    });
+  },{passive:true});
+});
+
+/* 事件綁定 */
+safe(function(){
+  ['up-fluid','up-q','up-ti','up-to','up-eff','up-hrs','up-days','up-price','up-base','up-ef']
+    .forEach(function(id){
+      var e=document.getElementById(id); if(!e) return;
+      e.addEventListener('input',recalc); e.addEventListener('change',recalc);
+    });
+  recalc();
+
+  var pr=document.getElementById('up-print');
+  if(pr) pr.addEventListener('click',function(){ window.print(); });
+
+  var toR=document.getElementById('up-toRfq');
+  if(toR) toR.addEventListener('click',function(){
+    recalc();
+    var s=document.getElementById('up-sheet'); if(s) s.value=buildSheet();
+    var r=document.getElementById('rfq'); if(r) r.scrollIntoView({behavior:'smooth'});
+  });
+
+  var gen=document.getElementById('up-gen');
+  if(gen) gen.addEventListener('click',function(){
+    var s=document.getElementById('up-sheet'); if(s) s.value=buildSheet();
+  });
+
+  var cp=document.getElementById('up-copy');
+  if(cp) cp.addEventListener('click',function(){
+    var s=document.getElementById('up-sheet'); if(!s) return;
+    if(!s.value) s.value=buildSheet();
+    var done=function(){ var o=document.getElementById('up-ok');
+      if(o){ o.classList.add('on'); setTimeout(function(){o.classList.remove('on');},1800); } };
+    if(navigator.clipboard&&navigator.clipboard.writeText){
+      navigator.clipboard.writeText(s.value).then(done,function(){ s.select(); });
+    }else{ s.select(); try{ document.execCommand('copy'); done(); }catch(e){} }
+  });
+
+  var mt=document.getElementById('up-mailto');
+  if(mt) mt.addEventListener('click',function(){
+    var s=document.getElementById('up-sheet'); if(!s) return;
+    if(!s.value) s.value=buildSheet();
+    var co=(document.getElementById('up-co')||{}).value||'';
+    var subj = tx('詢價 / 選型單','Enquiry / Sizing sheet')+(co?' — '+co:'')+' | Rewatt HeatingTec';
+    location.href='mailto:'+CFG.EMAIL+'?subject='+encodeURIComponent(subj)+'&body='+encodeURIComponent(s.value);
+  });
+
+  /* 語言切換後重算(輸出字串是動態產生的,不在 data-zh 機制內) */
+  document.querySelectorAll('.langtog button').forEach(function(b){
+    b.addEventListener('click',function(){ setTimeout(function(){
+      recalc();
+      var s=document.getElementById('up-sheet'); if(s&&s.value) s.value=buildSheet();
+    },40); });
+  });
+});
+
+/* 新區段的 secmark 橫線:LIVE LAYER 2 的 observer 在本區塊注入前就跑完了,
+   所以這裡自己補觀察一次,否則新標頭的橫線會永遠停在 scaleX(0)。 */
+safe(function(){
+  var marks = document.querySelectorAll('.up-apps .secmark, .up-compat .secmark, .up-calc .secmark, .up-flow .secmark, .up-faq .secmark, .up-rfq .secmark');
+  if(!('IntersectionObserver' in window)){
+    marks.forEach(function(m){ m.classList.add('lv-seen'); }); return;
+  }
+  var io=new IntersectionObserver(function(en){
+    en.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add('lv-seen'); io.unobserve(e.target); } });
+  },{threshold:.5});
+  marks.forEach(function(m){ io.observe(m); });
+});
+
+/* 導入流程進場動畫 */
+safe(function(){
+  if(!('IntersectionObserver' in window)) return;
+  var g=document.querySelector('.up-flow .g'); if(!g) return;
+  var io=new IntersectionObserver(function(en){
+    en.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add('lv-seen'); io.unobserve(e.target); } });
+  },{threshold:.3});
+  io.observe(g);
+});
+
+/* 回到頂端 + 行動端固定 CTA + skip link */
+safe(function(){
+  var top=h('<button id="up-top" aria-label="回到頂端">↑</button>');
+  top.addEventListener('click',function(){ scrollTo({top:0,behavior:'smooth'}); });
+  document.body.appendChild(top);
+  var tick=false;
+  addEventListener('scroll',function(){
+    if(tick) return; tick=true;
+    requestAnimationFrame(function(){ top.classList.toggle('on', scrollY>600); tick=false; });
+  },{passive:true});
+
+  document.body.appendChild(h(
+    '<div id="up-bar">'+
+      '<a href="tel:+886222681368" data-zh="撥打電話" data-en="Call">撥打電話</a>'+
+      '<a href="#sizing" data-zh="選型試算" data-en="Sizing">選型試算</a>'+
+      '<a class="pri" href="#rfq" data-zh="立即詢價" data-en="Enquire">立即詢價</a>'+
+    '</div>'));
+
+  var skip=h('<a class="up-skip" href="#products" data-zh="跳至主要內容" data-en="Skip to content">跳至主要內容</a>');
+  document.body.insertBefore(skip, document.body.firstChild);
+
+  var b=document.querySelector('.burger');
+  if(b){ b.setAttribute('aria-expanded','false'); b.setAttribute('aria-controls','nav-top');
+    var nv=document.querySelector('nav.top'); if(nv) nv.id='nav-top';
+    b.addEventListener('click',function(){
+      b.setAttribute('aria-expanded', b.getAttribute('aria-expanded')==='true'?'false':'true');
+    });
+  }
+});
+
+/* SEO meta + 結構化資料(建議日後直接寫進 <head>) */
+safe(function(){
+  var head=document.head; if(!head) return;
+  function meta(a,v,c){ if(head.querySelector('meta['+a+'="'+v+'"]')) return;
+    var m=document.createElement('meta'); m.setAttribute(a,v); m.setAttribute('content',c); head.appendChild(m); }
+  var DESC='奈米配方薄膜直接鍍於超純石英外壁,金屬零接觸流體。Rewatt HeatingTec 半導體濕製程 Inline 加熱器 — 化學藥液 3–4 kW、超純水 10–30 kW、35 mm 單顆加熱模組。';
+  meta('name','description',DESC);
+  meta('name','theme-color','#75b32a');
+  meta('name','keywords','inline heater, 加熱器, 半導體濕製程, 超純水加熱, 化學藥液加熱, 石英加熱, thin film heater, DI water heater, Rewatt, HeatingTec, 麗源光電');
+  meta('property','og:title','Rewatt HeatingTec — Inline Heaters for Semiconductor Wet Processes');
+  meta('property','og:description',DESC);
+  meta('property','og:type','website');
+  meta('property','og:locale','zh_TW');
+  meta('name','twitter:card','summary');
+  if(!head.querySelector('script[type="application/ld+json"]')){
+    var ld=document.createElement('script'); ld.type='application/ld+json';
+    ld.textContent=JSON.stringify({
+      "@context":"https://schema.org","@type":"Organization",
+      "name":"麗源光電股份有限公司","alternateName":["Rewatt","Liyuan Optoelectronics","HeatingTec"],
+      "url":"https://rewatt.com.tw","email":CFG.EMAIL,"telephone":"+886-2-2268-1368","foundingDate":"2011",
+      "address":{"@type":"PostalAddress","streetAddress":"大暖路110之1號","addressLocality":"土城區",
+        "addressRegion":"新北市","addressCountry":"TW"},
+      "makesOffer":[
+        {"@type":"Offer","itemOffered":{"@type":"Product","name":"Inline 化學藥液加熱器",
+          "description":"薄膜鍍於石英外壁的串接式化學藥液加熱器,3–4 kW,Ø46 mm 石英流道"}},
+        {"@type":"Offer","itemOffered":{"@type":"Product","name":"Inline 純水加熱器",
+          "description":"背掛式超純水加熱器,10 / 20 / 30 kW,SCR 相位控制,30–85 °C"}},
+        {"@type":"Offer","itemOffered":{"@type":"Product","name":"純水單顆加熱模組",
+          "description":"200 × 250 × 35 mm 疊層式加熱模組,10 kW,可串聯或併聯"}}
+      ]
+    });
+    head.appendChild(ld);
+  }
+});
+
+/* 語言選擇記憶(?lang= 或上次選擇) */
+safe(function(){
+  var q=(location.search.match(/[?&]lang=(zh|en)/)||[])[1];
+  var saved=null; try{ saved=localStorage.getItem('rewatt-lang'); }catch(e){}
+  var want=q||saved;
+  if(want==='en'){ var b=document.querySelector('.langtog button[data-lang="en"]'); if(b) b.click(); }
+  document.querySelectorAll('.langtog button').forEach(function(b){
+    b.addEventListener('click',function(){ try{ localStorage.setItem('rewatt-lang',b.dataset.lang); }catch(e){} });
+  });
+});
+
+/* HF 文案修正:氫氟酸會侵蝕石英,原文案的「稀 HF」與石英流道相衝突。
+   若要保留原文案,把 CFG.PATCH_HF 設為 false 即可。 */
+safe(function(){
+  if(!CFG.PATCH_HF) return;
+  var ZH='立式串接於管路,單顆石英管加熱藥液通過的瞬間路徑。薄膜、電極、感測全部位於乾側,流道內只有超純石英。適用 SC1/SC2、稀硫酸與超純水;含氟藥液(HF/BOE)與熱鹼會侵蝕石英,需個案評估。';
+  var EN='Vertical, in-line installation on the fluid loop; a single quartz tube heats the liquid as it passes through. Film, electrodes and sensors all sit on the dry side — only ultrapure quartz contacts the flow. Suits SC1/SC2, dilute sulfuric and UPW; fluorine-bearing chemistry (HF/BOE) and hot alkali attack quartz and need case-by-case evaluation.';
+  document.querySelectorAll('.prod .info p[data-zh]').forEach(function(p){
+    if((p.getAttribute('data-zh')||'').indexOf('稀 HF')<0) return;
+    p.setAttribute('data-zh',ZH); p.setAttribute('data-en',EN);
+    p.innerHTML = lang()==='en'?EN:ZH;
+  });
+});
+
+})();
+</script>
 </body>
 </html>
