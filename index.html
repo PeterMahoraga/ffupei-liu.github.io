@@ -2713,6 +2713,18 @@ html.up-ready body{opacity:1;transition:opacity .5s var(--ease)}
     animation-play-state:paused!important;
   }
 
+  /* 沒進畫面的裝飾動畫一律停住。整頁有數十個無限迴圈的 SVG 動畫,
+     其中大部分永遠在螢幕外空轉 —— 那是在燒別人的電池。 */
+  .mo-idle{animation-play-state:paused!important}
+
+  /* 進度線改用 transform 驅動。原本每次捲動都寫 inline width,
+     而寬度變更會觸發版面計算;scaleX 只走合成,不碰版面。 */
+  #mo-prog{
+    position:fixed;left:0;top:55px;height:1.5px;width:100%;z-index:101;
+    background:linear-gradient(to right,var(--signal),var(--brand));
+    transform:scaleX(0);transform-origin:0 50%;pointer-events:none;
+  }
+
   /* ---------- 3. 方括號標籤 ---------- */
   .langtog button::before{content:"[";opacity:.4;margin-right:1px}
   .langtog button::after {content:"]";opacity:.4;margin-left:1px}
@@ -2777,14 +2789,24 @@ safe(function(){
   MO.on = true;
 
   var target = scrollY, current = scrollY, running = false, vel = 0;
-  var EASE = 0.115;          /* 越小越黏。0.115 大約是「跟手但有重量」 */
+  var EASE = 0.13;           /* 越小越黏。以 60fps 為基準,實際會依幀長換算 */
   var stuck = 0;             /* 連續幾格捲不動就自我了斷 */
+  var lastT = 0;             /* 上一格的時間,用來做幀率無關的緩動 */
 
   MO.target = target;
 
+  /* scrollHeight 是會觸發版面計算的屬性,不能每次滾輪都讀 —— 快取起來,
+     只在尺寸變動或閒置時更新。 */
+  var maxCache = 0, maxAt = 0;
   function maxScroll(){
-    return Math.max(0, document.documentElement.scrollHeight - innerHeight);
+    var now = Date.now();
+    if(now - maxAt > 400){
+      maxCache = Math.max(0, document.documentElement.scrollHeight - innerHeight);
+      maxAt = now;
+    }
+    return maxCache;
   }
+  addEventListener('resize', function(){ maxAt = 0; }, {passive:true});
   /* 一定要用瞬間捲動,不能讓瀏覽器再插一層動畫 */
   function jump(y){
     try{ scrollTo({top:y, behavior:'instant'}); }
@@ -2800,6 +2822,12 @@ safe(function(){
   }
   MO.bail = bail;
 
+  var ptEl = null, ptVal = false;
+  function passthroughCached(el){
+    if(el === ptEl) return ptVal;
+    ptEl = el; ptVal = passthrough(el);
+    return ptVal;
+  }
   function passthrough(el){
     while(el && el !== document.body){
       if(el.tagName === 'IFRAME' || el.tagName === 'TEXTAREA' ||
@@ -2815,7 +2843,7 @@ safe(function(){
   addEventListener('wheel', function(e){
     if(!MO.on) return;
     if(e.ctrlKey) return;                                  /* 縮放交給瀏覽器 */
-    if(passthrough(e.target)) return;
+    if(passthroughCached(e.target)) return;
     e.preventDefault();
 
     var d = e.deltaY;
@@ -2831,7 +2859,7 @@ safe(function(){
     target = Math.max(0, Math.min(maxScroll(), target));
 
     MO.target = target;
-    if(!running){ running = true; current = scrollY; stuck = 0; requestAnimationFrame(step); }
+    if(!running){ running = true; current = scrollY; stuck = 0; lastT = 0; requestAnimationFrame(step); }
   }, {passive:false});
 
   /* 鍵盤 / 錨點 / 程式捲動改變了位置,閒置時要讓 target 跟上 */
@@ -2842,11 +2870,18 @@ safe(function(){
     syncing = setTimeout(function(){ if(!running){ target = scrollY; MO.target = target; } }, 90);
   }, {passive:true});
 
-  function step(){
+  function step(t){
     if(!MO.on) return;
     var before = scrollY;
+
+    /* 幀率無關的緩動:掉幀時單格走得多一點,補回同樣的距離。
+       固定係數的寫法在 30fps 下會變成「走一半速度」,那正是看起來遲鈍的原因。 */
+    var dt = lastT ? Math.min(64, t - lastT) : 16.67;
+    lastT = t;
+    var k = 1 - Math.pow(1 - EASE, dt / 16.67);
+
     var d = target - current;
-    current += d * EASE;
+    current += d * k;
     vel = d;
     if(Math.abs(d) < .4){ current = target; running = false; }
     jump(current);
@@ -2859,7 +2894,7 @@ safe(function(){
     writeV(Math.max(-1, Math.min(1, vel / 90)));
     setMoving(Math.abs(vel) > 8);
     if(running) requestAnimationFrame(step);
-    else{ writeV(0, true); setMoving(false); }
+    else{ lastT = 0; writeV(0, true); setMoving(false); }
   }
 
   /* 寫 CSS 變數會讓所有用到它的元素重算樣式,所以只在「變化夠大」時才寫。
@@ -2880,7 +2915,7 @@ safe(function(){
   MO.goto = function(y){
     target = Math.max(0, Math.min(maxScroll(), y));
     MO.target = target;
-    if(!running){ running = true; current = scrollY; stuck = 0; requestAnimationFrame(step); }
+    if(!running){ running = true; current = scrollY; stuck = 0; lastT = 0; requestAnimationFrame(step); }
   };
 });
 
@@ -2977,6 +3012,58 @@ safe(function(){
     t.textContent = p(tpe.getHours()) + ':' + p(tpe.getMinutes()) + ':' + p(tpe.getSeconds());
   }
   tick(); setInterval(tick, 1000);
+});
+
+/* ═══════════ 4.5 進度線改用 transform ═══════════
+   POLISH LAYER 那條每次捲動都改 inline width,而慣性捲動每一格都會發出
+   scroll 事件 —— 等於每格一次版面計算。換成 scaleX,只走合成。 */
+safe(function(){
+  if(reduce) return;
+  var old = document.getElementById('up-prog');
+  if(old && old.parentNode) old.parentNode.removeChild(old);
+  var bar = document.createElement('div');
+  bar.id = 'mo-prog';
+  document.body.appendChild(bar);
+  var tick = false, lastP = -1;
+  function draw(){
+    var h = document.documentElement.scrollHeight - innerHeight;
+    var p = h > 0 ? Math.min(1, scrollY / h) : 0;
+    if(Math.abs(p - lastP) > 0.002){
+      lastP = p;
+      bar.style.transform = 'scaleX(' + p.toFixed(4) + ')';
+    }
+    tick = false;
+  }
+  addEventListener('scroll', function(){
+    if(tick) return; tick = true; requestAnimationFrame(draw);
+  }, {passive:true});
+  addEventListener('resize', draw, {passive:true});
+  draw();
+});
+
+/* ═══════════ 4.6 螢幕外的裝飾動畫一律暫停 ═══════════ */
+safe(function(){
+  if(reduce || !('IntersectionObserver' in window)) return;
+  var sel = '.lv-red,.lv-grn,.lv-amb,.lv-ring,.lv-relay,.lv-scan,.lv-flow,.lv-film,'
+          + '.lv-filmring,.lv-flux line,.lv-serp,.lv-layer,.lv-mark,.lv-pwr,'
+          + '.up-flow .s,.sk-flow';
+  var nodes = document.querySelectorAll(sel);
+  if(!nodes.length) return;
+  /* 觀察的是「動畫元素所屬的區塊」,一個區塊進出畫面就整批開關,
+     觀察器數量因此從數十個降到個位數。 */
+  var groups = new Map();
+  nodes.forEach(function(n){
+    var host = n.closest ? (n.closest('section, footer, header') || document.body) : document.body;
+    if(!groups.has(host)) groups.set(host, []);
+    groups.get(host).push(n);
+  });
+  var io = new IntersectionObserver(function(en){
+    en.forEach(function(e){
+      var list = groups.get(e.target); if(!list) return;
+      list.forEach(function(n){ n.classList.toggle('mo-idle', !e.isIntersecting); });
+    });
+  },{rootMargin:'120px 0px'});
+  groups.forEach(function(list, host){ io.observe(host); });
 });
 
 /* ═══════════ 5. 錨點:配合慣性滾動平順到位 ═══════════ */
