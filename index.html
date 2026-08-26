@@ -2776,7 +2776,8 @@ function coarse(){
    刻意不用「把整頁塞進 transform 容器」那種寫法 —— 那會讓 position:fixed
    的頁首與 position:sticky 的區段標頭失效。這裡改成攔下滾輪、自己算目標
    位置,再每格 lerp 過去,捲的仍然是真正的 window,所以固定與吸附都還在。 */
-var MO = { on:false, target:0, goto:null };
+var MO = { on:false, target:0, goto:null, EASE:0.16 };
+window.MO = MO;
 
 safe(function(){
   if(reduce) return;
@@ -2789,7 +2790,7 @@ safe(function(){
   MO.on = true;
 
   var target = scrollY, current = scrollY, running = false, vel = 0;
-  var EASE = 0.13;           /* 越小越黏。以 60fps 為基準,實際會依幀長換算 */
+  MO.EASE = 0.16;            /* 越小越黏。以 60fps 為基準,實際會依幀長換算 */
   var stuck = 0;             /* 連續幾格捲不動就自我了斷 */
   var lastT = 0;             /* 上一格的時間,用來做幀率無關的緩動 */
 
@@ -2878,12 +2879,12 @@ safe(function(){
        固定係數的寫法在 30fps 下會變成「走一半速度」,那正是看起來遲鈍的原因。 */
     var dt = lastT ? Math.min(64, t - lastT) : 16.67;
     lastT = t;
-    var k = 1 - Math.pow(1 - EASE, dt / 16.67);
+    var k = 1 - Math.pow(1 - (MO.EASE || 0.16), dt / 16.67);
 
     var d = target - current;
     current += d * k;
     vel = d;
-    if(Math.abs(d) < .4){ current = target; running = false; }
+    if(Math.abs(d) < 1.5){ current = target; running = false; }
     jump(current);
 
     /* 真的有捲到嗎?連續 12 格都紋風不動,就是被什麼擋住了 —— 退回原生 */
@@ -3080,6 +3081,155 @@ safe(function(){
     if(MO.on && MO.goto) MO.goto(y);
     else scrollTo({top:y, behavior: reduce ? 'auto' : 'smooth'});
   });
+});
+})();
+</script>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     PERF LAYER v8 — 把掉幀的成因拿掉
+     前幾層是「讓動態便宜一點」,這一層是「不便宜的就不要」。
+     依成本由高到低處理:吸附毛玻璃 → 固定背景 → 螢幕外 iframe 的
+     rAF → 裝飾性 SVG 動畫 → 多層陰影 → 視差。
+     放在所有層之後,靠後載入順序覆蓋前面的規則。整塊刪除即可還原。
+     ═══════════════════════════════════════════════════════════════ -->
+<style>
+/* ══ 1. 吸附標頭:拿掉毛玻璃 ══════════════════════════════════
+   backdrop-filter 要把「元素背後那塊畫面」每一格重新模糊一次,
+   而它又是 sticky —— 捲動時每格都在動,等於每格重算一次模糊。
+   這是整頁最貴的單一效果。改成實色背景,視覺上幾乎看不出差別。 */
+main > section > .secmark{
+  backdrop-filter:none!important;
+  -webkit-backdrop-filter:none!important;
+  background:var(--paper)!important;
+  box-shadow:0 6px 12px -12px rgba(20,32,26,.35);
+}
+header{
+  backdrop-filter:none!important;
+  -webkit-backdrop-filter:none!important;
+  background:rgba(246,247,244,.97)!important;
+}
+#up-bar{
+  backdrop-filter:none!important;-webkit-backdrop-filter:none!important;
+  background:rgba(246,247,244,.97)!important;
+}
+#up-top{backdrop-filter:none!important;-webkit-backdrop-filter:none!important}
+
+/* ══ 2. 固定背景層 ══════════════════════════════════════════
+   position:fixed 的漸層在捲動時會被反覆重繪。改掛在 body 本身,
+   瀏覽器就能當成單純的背景處理。 */
+body::before{display:none!important}
+body{
+  background-image:
+    radial-gradient(120% 70% at 50% 0%, rgba(255,255,255,.85) 0%, rgba(255,255,255,0) 60%),
+    radial-gradient(90% 60% at 50% 100%, rgba(117,179,42,.045) 0%, rgba(117,179,42,0) 70%);
+  background-attachment:scroll;
+}
+
+/* ══ 3. 繪製隔離 ══════════════════════════════════════════
+   contain 讓每個區段的重繪不會外溢到整頁。刻意不用 size —— 那會
+   讓捲軸長度在區段渲染時跳動,反向捲動時特別明顯。 */
+main > section{contain:layout paint style}
+.prod .item,.up-apps .c,.up-flow .s,.specs .col,.up-faq details{contain:layout paint}
+
+/* ══ 4. 陰影減量 ══════════════════════════════════════════
+   多層大範圍陰影是純繪製成本。保留層次感,但只留一層。 */
+.prod .drawing,.tech .diagram,.ctrl .cabinet{
+  box-shadow:0 2px 10px -6px rgba(20,32,26,.18)!important;
+  transition:none!important;
+}
+.prod .item:hover .drawing{transform:none!important;box-shadow:0 4px 14px -6px rgba(20,32,26,.24)!important}
+.compare table,.specs .grid,.up-faq .list,.up-apps .g,.up-compat table,
+.up-calc .wrap,.up-flow .g,.up-rfq .wrap,.demo3d .stage{
+  box-shadow:0 1px 2px rgba(20,32,26,.04)!important;
+}
+.up-btn:hover{box-shadow:none!important}
+
+/* ══ 5. 視差整個拿掉 ══════════════════════════════════════
+   每次寫 --mo-v 都會讓用到它的元素重算樣式並啟動一段 transition。
+   它帶來的層次感,不值得為它付捲動時的幀。 */
+.prod .drawing,.specrow .cell .fig{transform:none!important;transition:none!important}
+
+/* ══ 6. 裝飾性 SVG 動畫預設關閉 ═══════════════════════════
+   指示燈、繼電器、掃描線、流體虛線這些改的是 fill / stroke /
+   stroke-dashoffset,每一格都要重畫 SVG。整頁二十幾個同時跑,
+   換來的是「圖會動」,付出的是全站幀率。
+   保留三個真正在講產品的:薄膜環、熱流箭頭、品牌燈。 */
+.lv-red,.lv-grn,.lv-amb,.lv-ring,.lv-relay,.lv-scan,.lv-flow,
+.lv-serp,.lv-layer,.compare .own td:first-child::after{
+  animation:none!important;
+}
+.lv-relay{fill:transparent!important}
+.lv-red,.lv-amb{opacity:.85!important}
+.lv-grn{opacity:.9!important}
+.lv-scan{opacity:.45!important}
+.lv-flow{opacity:.7!important}
+/* 留下來的三個,再放慢一階 */
+.lv-filmring{animation-duration:9s!important}
+.lv-flux line{animation-duration:6s!important}
+.lv-pwr{animation-duration:5s!important}
+.lv-film{animation-duration:8s!important}
+.lv-mark{animation:none!important}
+
+/* ══ 7. 進場動畫:只留位移,不留 filter / 大距離 ═══════════ */
+.lv-rise,.mo-rise{transition-duration:.55s!important}
+
+@media print{ main > section{contain:none} }
+</style>
+<script>
+(function(){
+"use strict";
+function safe(f){ try{ f(); }catch(e){ if(window.console) console.error('[perf]',e); } }
+var reduce = !!(window.matchMedia &&
+             window.matchMedia("(prefers-reduced-motion: reduce)").matches);
+
+/* ══ 8. 螢幕外的 3D 檢視器整個停掉 ══════════════════════════
+   那個 iframe 裡有一個永遠在跑的 requestAnimationFrame 迴圈(視差、
+   流體虛線)。它在首屏,你一往下捲它就離開畫面,但迴圈照跑不誤,
+   整站的捲動都在跟它搶時間。
+   display:none 的 iframe 不會執行 rAF —— 這是唯一能從外面關掉它的方法,
+   而且不會重新載入內容,捲回來還是原來的狀態。 */
+safe(function(){
+  var stage = document.getElementById('d3-stage');
+  var frame = document.getElementById('d3-frame');
+  if(!stage || !frame || !('IntersectionObserver' in window)) return;
+  var hidden = false;
+  var io = new IntersectionObserver(function(en){
+    en.forEach(function(e){
+      var want = !e.isIntersecting;
+      if(want === hidden) return;
+      hidden = want;
+      /* 用 visibility 佔住版位,再用 display 停掉 rAF;
+         兩者一起改,捲回來時不會有版面跳動。 */
+      frame.style.display = hidden ? 'none' : '';
+    });
+  },{rootMargin:'200px 0px'});
+  io.observe(stage);
+});
+
+/* ══ 9. 圖片一律非同步解碼 ══════════════════════════════════
+   內嵌的產品照解碼會卡住主執行緒。標成 async 之後交給別的執行緒。 */
+safe(function(){
+  document.querySelectorAll('img').forEach(function(im){
+    im.decoding = 'async';
+    if(!im.closest('header')) im.loading = 'lazy';
+  });
+});
+
+/* ══ 10. 捲動時停掉剩下的動畫 ═════════════════════════════ */
+safe(function(){
+  if(reduce) return;
+  var st = document.createElement('style');
+  st.textContent =
+    'body.mo-moving .lv-filmring,body.mo-moving .lv-flux line,' +
+    'body.mo-moving .lv-film,body.mo-moving .lv-pwr{animation-play-state:paused!important}';
+  document.head.appendChild(st);
+});
+
+/* ══ 11. 慣性:再調快一階,並縮短收尾 ══════════════════════
+   前一版的 EASE 寫死在慣性區塊裡,這裡用一個全域旗標讓它可調,
+   同時把「快到終點」的判定放寬,少跑十幾格幾乎看不見的收尾。 */
+safe(function(){
+  if(window.MO && window.MO.on) window.MO.EASE = 0.16;
 });
 })();
 </script>
