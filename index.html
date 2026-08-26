@@ -2659,5 +2659,254 @@ html.up-ready body{opacity:1;transition:opacity .5s var(--ease)}
   });
 })();
 </script>
+<!-- ═══════════════════════════════════════════════════════════════
+     MOTION LAYER v7 — 滾動與動態
+     參考 haoqi.design 的節奏:慣性滾動、內容隨速度輕微延遲、
+     大字逐行從裁切線後升起、方括號標籤、即時時鐘。
+     配色一律沿用 Rewatt 的綠白,沒有引入任何新顏色。
+     一樣是純附加式,貼在 </body> 之前,整塊刪除即可還原。
+     ═══════════════════════════════════════════════════════════════ -->
+<style>
+  /* ---------- 1. 大字逐行升起 ---------- */
+  .mo-line{display:block;overflow:hidden}
+  .mo-line > i{display:block;font-style:inherit;transform:translateY(105%);
+    transition:transform .95s cubic-bezier(.16,1,.3,1)}
+  .mo-line.in > i{transform:none}
+  .mo-line:nth-child(2) > i{transition-delay:.09s}
+  .mo-line:nth-child(3) > i{transition-delay:.18s}
+
+  /* ---------- 2. 內容隨滾動速度輕微延遲 ----------
+     --mo-v 由 JS 寫入(-1 ~ 1)。幅度刻意小:察覺得到,但不會暈。 */
+  .prod .item,.up-apps .c,.up-flow .s,.specs .col,.tech .diagram,.prod .drawing{
+    will-change:transform;
+    transform:translateY(calc(var(--mo-v,0) * 7px));
+    transition:transform .5s cubic-bezier(.16,1,.3,1);
+  }
+  .specrow .cell .fig,.specs .sheets .hero-fig b{
+    transform:translateY(calc(var(--mo-v,0) * -4px));
+    transition:transform .6s cubic-bezier(.16,1,.3,1);
+  }
+  /* 滾動時整體微微降一點對比,停下來就回來 —— 像鏡頭在追焦 */
+  main{transition:filter .45s ease}
+  body.mo-moving main{filter:saturate(.94)}
+
+  /* ---------- 3. 方括號標籤 ---------- */
+  .langtog button::before{content:"[";opacity:.4;margin-right:1px}
+  .langtog button::after {content:"]";opacity:.4;margin-left:1px}
+  .langtog button.on::before,.langtog button.on::after{opacity:1;color:var(--brand)}
+
+  /* ---------- 4. 頁首即時時鐘 ---------- */
+  #mo-clock{
+    display:flex;align-items:center;gap:7px;margin-left:14px;padding-left:14px;
+    border-left:1px solid var(--rule);
+    font-stretch:87%;font-weight:600;font-size:10.5px;letter-spacing:.12em;
+    color:var(--mute);font-variant-numeric:tabular-nums;white-space:nowrap;
+  }
+  #mo-clock .dot{width:5px;height:5px;border-radius:50%;background:var(--brand);
+    animation:moPulse 3.4s ease-in-out infinite}
+  @keyframes moPulse{0%,100%{opacity:.3}50%{opacity:1}}
+  #mo-clock .z{color:var(--signal)}
+  @media (max-width:1100px){#mo-clock{display:none}}
+
+  /* ---------- 5. 連結與按鈕:焦點更明確 ---------- */
+  .up-btn,#up-bar a,.demo3d .ctl .acts button{will-change:transform}
+  .contact .info dd a{transition:color .2s var(--ease,ease)}
+  .contact .info dd a:hover{color:var(--signal)}
+
+  /* ---------- 6. 區段進場:比 LIVE LAYER 更長的緩動 ---------- */
+  .mo-rise{opacity:0;transform:translateY(14px);
+    transition:opacity .9s cubic-bezier(.16,1,.3,1),transform .9s cubic-bezier(.16,1,.3,1)}
+  .mo-rise.in{opacity:1;transform:none}
+
+  @media (prefers-reduced-motion:reduce){
+    .mo-line > i{transform:none!important;transition:none!important}
+    .prod .item,.up-apps .c,.up-flow .s,.specs .col,.tech .diagram,.prod .drawing,
+    .specrow .cell .fig,.specs .sheets .hero-fig b{transform:none!important}
+    body.mo-moving main{filter:none}
+    .mo-rise{opacity:1!important;transform:none!important;transition:none!important}
+    #mo-clock .dot{animation:none}
+  }
+  @media print{ #mo-clock{display:none!important} }
+</style>
+<script>
+(function(){
+"use strict";
+function safe(f){ try{ f(); }catch(e){ if(window.console) console.error('[motion]',e); } }
+var reduce = window.matchMedia &&
+             window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+/* ═══════════ 1. 慣性滾動 ═══════════
+   刻意不用「把整頁塞進 transform 容器」那種寫法 —— 那會讓 position:fixed
+   的頁首與 position:sticky 的區段標頭失效。這裡改成攔下滾輪、自己算目標
+   位置,再每格 lerp 過去,捲的仍然是真正的 window,所以固定與吸附都還在。 */
+safe(function(){
+  if(reduce) return;
+  if(!window.requestAnimationFrame) return;
+  /* 觸控裝置維持原生慣性,不介入 */
+  if(matchMedia('(hover:none)').matches) return;
+
+  var target = scrollY, current = scrollY, running = false, vel = 0;
+  var EASE = 0.115;          /* 越小越黏,0.115 大約是「跟手但有重量」 */
+
+  function maxScroll(){
+    return Math.max(0, document.documentElement.scrollHeight - innerHeight);
+  }
+
+  /* 這些地方要把滾輪還給瀏覽器 */
+  function passthrough(el){
+    while(el && el !== document.body){
+      if(el.tagName === 'IFRAME' || el.tagName === 'TEXTAREA' ||
+         el.tagName === 'SELECT' || el.id === 'up-sheet') return true;
+      var s;
+      try{ s = getComputedStyle(el); }catch(e){ s = null; }
+      if(s && /(auto|scroll)/.test(s.overflowY) && el.scrollHeight > el.clientHeight + 4) return true;
+      el = el.parentElement;
+    }
+    return false;
+  }
+
+  addEventListener('wheel', function(e){
+    if(e.ctrlKey) return;                       /* 縮放交給瀏覽器 */
+    if(passthrough(e.target)) return;
+    e.preventDefault();
+    target = Math.max(0, Math.min(maxScroll(), target + e.deltaY));
+    if(!running){ running = true; current = scrollY; requestAnimationFrame(step); }
+  }, {passive:false});
+
+  /* 鍵盤、錨點、程式捲動都會改變 scrollY,要讓 target 跟上,否則會被拉回去 */
+  var syncing;
+  addEventListener('scroll', function(){
+    if(!running){ target = scrollY; }
+    clearTimeout(syncing);
+    syncing = setTimeout(function(){ if(!running) target = scrollY; }, 90);
+  }, {passive:true});
+
+  function step(){
+    var d = target - current;
+    current += d * EASE;
+    vel = d;
+    if(Math.abs(d) < .4){ current = target; running = false; }
+    scrollTo(0, current);
+    /* 速度寫進 CSS 變數,-1 ~ 1,給上面那些 transform 用 */
+    var v = Math.max(-1, Math.min(1, vel / 90));
+    document.documentElement.style.setProperty('--mo-v', v.toFixed(3));
+    document.body.classList.toggle('mo-moving', Math.abs(vel) > 8);
+    if(running) requestAnimationFrame(step);
+    else{
+      document.documentElement.style.setProperty('--mo-v', '0');
+      document.body.classList.remove('mo-moving');
+    }
+  }
+});
+
+/* 沒有慣性滾動時(觸控 / 減少動態),仍然要有速度變數,不然卡片會僵住 */
+safe(function(){
+  if(!reduce && !matchMedia('(hover:none)').matches) return;
+  var last = scrollY, tick = false;
+  addEventListener('scroll', function(){
+    if(tick) return; tick = true;
+    requestAnimationFrame(function(){
+      var d = scrollY - last; last = scrollY;
+      if(!reduce){
+        var v = Math.max(-1, Math.min(1, d / 60));
+        document.documentElement.style.setProperty('--mo-v', v.toFixed(3));
+      }
+      tick = false;
+    });
+  }, {passive:true});
+});
+
+/* ═══════════ 2. 大字逐行升起 ═══════════
+   語言切換會用 innerHTML 重寫標題,所以切換後要重包一次;
+   包裝前先檢查有沒有包過,避免疊成兩層。 */
+safe(function(){
+  if(reduce) return;
+  var SEL = '.hero h1, .contact h2';
+
+  function wrap(){
+    document.querySelectorAll(SEL).forEach(function(h){
+      if(h.querySelector(':scope > .mo-line')) return;
+      var parts = h.innerHTML.split(/<br\s*\/?>/i);
+      h.innerHTML = parts.map(function(p){
+        return '<span class="mo-line"><i>' + p + '</i></span>';
+      }).join('');
+      observe(h);
+    });
+  }
+  function observe(h){
+    var lines = h.querySelectorAll('.mo-line');
+    if(!('IntersectionObserver' in window)){
+      lines.forEach(function(l){ l.classList.add('in'); });
+      return;
+    }
+    var io = new IntersectionObserver(function(en){
+      en.forEach(function(e){
+        if(!e.isIntersecting) return;
+        io.unobserve(e.target);
+        e.target.querySelectorAll('.mo-line').forEach(function(l,i){
+          setTimeout(function(){ l.classList.add('in'); }, i*90);
+        });
+      });
+    },{threshold:.15});
+    io.observe(h);
+  }
+  wrap();
+  document.querySelectorAll('.langtog button').forEach(function(b){
+    b.addEventListener('click', function(){ setTimeout(wrap, 40); });
+  });
+});
+
+/* ═══════════ 3. 進場:補上 UPGRADE PACK 之後才注入的區段 ═══════════ */
+safe(function(){
+  if(reduce || !('IntersectionObserver' in window)) return;
+  var t = document.querySelectorAll(
+    '.up-apps .g, .up-compat table, .up-calc .wrap, .up-faq .list, .up-rfq .wrap');
+  if(!t.length) return;
+  var io = new IntersectionObserver(function(en){
+    en.forEach(function(e){
+      if(!e.isIntersecting) return;
+      e.target.classList.add('in'); io.unobserve(e.target);
+    });
+  },{threshold:.1, rootMargin:'0px 0px -30px 0px'});
+  t.forEach(function(el){ el.classList.add('mo-rise'); io.observe(el); });
+});
+
+/* ═══════════ 4. 頁首即時時鐘 ═══════════
+   時間用台北時區算,不用瀏覽器所在地 —— 這是工廠的時間,不是訪客的。 */
+safe(function(){
+  var nav = document.querySelector('.langtog');
+  if(!nav || !nav.parentNode) return;
+  var el = document.createElement('div');
+  el.id = 'mo-clock';
+  el.innerHTML = '<span class="dot"></span><span class="z">GMT+8</span><span class="t">--:--:--</span>';
+  nav.parentNode.insertBefore(el, nav);
+  var t = el.querySelector('.t');
+  function tick(){
+    var now = new Date();
+    /* 用 UTC 加 8 小時,結果與瀏覽器所在時區無關 */
+    var tpe = new Date(now.getTime() + (now.getTimezoneOffset() + 480) * 60000);
+    var p = function(n){ return (n<10?'0':'') + n; };
+    t.textContent = p(tpe.getHours()) + ':' + p(tpe.getMinutes()) + ':' + p(tpe.getSeconds());
+  }
+  tick(); setInterval(tick, 1000);
+});
+
+/* ═══════════ 5. 錨點:配合慣性滾動平順到位 ═══════════ */
+safe(function(){
+  document.addEventListener('click', function(e){
+    var a = e.target.closest && e.target.closest('a[href^="#"]');
+    if(!a) return;
+    var id = a.getAttribute('href').slice(1);
+    if(!id) return;
+    var s = document.getElementById(id);
+    if(!s) return;
+    e.preventDefault();
+    var y = s.getBoundingClientRect().top + scrollY - 64;
+    scrollTo({top:y, behavior: reduce ? 'auto' : 'smooth'});
+  });
+});
+})();
+</script>
+
 </body>
 </html>
