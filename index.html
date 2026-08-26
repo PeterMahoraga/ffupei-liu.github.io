@@ -2667,6 +2667,11 @@ html.up-ready body{opacity:1;transition:opacity .5s var(--ease)}
      一樣是純附加式,貼在 </body> 之前,整塊刪除即可還原。
      ═══════════════════════════════════════════════════════════════ -->
 <style>
+  /* ---------- 0. 慣性接手時關掉原生平滑捲動 ----------
+     這是關鍵:原本的 html{scroll-behavior:smooth} 會把慣性迴圈每一格的
+     scrollTo 都變成一段動畫,兩邊互相拉扯,結果就是整頁卡住不動。 */
+  html.mo-inertia{scroll-behavior:auto!important}
+
   /* ---------- 1. 大字逐行升起 ---------- */
   .mo-line{display:block;overflow:hidden}
   .mo-line > i{display:block;font-style:inherit;transform:translateY(105%);
@@ -2732,76 +2737,119 @@ html.up-ready body{opacity:1;transition:opacity .5s var(--ease)}
 (function(){
 "use strict";
 function safe(f){ try{ f(); }catch(e){ if(window.console) console.error('[motion]',e); } }
-var reduce = window.matchMedia &&
-             window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+var reduce = !!(window.matchMedia &&
+             window.matchMedia("(prefers-reduced-motion: reduce)").matches);
+/* matchMedia 不是每個環境都有(某些內嵌瀏覽器就沒有),沒有就當成非觸控 */
+function coarse(){
+  try{ return !!(window.matchMedia && window.matchMedia('(hover:none)').matches); }
+  catch(e){ return false; }
+}
 
 /* ═══════════ 1. 慣性滾動 ═══════════
    刻意不用「把整頁塞進 transform 容器」那種寫法 —— 那會讓 position:fixed
    的頁首與 position:sticky 的區段標頭失效。這裡改成攔下滾輪、自己算目標
    位置,再每格 lerp 過去,捲的仍然是真正的 window,所以固定與吸附都還在。 */
+var MO = { on:false, target:0, goto:null };
+
 safe(function(){
   if(reduce) return;
   if(!window.requestAnimationFrame) return;
-  /* 觸控裝置維持原生慣性,不介入 */
-  if(matchMedia('(hover:none)').matches) return;
+  if(coarse()) return;                                     /* 觸控維持原生慣性 */
+  if(/[?&]nomotion=1/.test(location.search)) return;       /* 緊急關閉開關 */
+
+  var root = document.documentElement;
+  root.classList.add('mo-inertia');                        /* 關掉 scroll-behavior:smooth */
+  MO.on = true;
 
   var target = scrollY, current = scrollY, running = false, vel = 0;
-  var EASE = 0.115;          /* 越小越黏,0.115 大約是「跟手但有重量」 */
+  var EASE = 0.115;          /* 越小越黏。0.115 大約是「跟手但有重量」 */
+  var stuck = 0;             /* 連續幾格捲不動就自我了斷 */
+
+  MO.target = target;
 
   function maxScroll(){
     return Math.max(0, document.documentElement.scrollHeight - innerHeight);
   }
+  /* 一定要用瞬間捲動,不能讓瀏覽器再插一層動畫 */
+  function jump(y){
+    try{ scrollTo({top:y, behavior:'instant'}); }
+    catch(e){ scrollTo(0, y); }
+  }
+  /* 出事就整個退回原生捲動,寧可沒有慣性,也不要卡住 */
+  function bail(why){
+    MO.on = false; running = false;
+    root.classList.remove('mo-inertia');
+    root.style.setProperty('--mo-v','0');
+    document.body.classList.remove('mo-moving');
+    if(window.console) console.warn('[motion] 慣性已停用:'+why);
+  }
+  MO.bail = bail;
 
-  /* 這些地方要把滾輪還給瀏覽器 */
   function passthrough(el){
     while(el && el !== document.body){
       if(el.tagName === 'IFRAME' || el.tagName === 'TEXTAREA' ||
          el.tagName === 'SELECT' || el.id === 'up-sheet') return true;
-      var s;
-      try{ s = getComputedStyle(el); }catch(e){ s = null; }
-      if(s && /(auto|scroll)/.test(s.overflowY) && el.scrollHeight > el.clientHeight + 4) return true;
+      var st;
+      try{ st = getComputedStyle(el); }catch(e){ st = null; }
+      if(st && /(auto|scroll)/.test(st.overflowY) && el.scrollHeight > el.clientHeight + 4) return true;
       el = el.parentElement;
     }
     return false;
   }
 
   addEventListener('wheel', function(e){
-    if(e.ctrlKey) return;                       /* 縮放交給瀏覽器 */
+    if(!MO.on) return;
+    if(e.ctrlKey) return;                                  /* 縮放交給瀏覽器 */
     if(passthrough(e.target)) return;
     e.preventDefault();
     target = Math.max(0, Math.min(maxScroll(), target + e.deltaY));
-    if(!running){ running = true; current = scrollY; requestAnimationFrame(step); }
+    MO.target = target;
+    if(!running){ running = true; current = scrollY; stuck = 0; requestAnimationFrame(step); }
   }, {passive:false});
 
-  /* 鍵盤、錨點、程式捲動都會改變 scrollY,要讓 target 跟上,否則會被拉回去 */
+  /* 鍵盤 / 錨點 / 程式捲動改變了位置,閒置時要讓 target 跟上 */
   var syncing;
   addEventListener('scroll', function(){
-    if(!running){ target = scrollY; }
+    if(!running){ target = scrollY; MO.target = target; }
     clearTimeout(syncing);
-    syncing = setTimeout(function(){ if(!running) target = scrollY; }, 90);
+    syncing = setTimeout(function(){ if(!running){ target = scrollY; MO.target = target; } }, 90);
   }, {passive:true});
 
   function step(){
+    if(!MO.on) return;
+    var before = scrollY;
     var d = target - current;
     current += d * EASE;
     vel = d;
     if(Math.abs(d) < .4){ current = target; running = false; }
-    scrollTo(0, current);
-    /* 速度寫進 CSS 變數,-1 ~ 1,給上面那些 transform 用 */
+    jump(current);
+
+    /* 真的有捲到嗎?連續 12 格都紋風不動,就是被什麼擋住了 —— 退回原生 */
+    if(running && Math.abs(target - before) > 2 && Math.abs(scrollY - before) < 0.5){
+      if(++stuck > 12){ bail('連續 12 格捲不動'); return; }
+    }else{ stuck = 0; }
+
     var v = Math.max(-1, Math.min(1, vel / 90));
-    document.documentElement.style.setProperty('--mo-v', v.toFixed(3));
+    root.style.setProperty('--mo-v', v.toFixed(3));
     document.body.classList.toggle('mo-moving', Math.abs(vel) > 8);
     if(running) requestAnimationFrame(step);
     else{
-      document.documentElement.style.setProperty('--mo-v', '0');
+      root.style.setProperty('--mo-v','0');
       document.body.classList.remove('mo-moving');
     }
   }
+
+  /* 錨點要走同一套,否則兩種捲動會互相打斷 */
+  MO.goto = function(y){
+    target = Math.max(0, Math.min(maxScroll(), y));
+    MO.target = target;
+    if(!running){ running = true; current = scrollY; stuck = 0; requestAnimationFrame(step); }
+  };
 });
 
 /* 沒有慣性滾動時(觸控 / 減少動態),仍然要有速度變數,不然卡片會僵住 */
 safe(function(){
-  if(!reduce && !matchMedia('(hover:none)').matches) return;
+  if(!reduce && !coarse()) return;
   var last = scrollY, tick = false;
   addEventListener('scroll', function(){
     if(tick) return; tick = true;
@@ -2902,7 +2950,8 @@ safe(function(){
     if(!s) return;
     e.preventDefault();
     var y = s.getBoundingClientRect().top + scrollY - 64;
-    scrollTo({top:y, behavior: reduce ? 'auto' : 'smooth'});
+    if(MO.on && MO.goto) MO.goto(y);
+    else scrollTo({top:y, behavior: reduce ? 'auto' : 'smooth'});
   });
 });
 })();
