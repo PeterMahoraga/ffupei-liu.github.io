@@ -2681,19 +2681,37 @@ html.up-ready body{opacity:1;transition:opacity .5s var(--ease)}
   .mo-line:nth-child(3) > i{transition-delay:.18s}
 
   /* ---------- 2. 內容隨滾動速度輕微延遲 ----------
-     --mo-v 由 JS 寫入(-1 ~ 1)。幅度刻意小:察覺得到,但不會暈。 */
-  .prod .item,.up-apps .c,.up-flow .s,.specs .col,.tech .diagram,.prod .drawing{
-    will-change:transform;
-    transform:translateY(calc(var(--mo-v,0) * 7px));
-    transition:transform .5s cubic-bezier(.16,1,.3,1);
+     這一段前一版寫得太貪心,是掉幀的主因,現在只留兩件事:
+       · 影響的元素從「幾十個」縮到「圖面與大數字」
+       · --mo-v 不再每格寫入,改成變化夠大才寫(見 JS 的 writeV)
+     另外前一版對整個 <main> 加 filter:saturate() —— 那會逼瀏覽器每格重繪
+     整頁,在這種 400 KB 的 DOM 上直接把幀率打到剩十幾,已完全移除。
+     will-change 也拿掉了:它會替每個元素常駐一張合成層,元素一多反而更慢。 */
+  .prod .drawing{
+    transform:translate3d(0,calc(var(--mo-v,0) * 6px),0);
+    transition:transform .55s cubic-bezier(.16,1,.3,1);
   }
-  .specrow .cell .fig,.specs .sheets .hero-fig b{
-    transform:translateY(calc(var(--mo-v,0) * -4px));
+  .specrow .cell .fig{
+    transform:translate3d(0,calc(var(--mo-v,0) * -4px),0);
     transition:transform .6s cubic-bezier(.16,1,.3,1);
   }
-  /* 滾動時整體微微降一點對比,停下來就回來 —— 像鏡頭在追焦 */
-  main{transition:filter .45s ease}
-  body.mo-moving main{filter:saturate(.94)}
+
+  /* 吸附標頭的毛玻璃在慣性捲動時非常貴 —— 捲動中先關掉,停下來再開回去 */
+  body.mo-moving main > section > .secmark{
+    backdrop-filter:none!important;-webkit-backdrop-filter:none!important;
+    background:var(--paper)!important;
+  }
+
+  /* 捲動中暫停所有裝飾性動畫。指示燈、繼電器、掃描線那些改的是 fill /
+     stroke,每一格都要重畫 SVG;捲動時本來就沒人在看,先停掉把預算讓給捲動。 */
+  body.mo-moving .lv-red,body.mo-moving .lv-grn,body.mo-moving .lv-amb,
+  body.mo-moving .lv-ring,body.mo-moving .lv-relay,body.mo-moving .lv-scan,
+  body.mo-moving .lv-flow,body.mo-moving .lv-film,body.mo-moving .lv-filmring,
+  body.mo-moving .lv-flux line,body.mo-moving .lv-serp,body.mo-moving .lv-layer,
+  body.mo-moving .lv-mark,body.mo-moving .lv-pwr,
+  body.mo-moving .compare .own td:first-child::after{
+    animation-play-state:paused!important;
+  }
 
   /* ---------- 3. 方括號標籤 ---------- */
   .langtog button::before{content:"[";opacity:.4;margin-right:1px}
@@ -2714,7 +2732,6 @@ html.up-ready body{opacity:1;transition:opacity .5s var(--ease)}
   @media (max-width:1100px){#mo-clock{display:none}}
 
   /* ---------- 5. 連結與按鈕:焦點更明確 ---------- */
-  .up-btn,#up-bar a,.demo3d .ctl .acts button{will-change:transform}
   .contact .info dd a{transition:color .2s var(--ease,ease)}
   .contact .info dd a:hover{color:var(--signal)}
 
@@ -2725,9 +2742,7 @@ html.up-ready body{opacity:1;transition:opacity .5s var(--ease)}
 
   @media (prefers-reduced-motion:reduce){
     .mo-line > i{transform:none!important;transition:none!important}
-    .prod .item,.up-apps .c,.up-flow .s,.specs .col,.tech .diagram,.prod .drawing,
-    .specrow .cell .fig,.specs .sheets .hero-fig b{transform:none!important}
-    body.mo-moving main{filter:none}
+    .prod .drawing,.specrow .cell .fig{transform:none!important}
     .mo-rise{opacity:1!important;transform:none!important;transition:none!important}
     #mo-clock .dot{animation:none}
   }
@@ -2802,7 +2817,19 @@ safe(function(){
     if(e.ctrlKey) return;                                  /* 縮放交給瀏覽器 */
     if(passthrough(e.target)) return;
     e.preventDefault();
-    target = Math.max(0, Math.min(maxScroll(), target + e.deltaY));
+
+    var d = e.deltaY;
+    var pending = target - current;                        /* 還沒走完的距離 */
+    /* 反向時把未走完的距離丟掉,直接從現在的位置重新出發。
+       前一版沒做這件事,所以往下滑一大段後改往上,滾輪得先把那段「還債」
+       還完畫面才會動 —— 那就是反向卡頓的來源。 */
+    if(d * pending < 0) target = current;
+    target += d;
+    /* 再夾住:任何時候最多只積欠 1.1 個畫面高度,避免一次滾太多變成長跑 */
+    var lim = innerHeight * 1.1;
+    target = Math.max(current - lim, Math.min(current + lim, target));
+    target = Math.max(0, Math.min(maxScroll(), target));
+
     MO.target = target;
     if(!running){ running = true; current = scrollY; stuck = 0; requestAnimationFrame(step); }
   }, {passive:false});
@@ -2829,14 +2856,24 @@ safe(function(){
       if(++stuck > 12){ bail('連續 12 格捲不動'); return; }
     }else{ stuck = 0; }
 
-    var v = Math.max(-1, Math.min(1, vel / 90));
-    root.style.setProperty('--mo-v', v.toFixed(3));
-    document.body.classList.toggle('mo-moving', Math.abs(vel) > 8);
+    writeV(Math.max(-1, Math.min(1, vel / 90)));
+    setMoving(Math.abs(vel) > 8);
     if(running) requestAnimationFrame(step);
-    else{
-      root.style.setProperty('--mo-v','0');
-      document.body.classList.remove('mo-moving');
-    }
+    else{ writeV(0, true); setMoving(false); }
+  }
+
+  /* 寫 CSS 變數會讓所有用到它的元素重算樣式,所以只在「變化夠大」時才寫。
+     這一項單獨就讓每格的樣式重算次數少了一個數量級。 */
+  var lastV = 0, movingNow = false;
+  function writeV(v, force){
+    if(!force && Math.abs(v - lastV) < 0.06) return;
+    lastV = v;
+    root.style.setProperty('--mo-v', v.toFixed(2));
+  }
+  function setMoving(on){
+    if(on === movingNow) return;                           /* 避免每格動 classList */
+    movingNow = on;
+    document.body.classList.toggle('mo-moving', on);
   }
 
   /* 錨點要走同一套,否則兩種捲動會互相打斷 */
@@ -2857,7 +2894,10 @@ safe(function(){
       var d = scrollY - last; last = scrollY;
       if(!reduce){
         var v = Math.max(-1, Math.min(1, d / 60));
-        document.documentElement.style.setProperty('--mo-v', v.toFixed(3));
+        if(Math.abs(v - (window.__moLastV||0)) >= 0.06){
+          window.__moLastV = v;
+          document.documentElement.style.setProperty('--mo-v', v.toFixed(2));
+        }
       }
       tick = false;
     });
