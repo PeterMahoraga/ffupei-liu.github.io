@@ -3930,16 +3930,15 @@ body.mo-moving .pl-box *,.pl-box.mo-idle *{animation-play-state:paused!important
 (function(){
 "use strict";
 try{
-  var tech = document.getElementById('tech');
-  if(!tech) return;
-  var grid = tech.querySelector('.grid');
-  if(!grid) return;
+  /* 放在產品陣容之前 —— 客戶看完首屏往下捲,第二眼就看到原理 */
+  var anchor = document.getElementById('products');
+  if(!anchor) return;
 
   /* 流體粒子:等距排開,再用負的 animation-delay 讓它們錯開出發 */
   var dots = '';
   for(var i=0;i<14;i++){
     var d = (-i * (6/14)).toFixed(2);
-    var y = 150 + (i % 3 - 1) * 11;
+    var y = 148 + (i % 3 - 1) * 12;
     dots += '<g class="pl-p" style="animation-delay:'+d+'s">'
           + '<circle cx="130" cy="'+y+'" r="4.5" style="animation-delay:'+d+'s"/></g>';
   }
@@ -3947,49 +3946,52 @@ try{
   var html =
   '<div class="pl">'+
     '<div class="secmark" style="padding-top:22px;padding-bottom:16px">'+
-      '<span class="no">02.01</span>'+
+      '<span class="no">00.02</span>'+
       '<span data-zh="熱怎麼走" data-en="How the heat travels">熱怎麼走</span>'+
       '<span class="rule"></span>'+
       '<span class="mono" data-zh="六秒循環・示意" data-en="Six-second loop · schematic">六秒循環・示意</span>'+
     '</div>'+
     '<div class="pl-box" id="pl-box">'+
-      '<svg viewBox="0 0 1200 300" xmlns="http://www.w3.org/2000/svg">'+
+      '<svg viewBox="0 0 1200 340" xmlns="http://www.w3.org/2000/svg">'+
         '<defs><marker id="plArr" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto">'+
         '<path d="M0 0 L7 3.5 L0 7 z" fill="#b4560e"/></marker></defs>'+
 
-        /* 管壁:上下兩條,恆定不動 */
-        '<g class="pl-wall">'+
-          '<rect x="120" y="96" width="940" height="16" fill="#dfe6e4"/>'+
-          '<rect x="120" y="188" width="940" height="16" fill="#dfe6e4"/>'+
-          '<text x="120" y="86" class="td-lbl-mute" data-zh-svg="石英管壁" data-en-svg="QUARTZ WALL">石英管壁</text>'+
-        '</g>'+
+        /* 標籤獨立一條帶,和圖形保持 12px 以上的距離,不會再被色塊蓋到 */
+        '<text x="120" y="52" class="td-lbl-mute" data-zh-svg="鍍膜發熱層・乾側" data-en-svg="HEATING FILM · DRY SIDE">鍍膜發熱層・乾側</text>'+
+        '<text x="1060" y="52" text-anchor="end" class="td-lbl-mute" data-zh-svg="石英管壁・唯一隔離" data-en-svg="QUARTZ WALL · THE ONLY BARRIER">石英管壁・唯一隔離</text>'+
 
         /* 薄膜:貼在管壁外側 */
-        '<rect class="pl-film" x="120" y="84" width="940" height="10"/>'+
-        '<rect class="pl-film" x="120" y="206" width="940" height="10"/>'+
-        '<text x="120" y="74" class="td-lbl-mute" data-zh-svg="鍍膜發熱層・乾側" data-en-svg="HEATING FILM · DRY SIDE">鍍膜發熱層・乾側</text>'+
-        '<text x="120" y="236" class="td-lbl-mute" data-zh-svg="鍍膜發熱層・乾側" data-en-svg="HEATING FILM · DRY SIDE">鍍膜發熱層・乾側</text>'+
+        '<rect class="pl-film" x="120" y="70" width="940" height="10"/>'+
+        '<rect class="pl-film" x="120" y="216" width="940" height="10"/>'+
+
+        /* 管壁 */
+        '<g class="pl-wall">'+
+          '<rect x="120" y="82" width="940" height="16" fill="#dfe6e4"/>'+
+          '<rect x="120" y="198" width="940" height="16" fill="#dfe6e4"/>'+
+        '</g>'+
 
         /* 熱流:由膜面穿過管壁往內 */
         '<g class="pl-heat" marker-end="url(#plArr)">'+
           (function(){var s='';for(var k=0;k<9;k++){var x=190+k*100;
-            s+='<path d="M'+x+' 96 L'+x+' 128" style="animation-delay:'+(k*0.06).toFixed(2)+'s"/>'+
-               '<path d="M'+(x+50)+' 204 L'+(x+50)+' 172" style="animation-delay:'+(k*0.06+0.03).toFixed(2)+'s"/>';}
+            s+='<path d="M'+x+' 98 L'+x+' 128" style="animation-delay:'+(k*0.06).toFixed(2)+'s"/>'+
+               '<path d="M'+(x+50)+' 198 L'+(x+50)+' 168" style="animation-delay:'+(k*0.06+0.03).toFixed(2)+'s"/>';}
             return s;})()+
         '</g>'+
 
         /* 流體 */
-        '<rect x="120" y="112" width="940" height="76" fill="#f2f7f8"/>'+
+        '<rect x="120" y="98" width="940" height="100" fill="#f2f7f8"/>'+
         dots+
-        '<text x="120" y="266" class="td-lbl-mute" data-zh-svg="流體・只接觸石英" data-en-svg="FLUID · TOUCHES QUARTZ ONLY">流體・只接觸石英</text>'+
+
+        /* 底部說明,和下方管壁保持距離 */
+        '<text x="120" y="262" class="td-lbl-mute" data-zh-svg="流體・全程只接觸石英" data-en-svg="FLUID · TOUCHES QUARTZ ONLY">流體・全程只接觸石英</text>'+
 
         /* 進出口與溫度柱 */
-        '<text x="112" y="155" text-anchor="end" class="td-label" fill="#1f8fb4" data-zh-svg="進" data-en-svg="IN">進</text>'+
-        '<text x="1070" y="155" class="td-label" fill="#5f9c1f" data-zh-svg="出" data-en-svg="OUT">出</text>'+
-        '<rect x="1120" y="90" width="14" height="120" fill="#eef0ed"/>'+
-        '<rect class="pl-bar" x="1120" y="90" width="14" height="120" fill="#b4560e" opacity=".85"'+
+        '<text x="112" y="152" text-anchor="end" class="td-label" fill="#1f8fb4" data-zh-svg="進" data-en-svg="IN">進</text>'+
+        '<text x="1070" y="152" class="td-label" fill="#5f9c1f" data-zh-svg="出" data-en-svg="OUT">出</text>'+
+        '<rect x="1120" y="76" width="14" height="140" fill="#eef0ed"/>'+
+        '<rect class="pl-bar" x="1120" y="76" width="14" height="140" fill="#b4560e" opacity=".85"'+
           ' style="transform-box:fill-box"/>'+
-        '<text x="1127" y="80" text-anchor="middle" class="td-lbl-mute" data-zh-svg="溫度" data-en-svg="TEMP">溫度</text>'+
+        '<text x="1127" y="64" text-anchor="middle" class="td-lbl-mute" data-zh-svg="溫度" data-en-svg="TEMP">溫度</text>'+
       '</svg>'+
 
       '<div class="pl-cap">'+
@@ -4001,7 +4003,7 @@ try{
     '</div>'+
   '</div>';
 
-  grid.insertAdjacentHTML('afterend', html);
+  anchor.insertAdjacentHTML('beforebegin', html);
 
   /* 離開畫面就停:沿用 MOTION LAYER 的 .mo-idle 機制 */
   var box = document.getElementById('pl-box');
