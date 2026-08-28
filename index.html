@@ -4017,5 +4017,527 @@ try{
 })();
 </script>
 
+<!-- ═══════════════════════════════════════════════════════════════
+     HERO v13 — 釘選式捲動解構 + 互動熱力演示
+     首屏捲到時釘住,三段在原地推進;第三段不是靜態圖,而是可以拉的
+     選型演示 —— 出口溫度直接查 2026 型錄第 4 頁的實測對照表。
+
+     釘選用 position:sticky,不是 JS 改 transform。sticky 走的是合成層,
+     跟慣性捲動不會打架,固定頁首也不會失效。
+     手機不釘選(小螢幕釘住等於把內容鎖死),改成按鈕切換。
+
+     只呈現「熱怎麼走」,不呈現內部結構 —— 爆炸圖是 CEO 禁止的。
+     ═══════════════════════════════════════════════════════════════ -->
+<style>
+/* ── 釘選容器 ─────────────────────────────────────────── */
+.hs{position:relative;height:320vh;padding:0 24px;max-width:var(--maxw);margin:0 auto}
+.hs-pin{
+  position:sticky;top:56px;height:calc(100vh - 76px);min-height:520px;
+  display:flex;flex-direction:column;
+  border:1px solid var(--rule);border-radius:4px;overflow:hidden;
+  background:linear-gradient(to bottom,#fafafa 0%,#f4f4f3 58%,#e9eae7 58.4%,#e1e3e0 100%);
+}
+
+/* 頂部進度 */
+.hs-top{display:flex;align-items:center;gap:14px;padding:14px 18px;
+  border-bottom:1px solid var(--rule);background:rgba(255,255,255,.7)}
+.hs-top .lbl{font-stretch:87%;font-weight:700;font-size:10px;letter-spacing:.18em;
+  text-transform:uppercase;color:var(--signal)}
+.hs-prog{flex:1;display:flex;gap:6px}
+.hs-prog i{flex:1;height:3px;border-radius:2px;background:var(--rule);overflow:hidden;position:relative}
+.hs-prog i::after{content:"";position:absolute;inset:0;background:var(--brand);
+  transform:scaleX(0);transform-origin:left;transition:transform .35s cubic-bezier(.16,1,.3,1)}
+.hs-prog i.done::after{transform:scaleX(1)}
+.hs-prog i.now::after{transform:scaleX(var(--p,0))}
+.hs-top .cnt{font-stretch:87%;font-weight:700;font-size:11px;color:var(--mute);
+  font-variant-numeric:tabular-nums;letter-spacing:.1em}
+.hs-top .cnt b{color:var(--ink)}
+
+/* 舞台 */
+.hs-body{flex:1;position:relative;overflow:hidden}
+.hs-scene{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+  padding:20px 26px;opacity:0;transform:translateY(18px) scale(.985);pointer-events:none;
+  transition:opacity .55s cubic-bezier(.16,1,.3,1),transform .55s cubic-bezier(.16,1,.3,1)}
+.hs-scene.on{opacity:1;transform:none;pointer-events:auto}
+.hs-scene img{max-width:min(66%,760px);height:auto;display:block;
+  filter:drop-shadow(0 16px 24px rgba(20,32,26,.14))}
+.hs-scene svg{width:min(92%,1080px);height:auto;overflow:visible}
+
+/* 文字欄 */
+.hs-copy{position:absolute;left:26px;bottom:20px;max-width:min(42%,380px);z-index:3;
+  pointer-events:none}
+.hs-copy .k{font-stretch:87%;font-weight:700;font-size:9.5px;letter-spacing:.2em;
+  text-transform:uppercase;color:var(--signal);margin-bottom:8px;
+  display:flex;align-items:center;gap:8px}
+.hs-copy .k::before{content:"";width:16px;height:1px;background:var(--signal)}
+.hs-copy h3{font-size:clamp(18px,1.9vw,24px);line-height:1.32;font-weight:700;margin-bottom:8px}
+.hs-copy h3 em{font-style:normal;color:var(--signal)}
+.hs-copy p{font-size:12.5px;line-height:1.8;color:#43514a}
+.hs-copy p b{color:var(--signal);font-weight:600}
+
+/* ── 第三段:互動熱力演示 ───────────────────────────── */
+.hs-demo{display:grid;grid-template-columns:1fr 300px;gap:26px;width:100%;
+  align-items:center;padding:0 4px}
+.hs-demo .viz{position:relative}
+.hs-ctrl{background:var(--card);border:1px solid var(--rule);border-radius:4px;padding:18px}
+.hs-ctrl h4{font-size:14px;font-weight:700;margin-bottom:2px}
+.hs-ctrl .sub{font-size:10.5px;color:var(--mute);letter-spacing:.06em;margin-bottom:14px}
+.hs-f{margin-bottom:14px}
+.hs-f .row{display:flex;justify-content:space-between;align-items:baseline;
+  font-size:12px;color:var(--mute);margin-bottom:6px}
+.hs-f .row b{font-size:15px;color:var(--ink);font-variant-numeric:tabular-nums;font-weight:700}
+.hs-f input[type=range]{width:100%;accent-color:var(--signal);cursor:pointer}
+.hs-pw{display:flex;gap:6px}
+.hs-pw button{flex:1;padding:9px 4px;border:1.5px solid var(--rule);border-radius:3px;
+  background:var(--paper);color:var(--mute);font-family:inherit;font-size:12px;font-weight:600;
+  cursor:pointer;transition:all .18s;font-variant-numeric:tabular-nums}
+.hs-pw button:hover{border-color:var(--brand);color:var(--ink);background:#fff}
+.hs-pw button.on{background:var(--signal);border-color:var(--signal);color:#fff}
+.hs-out{border-top:1px solid var(--ink);margin-top:16px;padding-top:14px}
+.hs-out .big{display:flex;align-items:baseline;gap:5px}
+.hs-out .big b{font-size:42px;font-weight:800;letter-spacing:-.03em;line-height:1;
+  font-variant-numeric:tabular-nums;color:var(--heat);transition:color .3s}
+.hs-out .big i{font-style:normal;font-size:15px;font-weight:600;color:var(--mute)}
+.hs-out .big em{font-style:normal;margin-left:auto;font-stretch:87%;font-weight:700;
+  font-size:9.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--mute)}
+.hs-out .r{display:flex;justify-content:space-between;font-size:12px;padding:7px 0;
+  border-bottom:1px solid var(--rule)}
+.hs-out .r span:first-child{color:var(--mute)}
+.hs-out .r span:last-child{font-variant-numeric:tabular-nums;font-weight:600}
+.hs-src{font-stretch:87%;font-weight:600;font-size:9.5px;letter-spacing:.06em;
+  color:var(--mute);text-transform:uppercase;margin-top:12px;line-height:1.6}
+
+/* ── 段 02:玻璃質感與描線 ─────────────────────────── */
+.hs-draw{stroke-dasharray:2200;stroke-dashoffset:2200;
+  transition:stroke-dashoffset 1.5s cubic-bezier(.16,1,.3,1) .15s}
+.hs-scene.on .hs-draw{stroke-dashoffset:0}
+.hs-fade{opacity:0;transform:translateY(10px);
+  transition:opacity .7s ease,transform .7s cubic-bezier(.16,1,.3,1)}
+.hs-scene.on .hs-fade{opacity:1;transform:none}
+.hs-scene.on .hs-fade.d1{transition-delay:.45s}
+.hs-scene.on .hs-fade.d2{transition-delay:.65s}
+.hs-scene.on .hs-fade.d3{transition-delay:.85s}
+/* 玻璃反光:一道細長高光沿著管身滑過 */
+.hs-shine{animation:hsShine 5.5s cubic-bezier(.4,0,.2,1) infinite}
+@keyframes hsShine{0%{transform:translateX(-120px);opacity:0}
+  12%{opacity:.55}32%{opacity:.55}45%{transform:translateX(940px);opacity:0}100%{opacity:0}}
+/* 端部「零 O-ring」的呼吸圈 */
+.hs-ring{animation:hsRing 3.2s ease-in-out infinite}
+@keyframes hsRing{0%,100%{r:5;opacity:.35}50%{r:8;opacity:.9}}
+
+/* ── 段 03:發熱與曲線 ─────────────────────────────── */
+.hs-film-glow{animation:hsGlow 3.6s ease-in-out infinite}
+@keyframes hsGlow{0%,100%{opacity:.75}50%{opacity:1}}
+.hs-arrow path{stroke:#b4560e;stroke-width:2;vector-effect:non-scaling-stroke;
+  animation:hsArrow 2.6s ease-in-out infinite}
+@keyframes hsArrow{0%,100%{opacity:.18}50%{opacity:1}}
+.hs-curve{transition:d .45s cubic-bezier(.16,1,.3,1),stroke .45s ease}
+.hs-curve-fill{transition:d .45s cubic-bezier(.16,1,.3,1),fill .45s ease}
+.hs-knob{transition:cx .45s cubic-bezier(.16,1,.3,1),cy .45s cubic-bezier(.16,1,.3,1),fill .45s}
+.hs-axis{stroke:var(--rule);stroke-width:1;vector-effect:non-scaling-stroke}
+.hs-tick{font-size:13px;fill:var(--mute);letter-spacing:.04em}
+
+/* 熱力色帶 */
+.hs-heat{transition:opacity .4s}
+.hs-part circle{animation:hsFlow 3.4s linear infinite}
+@keyframes hsFlow{0%{transform:translateX(0)}100%{transform:translateX(820px)}}
+
+/* ── 底部按鈕 ─────────────────────────────────────── */
+.hs-bar{display:flex;align-items:center;gap:14px;flex-wrap:wrap;
+  padding:12px 16px;border-top:1px solid var(--rule);background:var(--card)}
+.hs-hint{display:flex;align-items:center;gap:9px;font-stretch:87%;font-weight:700;
+  font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--signal)}
+.hs-hint .d{width:7px;height:7px;border-radius:50%;background:var(--brand);
+  animation:hsDot 2.6s ease-in-out infinite}
+@keyframes hsDot{0%,100%{opacity:.35;transform:scale(.82)}50%{opacity:1;transform:scale(1)}}
+.hs-steps{display:flex;gap:8px;margin-left:auto;flex-wrap:wrap}
+.hs-steps button{display:flex;align-items:center;gap:9px;padding:11px 17px;cursor:pointer;
+  border:2px solid var(--rule);border-radius:4px;background:var(--paper);color:#4a564e;
+  font-family:inherit;font-size:13px;font-weight:500;transition:all .18s;white-space:nowrap}
+.hs-steps button .n{font-stretch:87%;font-weight:800;font-size:10px;letter-spacing:.1em;color:var(--mute)}
+.hs-steps button:hover{border-color:var(--brand);background:#f6fbf0}
+.hs-steps button.on{background:var(--signal);border-color:var(--signal);color:#fff;font-weight:600;
+  box-shadow:0 4px 14px -6px rgba(79,125,25,.6)}
+.hs-steps button.on .n{color:rgba(255,255,255,.75)}
+
+@media (max-width:1000px){
+  .hs-demo{grid-template-columns:1fr;gap:16px}
+  .hs-ctrl{padding:14px}
+  .hs-out .big b{font-size:34px}
+}
+@media (max-width:900px){
+  /* 手機不釘選:釘住等於把內容鎖死,改成按鈕切換 */
+  .hs{height:auto;padding:0 16px}
+  .hs-pin{position:static;height:auto;min-height:0}
+  .hs-body{height:auto;min-height:340px}
+  .hs-scene{position:relative;inset:auto;display:none;padding:14px 0;transform:none}
+  .hs-scene.on{display:flex}
+  .hs-scene img{max-width:100%}
+  .hs-copy{position:static;max-width:none;padding:0 0 12px}
+  .hs-steps{margin-left:0;width:100%}
+  .hs-steps button{flex:1;justify-content:center;padding:11px 6px;font-size:12px}
+}
+@media (prefers-reduced-motion:reduce){
+  .hs-scene{transition:none}
+  .hs-part circle,.hs-hint .d{animation:none!important}
+}
+</style>
+<script>
+(function(){
+"use strict";
+try{
+
+/* ═══ 型錄第 4 頁的實測出水溫度(°C),進水以常溫計 ═══
+   這張表是網站上唯一「量出來的」數據,所以演示直接查它,
+   兩點之間用線性內插,絕不外推 —— 表格沒有的區間不假裝知道。 */
+var FLOW = [4,5,6,7,8,9,10,11,12];
+var TBL = {
+  10:[60,53,48,46,42,40,39,37,36],
+  20:[85,82,72,65,60,56,53,50,48],
+  30:[85,85,85,85,78,72,67,64,60]
+};
+var INLET = 25;                      /* 型錄:進水以常溫計 */
+
+function lookup(kw, q){
+  var row = TBL[kw];
+  if(q <= FLOW[0]) return row[0];
+  if(q >= FLOW[FLOW.length-1]) return row[row.length-1];
+  for(var i=0;i<FLOW.length-1;i++){
+    if(q >= FLOW[i] && q <= FLOW[i+1]){
+      var t = (q - FLOW[i]) / (FLOW[i+1] - FLOW[i]);
+      return row[i] + (row[i+1] - row[i]) * t;
+    }
+  }
+  return row[row.length-1];
+}
+
+/* ═══ 版面 ═══ */
+var old = document.querySelector('.demo3d');
+if(!old) return;
+
+var parts = '';
+for(var i=0;i<12;i++){
+  var d = (-i * (3.4/12)).toFixed(2);
+  var y = 150 + (i % 3 - 1) * 13;
+  parts += '<circle class="hp" cx="150" cy="'+y+'" r="5" fill="#1f8fb4" style="animation-delay:'+d+'s"/>';
+}
+
+var html =
+'<section class="hs" id="hs">'+
+  '<div class="hs-pin">'+
+    '<div class="hs-top">'+
+      '<span class="lbl" data-zh="產品與原理" data-en="Product &amp; principle">產品與原理</span>'+
+      '<span class="hs-prog"><i></i><i></i><i></i></span>'+
+      '<span class="cnt"><b id="hs-now">1</b> / 3</span>'+
+    '</div>'+
+
+    '<div class="hs-body">'+
+      /* ── 01 產品 ── */
+      '<div class="hs-scene on" data-s="0">'+
+        '<img src="img/hero-dn3.jpg" width="1400" height="876" decoding="async"'+
+        ' alt="Rewatt DN3 單顆加熱模組">'+
+      '</div>'+
+
+      /* ── 02 石英流道 ── */
+      '<div class="hs-scene" data-s="1">'+
+        '<svg viewBox="0 0 1200 330" xmlns="http://www.w3.org/2000/svg">'+
+          '<defs>'+
+            '<linearGradient id="hsGlass" x1="0" y1="0" x2="0" y2="1">'+
+              '<stop offset="0" stop-color="#ffffff"/>'+
+              '<stop offset=".35" stop-color="#eef5f7"/>'+
+              '<stop offset=".62" stop-color="#dfeaee"/>'+
+              '<stop offset="1" stop-color="#f4f8f9"/>'+
+            '</linearGradient>'+
+            '<linearGradient id="hsShineG" x1="0" y1="0" x2="1" y2="0">'+
+              '<stop offset="0" stop-color="#fff" stop-opacity="0"/>'+
+              '<stop offset=".5" stop-color="#fff"/>'+
+              '<stop offset="1" stop-color="#fff" stop-opacity="0"/>'+
+            '</linearGradient>'+
+            '<clipPath id="hsClip"><rect x="140" y="112" width="920" height="86" rx="6"/></clipPath>'+
+          '</defs>'+
+
+          '<text x="140" y="44" class="td-lbl-mute hs-fade" data-zh-svg="一體成型石英管・兩端 100% 純石英接液" data-en-svg="ONE-PIECE QUARTZ · 100% PURE QUARTZ WETTED">一體成型石英管・兩端 100% 純石英接液</text>'+
+
+          /* 端部螺牙頸 */
+          '<rect x="86" y="132" width="54" height="46" rx="4" fill="#e6edef" stroke="#c9d5d8"/>'+
+          '<rect x="1060" y="132" width="54" height="46" rx="4" fill="#e6edef" stroke="#c9d5d8"/>'+
+          '<g stroke="#c3d0d3" stroke-width="1">'+
+            '<path d="M96 132v46M108 132v46M120 132v46M132 132v46"/>'+
+            '<path d="M1070 132v46M1082 132v46M1094 132v46M1106 132v46"/>'+
+          '</g>'+
+
+          /* 管身:玻璃漸層 + 描線 */
+          '<rect x="140" y="112" width="920" height="86" rx="6" fill="url(#hsGlass)"/>'+
+          '<rect class="hs-draw" x="140" y="112" width="920" height="86" rx="6"'+
+            ' fill="none" stroke="#9fb2b6" stroke-width="2" vector-effect="non-scaling-stroke"/>'+
+          '<path class="hs-draw" d="M140 132 H1060 M140 178 H1060" stroke="#c3d0d3"'+
+            ' stroke-width="1.5" fill="none" vector-effect="non-scaling-stroke"/>'+
+
+          /* 流體與反光 */
+          '<g clip-path="url(#hsClip)">'+
+            '<g class="hs-part">'+parts.replace(/cy="1(\d\d)"/g, function(m,a){ return 'cy="'+(155+(+a-150))+'"'; })+'</g>'+
+            '<rect class="hs-shine" x="140" y="112" width="130" height="86" fill="url(#hsShineG)" opacity="0"/>'+
+          '</g>'+
+
+          /* 兩端純石英區段:括號 + 呼吸圈 */
+          '<g class="hs-fade d1">'+
+            '<path d="M86 226 V238 M86 232 H300 M300 226 V238" stroke="#4f7d19" stroke-width="2" fill="none"/>'+
+            '<text x="193" y="266" text-anchor="middle" class="td-label" fill="#4f7d19" data-zh-svg="100% 純石英" data-en-svg="100% PURE QUARTZ">100% 純石英</text>'+
+            '<circle class="hs-ring" cx="113" cy="155" r="5" fill="none" stroke="#4f7d19" stroke-width="2"/>'+
+          '</g>'+
+          '<g class="hs-fade d1">'+
+            '<path d="M900 226 V238 M900 232 H1114 M1114 226 V238" stroke="#4f7d19" stroke-width="2" fill="none"/>'+
+            '<text x="1007" y="266" text-anchor="middle" class="td-label" fill="#4f7d19" data-zh-svg="100% 純石英" data-en-svg="100% PURE QUARTZ">100% 純石英</text>'+
+            '<circle class="hs-ring" cx="1087" cy="155" r="5" fill="none" stroke="#4f7d19" stroke-width="2"/>'+
+          '</g>'+
+
+          /* 三個賣點,依序淡入 */
+          '<g class="hs-fade d2">'+
+            '<text x="600" y="300" text-anchor="middle" class="td-lbl-mute" data-zh-svg="無接縫 · 無膠合 · 濕式路徑零 O-ring" data-en-svg="NO JOINTS · NO BONDING · ZERO O-RINGS">無接縫 · 無膠合 · 濕式路徑零 O-ring</text>'+
+          '</g>'+
+        '</svg>'+
+      '</div>'+
+
+      /* ── 03 互動熱力演示 ── */
+      '<div class="hs-scene" data-s="2">'+
+        '<div class="hs-demo">'+
+          '<div class="viz">'+
+            '<svg viewBox="0 0 1000 420" xmlns="http://www.w3.org/2000/svg">'+
+              '<defs>'+
+                '<linearGradient id="hsGrad" x1="0" y1="0" x2="1" y2="0">'+
+                  '<stop offset="0" stop-color="#1f8fb4"/>'+
+                  '<stop offset="1" stop-color="#b4560e" id="hsGradEnd"/>'+
+                '</linearGradient>'+
+                '<linearGradient id="hsFill" x1="0" y1="0" x2="0" y2="1">'+
+                  '<stop offset="0" stop-color="#b4560e" stop-opacity=".28" id="hsFillTop"/>'+
+                  '<stop offset="1" stop-color="#b4560e" stop-opacity="0"/>'+
+                '</linearGradient>'+
+              '</defs>'+
+
+              '<text x="60" y="40" class="td-lbl-mute" data-zh-svg="鍍膜發熱層・乾側" data-en-svg="HEATING FILM · DRY SIDE">鍍膜發熱層・乾側</text>'+
+              '<rect class="hs-film-glow" x="60" y="58" width="880" height="9" fill="#c26a14"/>'+
+              '<rect class="hs-film-glow" x="60" y="200" width="880" height="9" fill="#c26a14"/>'+
+              '<rect x="60" y="70" width="880" height="14" fill="#dfe6e4"/>'+
+              '<rect x="60" y="184" width="880" height="14" fill="#dfe6e4"/>'+
+              '<rect class="hs-heat" id="hs-heat" x="60" y="84" width="880" height="100" fill="url(#hsGrad)" opacity=".3"/>'+
+
+              /* 熱流箭頭:由膜面往內 */
+              '<g class="hs-arrow">'+
+                (function(){var o='';for(var k=0;k<8;k++){var x=110+k*110;
+                  o+='<path d="M'+x+' 84 V112" style="animation-delay:'+(k*0.08).toFixed(2)+'s"/>'+
+                     '<path d="M'+(x+55)+' 184 V156" style="animation-delay:'+(k*0.08+0.04).toFixed(2)+'s"/>';}
+                  return o;})()+
+              '</g>'+
+
+              '<g class="hs-part">'+parts.replace(/cx="150"/g,'cx="70"').replace(/cy="1(\d\d)"/g,function(m,a){return 'cy="'+(134+(+a-150))+'"';})+'</g>'+
+              '<text x="52" y="140" text-anchor="end" class="td-label" fill="#1f8fb4" data-zh-svg="進 25°C" data-en-svg="IN 25°C">進 25°C</text>'+
+              '<text x="950" y="140" class="td-label" fill="#b4560e" id="hs-outT">出</text>'+
+
+              /* ── 溫升曲線:沿管長的溫度變化,跟著滑桿重畫 ── */
+              '<path class="hs-axis" d="M60 380 H940 M60 260 V380"/>'+
+              '<text x="52" y="266" text-anchor="end" class="hs-tick" id="hs-ymax">85</text>'+
+              '<text x="52" y="384" text-anchor="end" class="hs-tick">25</text>'+
+              '<text x="60" y="404" class="td-lbl-mute" data-zh-svg="進口" data-en-svg="INLET">進口</text>'+
+              '<text x="940" y="404" text-anchor="end" class="td-lbl-mute" data-zh-svg="出口" data-en-svg="OUTLET">出口</text>'+
+              '<text x="500" y="248" text-anchor="middle" class="td-lbl-mute" data-zh-svg="沿管長的溫度變化" data-en-svg="TEMPERATURE ALONG THE TUBE">沿管長的溫度變化</text>'+
+              '<path class="hs-curve-fill" id="hs-fill" d="M60 380 L940 380 L940 380 Z" fill="url(#hsFill)"/>'+
+              '<path class="hs-curve" id="hs-curve" d="M60 380 Q500 380 940 380" fill="none"'+
+                ' stroke="#b4560e" stroke-width="3" stroke-linecap="round" vector-effect="non-scaling-stroke"/>'+
+              '<circle class="hs-knob" id="hs-knob" cx="940" cy="380" r="6" fill="#b4560e" stroke="#fff" stroke-width="2"/>'+
+            '</svg>'+
+          '</div>'+
+          '<div class="hs-ctrl">'+
+            '<h4 data-zh="試試你的條件" data-en="Try your own conditions">試試你的條件</h4>'+
+            '<div class="sub" data-zh="數值取自型錄實測對照表" data-en="From the catalog\\u2019s measured table">數值取自型錄實測對照表</div>'+
+            '<div class="hs-f">'+
+              '<div class="row"><span data-zh="功率" data-en="Power">功率</span></div>'+
+              '<div class="hs-pw" id="hs-pw">'+
+                '<button data-kw="10">10 kW</button>'+
+                '<button data-kw="20" class="on">20 kW</button>'+
+                '<button data-kw="30">30 kW</button>'+
+              '</div>'+
+            '</div>'+
+            '<div class="hs-f">'+
+              '<div class="row"><span data-zh="流量" data-en="Flow">流量</span><b><span id="hs-qv">8</span> L/min</b></div>'+
+              '<input id="hs-q" type="range" min="4" max="12" step="0.5" value="8">'+
+            '</div>'+
+            '<div class="hs-out">'+
+              '<div class="big"><b id="hs-t">60</b><i>°C</i>'+
+                '<em data-zh="出水溫度" data-en="Outlet">出水溫度</em></div>'+
+              '<div class="r"><span data-zh="溫升 ΔT" data-en="Rise ΔT">溫升 ΔT</span><span id="hs-dt">—</span></div>'+
+              '<div class="r"><span data-zh="建議機型" data-en="Model">建議機型</span><span id="hs-m">—</span></div>'+
+            '</div>'+
+            '<div class="hs-src" data-zh="進水以常溫 25°C 計・表列以外的流量以線性內插估算・實際依進水溫度與環境而異"'+
+              ' data-en="Inlet taken as 25°C · values between table points are interpolated · actual varies with inlet temperature and environment">'+
+              '進水以常溫 25°C 計・表列以外的流量以線性內插估算・實際依進水溫度與環境而異</div>'+
+          '</div>'+
+        '</div>'+
+      '</div>'+
+
+      '<div class="hs-copy" id="hs-copy"></div>'+
+    '</div>'+
+
+    '<div class="hs-bar">'+
+      '<span class="hs-hint"><span class="d"></span>'+
+        '<span data-zh="往下捲或點按切換" data-en="Scroll or tap to switch">往下捲或點按切換</span></span>'+
+      '<div class="hs-steps" id="hs-steps">'+
+        '<button data-s="0" class="on"><span class="n">01</span><span data-zh="整機外觀" data-en="The unit">整機外觀</span></button>'+
+        '<button data-s="1"><span class="n">02</span><span data-zh="石英流道" data-en="Quartz path">石英流道</span></button>'+
+        '<button data-s="2"><span class="n">03</span><span data-zh="熱力演示" data-en="Thermal demo">熱力演示</span></button>'+
+      '</div>'+
+    '</div>'+
+  '</div>'+
+'</section>';
+
+old.insertAdjacentHTML('beforebegin', html);
+old.parentNode.removeChild(old);
+
+/* ═══ 文案 ═══ */
+var COPY = {
+ 0:{k:['01 · 整機外觀','01 · THE UNIT'],
+    t:['串接在管路上的<em>一顆加熱器</em>。','One heater, <em>in line with the pipe</em>.'],
+    s:['DN3 單顆 3 kW,串聯可達 9 kW;進出口徑 3/4″,直接串在既有管線上。',
+       'DN3 delivers 3 kW per unit, up to 9 kW in series, with 3/4″ ports.']},
+ 1:{k:['02 · 石英流道','02 · QUARTZ PATH'],
+    t:['藥液走過的,<em>從頭到尾都是石英</em>。','The chemistry only ever touches <em>quartz</em>.'],
+    s:['一體成型的石英管,<b>兩端 100% 純石英接液</b>。沒有接縫、沒有膠合,濕式路徑上也沒有 O-ring。',
+       'One-piece quartz, <b>100% quartz wetted at both ends</b> — no joints, no bonding, no O-rings.']},
+ 2:{k:['03 · 熱力演示','03 · THERMAL DEMO'],
+    t:['拉一下,<em>看你的條件能到幾度</em>。','Drag it — <em>see what your process gets</em>.'],
+    s:['數值取自 2026 型錄的實測對照表,不是模擬值。',
+       'Figures come from the 2026 catalog’s measured table, not a simulation.']}
+};
+
+var pin   = document.querySelector('.hs-pin');
+var sect  = document.getElementById('hs');
+var steps = document.getElementById('hs-steps');
+var btns  = [].slice.call(steps.querySelectorAll('button'));
+var scenes= [].slice.call(document.querySelectorAll('.hs-scene'));
+var bars  = document.querySelectorAll('.hs-prog i');
+var copy  = document.getElementById('hs-copy');
+var nowEl = document.getElementById('hs-now');
+var cur   = -1;
+
+function en(){ return document.documentElement.lang === 'en'; }
+
+function show(s){
+  if(s === cur) return;
+  cur = s;
+  scenes.forEach(function(el){ el.classList.toggle('on', +el.dataset.s === s); });
+  btns.forEach(function(b){ b.classList.toggle('on', +b.dataset.s === s); });
+  var c = COPY[s], i = en() ? 1 : 0;
+  copy.innerHTML = '<div class="k">'+c.k[i]+'</div><h3>'+c.t[i]+'</h3><p>'+c.s[i]+'</p>';
+  nowEl.textContent = s + 1;
+}
+
+/* 捲動進度 → 段落。sticky 已經把畫面釘住了,這裡只負責算「捲到哪一段」 */
+var pinned = true;
+function measure(){ pinned = innerWidth > 900; }
+measure();
+addEventListener('resize', measure, {passive:true});
+
+var tick = false;
+function onScroll(){
+  if(tick || !pinned) return;
+  tick = true;
+  requestAnimationFrame(function(){
+    tick = false;
+    var r = sect.getBoundingClientRect();
+    var span = sect.offsetHeight - pin.offsetHeight;
+    if(span <= 0) return;
+    var p = Math.max(0, Math.min(1, -r.top / span));
+    var s = p < 0.34 ? 0 : (p < 0.67 ? 1 : 2);
+    show(s);
+    /* 進度條:已走完的填滿,當前那一格依比例填 */
+    var seg = (p - s/3) * 3;
+    for(var i=0;i<bars.length;i++){
+      bars[i].classList.toggle('done', i < s);
+      bars[i].classList.toggle('now', i === s);
+      if(i === s) bars[i].style.setProperty('--p', Math.max(0, Math.min(1, seg)).toFixed(3));
+    }
+  });
+}
+addEventListener('scroll', onScroll, {passive:true});
+
+/* 按鈕:捲到對應位置,讓釘選與按鈕講同一套語言 */
+btns.forEach(function(b){
+  b.addEventListener('click', function(){
+    var s = +b.dataset.s;
+    if(!pinned){ show(s); return; }
+    var span = sect.offsetHeight - pin.offsetHeight;
+    var y = sect.offsetTop + span * (s/3 + 0.16);
+    if(window.MO && window.MO.on && window.MO.goto) window.MO.goto(y);
+    else scrollTo({top:y, behavior:'smooth'});
+  });
+});
+
+/* ═══ 互動熱力演示 ═══ */
+var kw = 20;
+var qEl = document.getElementById('hs-q');
+var qv  = document.getElementById('hs-qv');
+var tEl = document.getElementById('hs-t');
+var dEl = document.getElementById('hs-dt');
+var mEl = document.getElementById('hs-m');
+var gEnd= document.getElementById('hsGradEnd');
+var heat= document.getElementById('hs-heat');
+var outT= document.getElementById('hs-outT');
+
+function calc(){
+  var q = parseFloat(qEl.value);
+  var t = lookup(kw, q);
+  qv.textContent = q;
+  tEl.textContent = Math.round(t);
+  dEl.textContent = '+' + Math.round(t - INLET) + ' K';
+  mEl.textContent = 'DI-' + kw;
+  outT.textContent = (en() ? 'OUT ' : '出 ') + Math.round(t) + '°C';
+  /* 溫度越高,出口端的顏色越熱,色帶也越明顯 */
+  var k = Math.max(0, Math.min(1, (t - 30) / 55));
+  var col = k > .66 ? '#b4560e' : (k > .33 ? '#c98a3e' : '#4f9c8a');
+  if(gEnd) gEnd.setAttribute('stop-color', col);
+  if(heat) heat.setAttribute('opacity', (0.18 + k * 0.34).toFixed(2));
+  tEl.style.color = col;
+
+  /* 溫升曲線:y 軸固定 25–85 °C(型錄表的上下界),曲線末端就是出水溫度。
+     用二次貝茲畫,控制點壓在中段偏後 —— 熱是沿著發熱段累積上去的,
+     不是一進管子就到頂。 */
+  var Y0 = 380, Y1 = 260, TMIN = 25, TMAX = 85;
+  var y = Y0 - (Y0 - Y1) * Math.max(0, Math.min(1, (t - TMIN) / (TMAX - TMIN)));
+  var cx = 560, cy = Y0 - (Y0 - y) * 0.35;
+  var d = 'M60 ' + Y0 + ' Q' + cx + ' ' + cy.toFixed(1) + ' 940 ' + y.toFixed(1);
+  var curve = document.getElementById('hs-curve');
+  var fill  = document.getElementById('hs-fill');
+  var knob  = document.getElementById('hs-knob');
+  var ftop  = document.getElementById('hsFillTop');
+  if(curve){ curve.setAttribute('d', d); curve.setAttribute('stroke', col); }
+  if(fill){ fill.setAttribute('d', d + ' L940 ' + Y0 + ' L60 ' + Y0 + ' Z'); }
+  if(knob){ knob.setAttribute('cy', y.toFixed(1)); knob.setAttribute('fill', col); }
+  if(ftop){ ftop.setAttribute('stop-color', col); }
+}
+qEl.addEventListener('input', calc);
+document.getElementById('hs-pw').addEventListener('click', function(e){
+  var b = e.target.closest('button[data-kw]');
+  if(!b) return;
+  kw = +b.dataset.kw;
+  [].forEach.call(this.querySelectorAll('button'), function(x){
+    x.classList.toggle('on', x === b);
+  });
+  calc();
+});
+
+/* 語言切換:文案與演示文字都要跟著換 */
+document.querySelectorAll('.langtog button').forEach(function(b){
+  b.addEventListener('click', function(){
+    setTimeout(function(){ var s = cur; cur = -1; show(s); calc(); }, 40);
+  });
+});
+
+show(0);
+calc();
+onScroll();
+
+}catch(e){ if(window.console) console.error('[hero v13]', e); }
+})();
+</script>
+
 </body>
 </html>
